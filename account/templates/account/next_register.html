@@ -1,0 +1,261 @@
+{% extends 'base_v2.html' %}
+
+{% load static %}
+
+{% block content %}
+<head>
+
+	<style>
+		
+	hr.new4 {
+			border: 1px solid black;
+			font-weight:bolder;
+	}
+	.navba {
+        margin-top: 30px;
+        margin-bottom: 30px;
+        position:relative;
+        z-index:-1;
+        background-color:#34495E;
+	color: white;
+        box-shadow: 0 8px 8px -4px lightblue;
+        height: 30px;
+	letter-spacing: 2px;
+    	}	
+	a {
+			text-decoration:none;
+	 }
+	 
+	 .previous {
+		  background-color: #f1f1f1;
+		  color: black;
+		}
+
+	.next {
+		  background-color: #04AA6D;
+		  color: white;
+		}
+		
+		
+	.round {
+	  border-radius: 50%;
+		}
+	.table {
+       max-width: none;
+       table-layout: fixed;
+        
+    }
+	td{
+	
+      padding: 1em;
+      font-size: calc(0.6vw + 0.6em);
+      direction: ltr;
+      width: 30vw;
+      margin:auto;
+      text-align:justify;
+      word-break: break-word;
+      white-space: pre-line;
+      overflow-wrap: break-word;
+      -ms-word-break: break-word;
+      word-break: break-word;
+      -ms-hyphens: auto;
+      -moz-hyphens: auto;
+      -webkit-hyphens: auto;
+      hyphens: auto;
+	}
+
+	</style>
+</head>
+<div style="margin-left:2rem;">	
+<form action="" method="POST" enctype="multipart/form-data">
+
+    {% csrf_token %} 
+	<!--Academic Qualication-->
+
+	
+    <div class="card newCard shadow p-3 mb-5 bg-white rounded" style="width: 95%;margin-left:50px;">
+          
+        <div class="card-body" >
+                   <h2 class="card-title" style="font-weight:bold;">Part B. Academic Qualifications
+				   
+						<a href="{% url 'account:home' user_id=pk_var %}" class="previous" style="text-decoration:none;float:right;"><i class="fa fa-window-close" style="font-size:36px"></i></a>
+				  
+				   </h2>
+				   				
+						   
+				   
+
+				   <h4> A. Last Academic Qualifications (From graduation onwards excluding research degree(s)):
+					{% if user.is_applicant %}
+					 <a href="{% url 'academy-add' %}" class="w3-button w3-circle w3-teal" style="text-decoration:none;">+</a>
+					 <small style="color:Tomato;font-weight:bolder;">Add</small>
+						
+					{% endif %}
+				</h4>	
+				
+	<hr class="new4">
+	<table class = "table">					
+		<thead >
+			<tr >
+				
+				<th  VALIGN=TOP style="text-align: left;width:160px;">Degree/<BR>Diploma</th>
+				<th  VALIGN=TOP style="text-align: left;width:12%;">Name of<BR> The Board/<BR>University</th>
+				<th  VALIGN=TOP style="text-align: left;">Year of <BR>Passing</th>
+				<th  VALIGN=TOP style="text-align: left;">Percentage of<BR> Marks <BR>Obtained</th>	
+				<th  VALIGN=TOP style="text-align: left;">Division/<BR>Class/Grade</th>	
+				<th  VALIGN=TOP style="text-align: left;width:20%;">Subject(s)</th>
+				<th  VALIGN=TOP style="text-align: left;">Doc Link</th>
+				
+				{% if user.is_applicant %}				
+					<th  VALIGN=TOP colspan="2">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspActions</th>
+				{% endif %}
+			</tr>
+		</thead>
+		
+			{% for item in acad %}
+				<tr>
+					
+					
+					<td style="width:10%;">{{item.degree|default_if_none:"Blank"}}</td>
+					
+					<td>{{item.name_board_university|default_if_none:"Blank"}}</td>
+					
+					<td>{{item.year_passing|default_if_none:"Blank"}}</td>
+					<td>{{item.marks_obtained|default_if_none:"Blank"}}</td>
+					<td>{{item.div_class_grade|default_if_none:"Blank"}}</td>
+					<td class="td_class">{{item.subject|default_if_none:"Blank"|linebreaks}}</td>
+					
+					{% if item.doc_link %}
+						<td><a name="doc_link"  id="id_doc_link" href="{{item.doc_link}}" target="_blank"  style="max-width:80%;" class="btn btn-primary ">Doc View</a></td>							
+					{% else %}
+					    <td>None</label></td>						
+					{% endif %}
+
+					
+					{% comment %} 
+					{% if item.pdf %}       
+					    <td><a name="pdf"  id="id_pdf" href="{{item.pdf.url}}" target="_blank"  style="max-width:60%" class="btn btn-primary ">View</a></td>
+					{% else %}
+					    <td><label name="no_pdf" class="form-control" style="max-width:30%" readonly >None</label></td>						
+					{% endif %}
+					{% endcomment %} 
+
+					{% if user.is_applicant %}
+						<td><a style="font-weight:bolder;" name="edit-btn" class="text-information" href="{% url 'account:academy-edit1' pk=item.id %}">Edit</a></td>
+						<td><a style="font-weight:bolder;" class="text-warning" href="{% url 'account:academy-delete' pk=item.id %}">Delete</a></td>				
+					{% endif %}
+					
+					
+				</tr>
+			{% endfor %}
+
+			{% if not acad %}
+				<tr>
+					<td colspan="9" style="line-height: 10px;background-color:powderblue;text-align:center;" >No data available in table</td>
+				</tr>
+			{% endif %}
+		
+		
+	</table>
+
+
+	<!--Research Degree-->
+	
+	<h4> B. Research Degrees:
+		{% if user.is_applicant %}
+		
+			 <a href="{% url 'research-add' %}" class="w3-button w3-circle w3-teal" style="text-decoration:none;">+</a>
+			 <small style="color:Tomato;font-weight:bolder;">Add</small>
+		
+		
+		{% endif %}
+		
+		
+	</h4>
+	
+	
+	<hr class="new4">
+	<table class = "table">				
+		<thead >
+	
+			<tr >
+				
+				<th  VALIGN=TOP style="text-align: left;width:10%">Degree</th>
+				<th  VALIGN=TOP style="text-align: left;width:35%">Title of Dissertation<br>/Thesis</th>
+				<th  VALIGN=TOP style="text-align: left;width:10%">Date <br>of Award</th>
+				<th  VALIGN=TOP style="text-align: left;width:25%">Institute/<BR> University</th>
+					
+				<th  VALIGN=TOP style="text-align: left;width:10%;">Doc Link</th>
+				
+				{% if user.is_applicant %}				
+					<th  VALIGN=TOP colspan="2">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspActions</th>	
+				{% endif %}
+			</tr>
+			
+		</thead>
+		
+
+		{% for item in research %}
+				<tr>
+					{% if item.degree %}
+					<td style="height:10px;">{{item.degree|default_if_none:"Blank"}}</td>
+					
+					<td>{{item.thesis|linebreaks|default_if_none:"Blank"}}</td>
+					
+					<td>{{item.dt_award|date:'d/m/Y'|default:"Blank"}}</td>
+					
+					<td>{{item.institute|linebreaks|default_if_none:"Blank"}}</td>
+					
+					{% comment %}
+					{% if item.pdf %}       
+					    <td><a name="pdf"  id="id_pdf" href="{{item.pdf.url}}" target="_blank"  style="max-width:60%" class="btn btn-primary ">View</a></td>
+					{% else %}
+					    <td><label name="no_pdf" class="form-control" style="max-width:35%" readonly >None</label></td>					
+					{% endif %}
+					{% endcomment %}
+					
+					{% if item.url_link %}                    		
+							<td><a name="url_link"  id="id_url_link" href="{{item.url_link}}" target="_blank"  style="width:80%;" class="btn btn-primary ">Doc View</a></td>
+                	{% else %}
+							<td>None</td>	
+                	{% endif %}
+					
+
+
+					{% if user.is_applicant %}
+						<td><a style="font-weight:bolder;" class="text-information" href="{% url 'account:research-edit1' pk=item.id %}">Edit</a></td>
+						<td><a style="font-weight:bolder;" class="text-warning" href="{% url 'account:research-delete' pk=item.id %}">Delete</a></td>				
+					{% endif %}
+					
+					{% endif %}
+				</tr>
+			{% endfor %}
+			{% if not research %}
+				<tr>
+					<td colspan="8" style="line-height: 10px;background-color:powderblue;text-align:center;" >No data available in table</td>
+				</tr>
+			{% endif %}
+
+
+		</table>
+		<div class="row" >			
+				<a href="{% url 'account:cas' user_id=pk_var %}" style="margin-left:12px;width:5%;height:50%;font-weight:bold;margin-right:20px;font-size:2rem;" class="btn btn-primary btn-lg">&laquo;</a>
+				<a href="{% url 'account:professional' user_id=pk_var %}" style="float:right;width:5%;font-weight:bold;font-size:2rem;" class="btn btn-success btn-lg">&raquo;</a>
+		
+		</div>
+
+
+	</div>
+		
+</div>
+
+		
+
+</form>
+</div>
+<script type="text/javascript">
+	
+
+</script>
+
+{% endblock content %}

@@ -1,0 +1,192 @@
+<!--Html for adding records in Pub_other-->
+{% extends 'base_v2.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+
+<style>
+  
+
+      span{
+        color:red;
+      }
+      html {
+        font-family: verdana;
+        font-size: 10pt;        
+      }
+      
+      table {
+        border-collapse: collapse;
+        width: 900px;
+        height : 450px;
+        overflow-y: scroll;
+        overflow-x: hidden !important;
+        display: block;
+      }
+
+      td,
+      th {        
+        height: 15px;
+        border: dashed 1px lightblue;
+        }
+
+     th{
+         width:400px;
+         font-size:20px;
+     }
+     td{
+        width:600px;
+        font-size:25px;
+    }
+
+     .form-number{
+        text-align: center; 
+        width: 60pt;        
+     }
+
+     input[type=number]::-webkit-inner-spin-button, 
+     input[type=number]::-webkit-outer-spin-button { 
+           -webkit-appearance: none; 
+           margin: 0; 
+     }
+     .card {
+        margin: 0 auto; /* Added */
+        float: none; /* Added */
+        margin-bottom: 10px; /* Added */
+     }
+  </style>
+
+
+<form id="formAdd" action="" method="POST" enctype="multipart/form-data" >
+
+    {% csrf_token %}
+
+     <div class="card shadow p-3 mb-5 bg-white rounded" style="width: 70%;">
+            {% if form1.errors %}
+            <div class="alert-warning center">
+                <h2>{{form1.non_field_errors}}</h2>                
+            </div> 
+            {% endif %}
+        <div class="card-body">
+          <h2 class="card-title" style="font-weight:bold;">CATEGORY III : Research and Academic Contribution (Entry Screen)</h2>               
+                <h2 class="card-title">III-E : (ii) Invited Lecture / Paper presented
+                  <a href="{% url 'catg_3:fellow-award-view' user_id=request.user.id %}" class="previous" style="text-decoration:none;float:right;"><i class="fa fa-window-close" style="font-size:36px"></i></a>
+
+                </h2>      
+        
+
+          <br>
+  
+                
+          <table class="table table-striped">
+        
+               
+				
+                <tr>
+                    <th VALIGN=TOP>Type<span>*</span></th>
+                    <td>{{form1.invitation_type}}</td>                   
+                </tr>        
+                <tr>
+                    <th VALIGN=middle>Title of the Lecture/Paper<span>*</span></th>
+                    <td>{{form1.title_lecture}}</td>
+                </tr>	
+                <tr>
+                    <th VALIGN=middle>Name of the Conference/<br>Seminar/ Workshop<span>*</span></th>
+                    <td>{{form1.seminer}}</td>
+                </tr>
+				<tr>
+                    <th VALIGN=middle>Organized by<span>*</span></th>
+                    <td>{{form1.organizer}}</td>
+                </tr>
+				<tr>
+                    <th VALIGN=middle>Venue<span>*</span></th>
+                    <td>{{form1.venue}}</td>
+                </tr>
+				<tr>
+                    <th VALIGN=middle>Duration of the Conference/<br>Seminar/ Workshop<span>*</span></th>
+                    <td>{{form1.duration}}</td>
+                </tr>
+                <tr>
+                    <th VALIGN=middle>Level<span>*</span></th>
+                    <td>{{form1.prj_lvl}}</td>
+                </tr>               
+                <tr>
+                    <th VALIGN=middle>Document Link<span>*</span></th>
+                    <td>{{form1.prj_url}}</td>
+                </tr>                
+                <tr>
+                  <td style="display:none;">{{form1.self_api_score}}</td>
+                  <td style="display:none;">{{form1.veri_api_score}}</td>
+                </tr>
+            </table>
+    
+            <div style="width:200px;float:left;">
+	        <button type="submit" id="btnSubmit"  style="font-weight:bold; font-size:25px;" class="btn btn-success btn-block btn-lg">
+		        Save</button>
+			</div>	
+  
+        </div>
+      </div>  
+
+</form>
+          
+
+<script type="text/javascript">  
+
+
+$("form").submit(function(){    
+
+    var lvl      = $('#id_prj_lvl').val();
+	
+	var inv_type = $('#id_invitation_type').val();
+ 
+		   
+		  if (inv_type == 'LECT'){
+		  
+			if (lvl == 'INTR'){	 	
+				var score = 7;
+			}
+			else if (lvl == 'NATL') {
+				var score = 5;
+			}
+			else if (lvl == 'LCL') {
+				var score = 3;
+			}
+			else if (lvl == 'UNIV') {
+				var score = 3;
+			}
+		  }
+		  else if (inv_type == 'PAPER') {
+		  
+			if (lvl == 'INTR'){	 	
+				var score = 5;
+			}
+			else if (lvl == 'NATL') {
+				var score = 3;
+			}
+			else if (lvl == 'LCL') {
+				var score = 2;
+			}
+			else if (lvl == 'UNIV') {
+				var score = 2;
+			}
+					 
+		  } 
+
+    
+  var field1 = document.getElementById("id_self_api_score");				
+  field1.value = parseFloat(score);
+    
+  var field2 = document.getElementById("id_veri_api_score");				
+  field2.value = parseFloat(score);
+    
+   
+    
+ });
+  
+
+</script>
+
+{% endblock content %}

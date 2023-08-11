@@ -1,0 +1,212 @@
+<!--Html for adding records in Pub_other-->
+{% extends 'base_v2.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+
+<style>
+  
+
+      span{
+        color:red;
+      }
+      html {
+        font-family: verdana;
+        font-size: 10pt;        
+      }
+      
+      table {
+        border-collapse: collapse;
+        width: 900px;
+        height : 405px;
+        overflow-y: scroll;
+        overflow-x: hidden !important;
+        display: block;
+      }
+
+      td,
+      th {        
+        height: 15px;
+        border: dashed 1px lightblue;
+        }
+
+     th{
+         width:400px;
+         font-size:20px;
+     }
+     td{
+        width:600px;
+        font-size:25px;
+    }
+
+     .form-number{
+        text-align: center; 
+        width: 60pt;        
+     }
+
+     input[type=number]::-webkit-inner-spin-button, 
+     input[type=number]::-webkit-outer-spin-button { 
+           -webkit-appearance: none; 
+           margin: 0; 
+     }
+     .card {
+        margin: 0 auto; /* Added */
+        float: none; /* Added */
+        margin-bottom: 10px; /* Added */
+     }
+  </style>
+
+
+<form id="formAdd" action="" method="POST" enctype="multipart/form-data" >
+
+    {% csrf_token %}
+
+     <div class="card shadow p-3 mb-5 bg-white rounded" style="width: 60%;">
+            {% if form1.errors %}
+            <div class="alert-warning center">
+                <h2>{{form1.non_field_errors}}</h2>                
+            </div> 
+            {% endif %}
+        <div class="card-body">
+          <h2 class="card-title" style="font-weight:bold;">CATEGORY III : Research and Academic Contribution (Entry Screen)</h2>               
+                <h2 class="card-title">III-D :  Research Guidance 
+                  <a href="{% url 'catg_3:resch-guide-view' user_id=request.user.id %}" class="previous" style="text-decoration:none;float:right;"><i class="fa fa-window-close" style="font-size:36px"></i></a>
+                </h2>      
+        
+
+          <br>
+  
+                
+          <table class="table table-striped">
+        
+                
+                <tr>
+                    <th VALIGN=TOP>Name of the Student<span>*</span></th>
+                    <td>{{form1.student_name}}</td>                   
+                </tr>        
+                <tr>
+                    <th VALIGN=middle>Degree<span>*</span></th>
+                    <td>{{form1.degree}}</td>
+                </tr>	
+                <tr>
+                    <th VALIGN=middle>Title of the Thesis<span>*</span></th>
+                    <td>{{form1.title_thesis}}</td>
+                </tr>
+                <tr>
+                    <th VALIGN=middle>Status<span>*</span></th>
+                    <td>{{form1.status}}</td>
+                </tr>               
+                <tr>
+                    <th VALIGN=middle>Document Link<span>*</span></th>
+                    <td>{{form1.prj_url}}</td>
+                </tr>                
+                <tr>
+                  <td style="display:none;">{{form1.self_api_score}}</td>
+                  <td style="display:none;">{{form1.veri_api_score}}</td>
+                </tr>
+            </table>
+    
+            
+            <div style="width:200px;float:left;">
+              <button type="submit" id="btnSubmit" style="font-weight:bolder;" class="btn btn-success btn-block btn-lg">
+                Save Record</button>
+              </div>  
+	        
+  
+        </div>
+      </div>  
+
+</form>
+          
+
+<script type="text/javascript"> 
+
+$( document ).ready(function() {
+		
+    var degree = $('select#id_degree').val();
+  
+    
+    if (degree != 'PHD') {
+      $("#id_status option[value='PHDR']").remove();
+      $("#id_status option[value='THES']").remove();
+    }
+    else {
+      $("#id_status").append('<option value="PHDR">Ph.D Registered</option>');
+      $("#id_status").append('<option value="THES">Thesis submitted</option>');
+    }	
+    
+
+});
+
+function check_option() {
+      
+  var degree = $('select#id_degree').val();
+  
+    if (degree != 'PHD') {
+      $("#id_status option[value='PHDR']").remove();
+      $("#id_status option[value='THES']").remove();
+    }
+    else {
+      $("#id_status").append('<option value="PHDR">Ph.D Registered</option>');
+      $("#id_status").append('<option value="THES">Thesis submitted</option>');
+    }	
+            
+} 
+
+
+		$("form").submit(function(){    
+
+			var sts    = $('#id_status').val();
+			var degree = $('#id_degree').val();
+			
+			
+		   
+		   
+		  if (degree == "MPHIL"){
+			  if (sts == "DEGR"){	
+				var score = 5;
+			  }		
+		  }
+		  else if (degree == "ME") {
+			  if (sts == "DEGR"){	
+				var score = 5;
+			  }	              
+		  } 
+		  else if (degree == "MTECH") {
+			  if (sts == "DEGR"){	
+				var score = 5;
+			  }	              
+		  }
+      else if (degree == "MPHARM") {
+			  if (sts == "DEGR"){	
+				var score = 5;
+			  }	              
+		  }  
+		  else if (degree == "PHD") {
+			  if (sts == "DEGR"){	
+				var score = 15;
+			  }
+			  else if (sts == "THES"){	
+				var score = 10;		
+			  }
+			  else if (sts == "PHDR"){	
+				var score = 5;		
+			  }				  
+		  } 
+			
+		  var field1 = document.getElementById("id_self_api_score");				
+		  field1.value = parseFloat(score);
+			
+		  var field2 = document.getElementById("id_veri_api_score");				
+		  field2.value = parseFloat(score);
+			
+		   
+			
+		 });
+		  
+
+</script>
+
+{% endblock content %}

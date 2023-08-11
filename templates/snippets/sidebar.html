@@ -1,0 +1,224 @@
+{% load static %}
+<head>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  <style>
+
+
+	.dropdown {
+	  display: block;
+	  position: relative;
+	 
+	}
+	.dropdown-menu{
+	  display: none;
+	  float:right;
+	  background-color:  #ffffe6;
+	  position: absolute;
+	  width: 110%;
+	  margin:300px;
+	  margin-top:580px;;
+	  overflow: auto;
+	  box-shadow: 0px 10px 10px 0px rgba(0,0,0,0.4);
+	}
+	
+	.dropdown-menu a {
+	  display: block;
+	  color: #000000;
+	  padding: 2px;
+	  text-decoration: none;
+	}
+	.arrow{
+	  color:black;
+	  
+	  margin-left: 10px;
+	}
+	a:hover{
+	  text-decoration:none;
+	}
+
+	.menu-sample {
+		  list-style: none;
+		  padding: 5px;
+	}
+
+	.menu-item-sample:hover {
+		  background-color: red;
+	}
+
+	.menu-item-sample.active {
+		  background-color: green;
+	}
+	.w3-sidebar{
+		background-color:#1d4666;
+		color:white;
+	}
+
+	div{
+		margin:0;
+		padding:0;
+	}
+
+  </style>
+
+</head>
+
+<div id="main">
+
+  {% if request.user.is_authenticated %}
+
+<nav class="w3-sidebar w3-collapse" style="z-index:1;width:300px;overflow: visible;margin-top:52px;box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;" id="mySidebar"><br>
+  <div class="w3-container w3-row">
+    <div class="w3-col s3">
+      <i class="fa fa-user-circle" style="font-size:48px;"></i>
+    </div>
+    {% if user.is_admin %}
+    <div class="w3-col s4 w3-bar w3-text-white" style="padding-top:10px;">
+      <span1 style="font-size:medium;">Welcome, <br> <strong>{{ request.user.username }}</strong></span1><br>
+	  
+        
+    {% else %}
+                    
+                    <div class="w3-col s8 w3-bar w3-text-white" style="padding-top:10px;">
+                        <span1 style="font-size:medium;">Welcome, <br> <strong>{{ request.user.username }}</strong></span1><br>    
+                      {% endif %}        
+                    </div>
+           
+ 
+ {% endif %}        
+ 
+    
+  </div>
+  <hr>
+  <div class="w3-container">
+    <h5 style="color:#BCC747">Quick Links</h5>
+  </div>
+  <div class="w3-bar-block " style="font-size:medium;">
+		
+		<ul class="menu-sample">
+        
+        <li class="menu-item-sample"><a href="{% url 'account:home' user_id=request.user.id %}" class="w3-bar-item w3-button w3-padding w3-hover-red"><i class="fa fa-dashboard fa-fw"></i>  Dashboard</a></li>
+        <li class="menu-item-sample"><a id="id_gen" href="{% url 'account:cas' user_id=request.user.id %}" class="w3-bar-item w3-button w3-padding w3-hover-red"><i class="fa fa fa-vcard fa-fw"></i>  General Information</a></li>
+        
+		<li class="menu-item-sample"><a href="{% url 'account:academy' user_id=request.user.id %}" class="w3-bar-item w3-button w3-padding w3-hover-red"><i class="fa fa fa-graduation-cap fa-fw"></i>  Academic Qualifications</a></li>
+       
+		<li class="menu-item-sample"><a href="{% url 'account:professional' user_id=request.user.id %}" class="w3-bar-item w3-button w3-padding w3-hover-red"><i class="fa fa fa-briefcase fa-fw"></i>  Professional Experience</a></li>
+        <li class="menu-item-sample"><a href="{% url 'account:teaching' user_id=request.user.id %}" class="w3-bar-item w3-button w3-padding w3-hover-red"><i class="fa fa fa-book fa-fw"></i>  Teaching Experience</a></li>
+        <li class="menu-item-sample"><a href="{% url 'account:orient' user_id=request.user.id %}" class="w3-bar-item w3-button w3-padding w3-hover-red"><i class="fa fa-bell fa-fw"></i> Orientation / Refresher Courses</a></li>
+        
+        </ul>
+		
+	 <button class="w3-button w3-block w3-left-align w3-hover-red" onclick="myAccFunc1()"><i class="fa fa-tasks fa-fw "></i> API Categories <i class="fa fa-caret-down fa-fw" style="font-size:15px;margin-left:7px;"></i>
+  </button>
+  <div id="demoAcc1" class="w3-hide w3-white w3-card">
+    <a href="{% url 'account:api-1' user_id=request.user.id %}" class="w3-bar-item w3-button w3-hover-red">API Criteria I</a>
+    <a href="{% url 'account:api-2' user_id=request.user.id %}" class="w3-bar-item w3-button w3-hover-red">API Criteria II</a>
+    
+    <div class=" dropdown">
+      
+      <button type="button" class="w3-button w3-block w3-left-align w3-hover-red" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        API Criteria III  <span class="arrow"><i class="fa fa-caret-right"></i></span>
+      </button>
+      <div class="dropdown-menu" >
+        <a href="#" onclick="showLoaderOnClick('{% url 'catg_3:jrnl-pub' user_id=request.user.id %}')" class="w3-bar-item w3-button w3-hover-red"> A. Journal Publication</a>
+		<!--<a href="{% url 'catg_3:jrnl-pub' user_id=request.user.id %}" class="w3-bar-item w3-button w3-hover-red"> A. Journal Publication</a>-->
+        <a href="{% url 'catg_3:pub-other' user_id=request.user.id %}" class="w3-bar-item w3-button w3-hover-red"> B. Publications other than Journal Articles</a>
+        <a href="{% url 'catg_3:resch-view' user_id=request.user.id %}" class="w3-bar-item w3-button w3-hover-red"> C. Research Projects</a>
+        <a href="{% url 'catg_3:resch-guide-view' user_id=request.user.id %}" class="w3-bar-item w3-button w3-hover-red"> D. Research Guidance</a>
+        <a href="{% url 'catg_3:fellow-award-view' user_id=request.user.id %}" class="w3-bar-item w3-button w3-hover-red"> E. Fellowships/Awards/Invited Lecture</a>
+      </div>  
+	  </div>
+
+    
+  
+  </div>
+  <a href="{% url 'catg_3:api-summary-view' user_id=request.user.id %}"  class="w3-bar-item w3-button w3-padding w3-hover-red"><i class="fa fa-calculator fa-fw"></i>  API Score Summary</a>
+  <hr>
+	  <!--<a href="#" onclick="showLoaderOnClick('{% url 'account:pdf_view' user_id=request.user.id %}')" target="_blank" class="w3-bar-item w3-button w3-padding w3-hover-red"><i class="fa fa-file-pdf-o fa-fw"></i>  Generate PDF</a>-->
+	  <a href="{% url 'account:pdf_view' user_id=request.user.id %}" target="_blank" class="w3-bar-item w3-button w3-padding w3-hover-red"><i class="fa fa-file-pdf-o fa-fw"></i>  Generate PDF</a>
+
+    <a href="{% url 'logout' %}" class="w3-bar-item w3-button w3-padding w3-hover-red"><i class="fa fa-power-off fa-fw"></i>  Logout</a>
+    <a href="{% url 'password_change' %}" class="w3-bar-item w3-button w3-padding w3-hover-red"><i class="fa fa-cog fa-fw"></i>  Change Password</a><br><br>
+  </div>
+</nav>
+
+
+<!-- Overlay effect when opening sidebar on small screens -->
+<div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
+
+
+</div>
+
+<script>
+// Get the Sidebar
+var mySidebar = document.getElementById("mySidebar");
+
+// Get the DIV with overlay effect
+var overlayBg = document.getElementById("myOverlay");
+
+// Toggle between showing and hiding the sidebar, and add overlay effect
+function w3_open() {
+  if (mySidebar.style.display === 'block') {
+    mySidebar.style.display = 'none';
+    overlayBg.style.display = "none";
+  } else {
+    mySidebar.style.display = 'block';
+    overlayBg.style.display = "block";
+  }
+}
+
+// Close the sidebar with the close button
+function w3_close() {
+  mySidebar.style.display = "none";
+  overlayBg.style.display = "none";
+}
+
+
+function myAccFunc1() {
+  var x = document.getElementById("demoAcc1");
+  if (x.className.indexOf("w3-show") == -1) {
+    x.className += " w3-show";
+    x.previousElementSibling.className += " w3-grey";
+  } else { 
+    x.className = x.className.replace(" w3-show", "");
+    x.previousElementSibling.className = 
+    x.previousElementSibling.className.replace(" w3-grey", "");
+  }
+}
+
+function myAccFunc2() {
+  var x = document.getElementById("demoAcc2");
+  if (x.className.indexOf("w3-show") == -1) {
+    x.className += " w3-show";
+    x.previousElementSibling.className += " w3-blue";
+  } else { 
+    x.className = x.className.replace(" w3-show", "");
+    x.previousElementSibling.className = 
+    x.previousElementSibling.className.replace(" w3-blue", "");
+  }
+}
+
+$(document).ready(function() {
+    $('.menu-item-sample li').click(function() {
+        $('li.active').removeClass("active");
+        $(this).addClass("active");
+    });
+});
+
+function showLoaderOnClick(url) {
+				  showLoader();
+				  window.location=url;
+	}
+
+function showLoader(){
+	 $('body').append('<div style="" id="loadingDiv"><div class="loader">Please wait page is Loading...</div></div>');
+}
+
+		
+
+</script>

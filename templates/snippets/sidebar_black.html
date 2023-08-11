@@ -1,0 +1,116 @@
+{% load static %}
+
+
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+<style>
+.sidebar{
+	
+	padding:0;
+	margin-left:0;
+}
+.elements{
+	width:320px;
+	margin:0;
+	height:60px;
+	padding-top:10px;
+	color:white;
+	text-decoration:none;
+	font-size: 25px;
+	border-bottom:2px solid grey;
+	border-radius: 15px 50px 30px 5px;
+	}
+
+.api{
+	color:white;
+	font-size: 20px;
+}
+
+
+
+</style>
+
+
+
+
+
+<div class="sidebar">
+					
+		
+		  
+			<a  class="elements" href="{% url 'account:home' user_id=request.user.id %}"> Dashboard</a>
+			<a  class="elements" href="{% url 'account:cas' user_id=request.user.id %}"> General Information</a>
+			<a  class="elements" href="{% url 'account:academy' user_id=request.user.id %}"> Academic Qualifications</a>
+			<a  class="elements" href="#"> Professional Experience</a>
+			<a  class="elements" href="#"> Teaching Experience</a>
+			<a  class="elements" href="#" style="height:90px;"> Orientation/Refresher Courses</a>
+			
+			
+			<!--
+			<div class="dropdown">
+				<a class="elements" data-toggle="dropdown"> API Categories
+				</a>
+		    -->		
+
+				<div class="menu">
+					<li class="item" id="mn1" style="list-style:none;">
+						<a class="btn" href="#mn1" style="text-align:left;font-size:25px;">API Categories</a>
+						<div class="submenu">
+							<a style="text-align:left;font-size:25px;color:white;" href="#">Criterion I</a>
+							{% comment %}
+
+							{% if not user.is_applicant %}                
+								{% if user_var %}
+								<a style="text-align:left;font-size:25px;color:white;" href="{% url 'account:api-1' user_id=pk_var %}">Criterion I</a>
+								{% endif %}
+							{% else %}
+								<a style="text-align:left;font-size:25px;color:white;" href="{% url 'account:api-1' user_id=request.user.id %}">Criterion I</a>
+							{% endif %}
+
+							{% endcomment %}
+
+
+							<a style="text-align:left;font-size:25px;color:white;" href="#">Criterion II</a>
+							<a style="text-align:left;font-size:25px;color:white;" href="#">Criterion III</a>
+						</div>
+					</li>
+				</div>		
+
+
+
+
+
+
+
+				<!--
+				{% include 'snippets/bs_accordian.html' %}
+				
+				<ul class="dropdown-menu">
+					<li href="#">Criterion I</li>
+					<li href="#">Criterion II</li>
+					
+					<li href="#">Criterion III</li>
+					
+					<ul>
+						<li href="#">A. Journal Publication</li>
+						<li href="#">B. Publications other than Journal Articles</li>
+						<li href="#">C. Research Projects</li>
+						<li href="#">D. Research Guidance</li>
+						<li href="#">E. Fellowships/Awards/Invited Lecture</li>
+					</ul>
+				
+				</ul>
+			</div>
+				--> 
+			
+
+			<a  class="elements" href="{% url 'password_change' %}"> Change Password</a>
+			<a  class="elements" href="{% url 'logout' %}"> Logout</a>
+
+		
+					
+</div>
+

@@ -1,0 +1,84 @@
+{% extends 'base_v2.html' %}
+{% load static %}
+{% include 'css_add_edit.html' %}
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+
+
+
+<form action="" method="POST" enctype="multipart/form-data">
+
+    {% csrf_token %}
+
+	
+	<div class="card shadow p-3 mb-5 bg-white rounded" style="width: 750px;margin-left:70px;">
+          
+		<div class="card-body" >
+				   <h2 class="card-title" style="font-weight:bold;">Part C. Professional Experience (Add New):
+				   
+				    {% if user.is_applicant %}
+						<a href="{% url 'account:professional' user_id=request.user.id %}" class="previous" style="text-decoration:none;float:right;"><i class="fa fa-window-close" style="font-size:36px"></i></a>
+
+					{% endif %}
+					
+				   </h2>	
+				   <h5 style="margin-left:5px"> Posts held after Appointment at the University:</h5>
+
+	<table class="table table-striped">
+		<tr>
+			
+			<tr>
+				<th style="color:white;border: none;"></th>
+				<th style="color:white;border: none;"></th>
+			</tr>
+			<tr>
+				<td>{{form4.designation|as_crispy_field}}</td>
+			</tr>
+			<tr>
+				<td>{{form4.department|as_crispy_field}}</td>
+			</tr>
+			<tr>
+				<td>{{form4.period_from|as_crispy_field}}</td>
+			</tr>
+			<tr>
+				<td>{{form4.period_to|as_crispy_field}}</td>
+			</tr>
+			<tr>
+				<td>{{form4.pay_scale|as_crispy_field}}</td>
+			</tr>
+			<tr>
+				<td>{{form4.agp|as_crispy_field}}</td>
+			</tr>
+			<tr>	
+				<td>{{form4.url_link|as_crispy_field}}</td>
+			</tr>
+
+		</tr>
+	</table>
+
+	
+	<div style="width:200px;float:left;">
+		<button type="submit" style="font-weight:bolder;" class="btn btn-success btn-block btn-lg">
+			Save & Exit</button>
+		</div>
+	
+	</div>
+</div>
+
+ 
+</form>
+
+<script type="text/javascript">
+
+	
+	document.getElementById("id_period_to").onchange = function () {
+		var input = document.getElementById("id_period_from");
+		input.setAttribute("max", this.value);
+	}
+
+
+</script>
+
+{% endblock content %}

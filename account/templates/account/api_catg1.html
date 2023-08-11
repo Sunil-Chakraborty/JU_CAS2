@@ -1,0 +1,412 @@
+{% extends 'base_v2.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<style>
+
+	input[type=number]::-webkit-inner-spin-button, 
+    input[type=number]::-webkit-outer-spin-button { 
+           -webkit-appearance: none; 
+           margin: 0; 
+     }
+	 
+	 
+	 
+</style>
+
+<form action="" method="POST" enctype="multipart/form-data">
+
+    {% csrf_token %}
+	
+	 {% if form.errors %}
+          <div class="alert-warning center">
+              <h2>{{form.non_field_errors}}</h2>
+          </div> 
+     {% endif %}
+
+    <div class="card shadow p-3 mb-5 bg-white rounded" style="width: 95%;margin-left:50px;">
+          
+        <div class="card-body" >
+                   <h4 class="card-title" style="font-weight:bold;text-align:center;">API CATEGORY : I. TEACHING, LEARNING AND EVALUATION RELATED ACTIVITIES 
+				     <a href="{% url 'account:home' user_id=api1.id %}" class="previous" style="text-decoration:none;float:right;"><i class="fa fa-window-close" style="font-size:36px"></i></a>
+				   </h4>
+			<br>
+            
+    <table class="table">
+        <tr>
+            <th>Sl.No.</th>
+            <th>Nature of Activity</th>
+            <th>Max Marks</th>
+            <th>Hours spent per<br>academic year</th>
+            <th style="display:none;">Actual score</th>
+            <th>Self Appraisal Score</th> 
+			{% if not user.is_applicant %}			
+				<th >Verified API Score</th>
+			{% endif %}	
+			<th>Doc.Link<br><a style="font-weight:normal" href="{% url 'account:instruction' %}" target=__blank><i class="fa fa-file-text" aria-hidden="true"></i> Refer Sl.No.8 of Gen. Instructions</a></th>
+			<th>Link Status</th>
+        </tr>    
+
+
+	<tr>
+		<td style="display:none;">{{form.email|as_crispy_field}}</td>
+		<td>1.</td>
+        <td>Direct Teaching<br>(self declaration)</td>
+        <td>{{dt_marks}}</td>
+		{% if not user.is_applicant %}
+			<td>{{form.direct_teaching}}</td>
+			<script>
+			 $('input[name=direct_teaching]').attr('readonly', true); 
+			</script>
+		{% else %}	
+		    <td>{{form.direct_teaching}}</td>
+		{% endif %}		
+        <td style="display:none;">{{form.actl_api_dt}}</td>
+		<td>{{form.self_api_dt}}</td>
+		{% if admin %}
+			<td>{{form.veri_api_dt}}</td>
+			<script>
+			 $('input[name=veri_api_dt]').attr('readonly', false); 
+			</script>
+		{% else %}	
+			<td style="display:none;">{{form.veri_api_dt}}</td>
+		{% endif %}
+		
+		{% if not admin %}
+			<td>{{form.url_dt}}</td>
+		{% endif %}	
+		
+		{% if api1.url_dt %}
+			<td><a name="url_dt"  id="id_url_dt" href="{{api1.url_dt}}" target="_blank"  style="max-width:100%;" class="btn btn-primary ">View</a></td>							
+		{% else %}
+			<td><label name="no_url_dt" class="form-control" style="max-width:100%" readonly >None</label></td>						
+		{% endif %}
+		
+        
+		{% comment %}
+		
+        {% if not user.is_applicant %}
+            {% if user_var %}
+                {% if api1.pdf_dt %}       
+		            <td><a name="pdf_dt"  id="id_pdf_dt" href="{{api1.pdf_dt.url}}" target="_blank"  style="max-width:70%" class="btn btn-primary ">View</a></td>
+                {% else%}
+                    <td><label name="no_pdf_dt" class="form-control" style="max-width:40%" readonly >None</label></td>
+                {% endif %}
+            {% endif %}        
+        {% else %}			
+            <td style="width:5%;">{{form.pdf_dt|as_crispy_field}}</td>
+		{% endif %}
+		
+		{% endcomment %}
+        	    
+        <td id="dt_marks" style="display:none;">{{dt_marks}}</td>
+        <td id="factor" style="display:none;">{{api_factor}}</td> 
+        <td id="api" style="display:none;"></td>
+
+	</tr>
+
+
+    <tr>
+        <td>2.</td>
+        <td>Examination duties<br>(question paper setting,<br> Invigilation, evaluation of <br> answer scripts etc.)<br> (self declaration)</td>
+        <td>{{ed_marks}}</td>
+		{% if not user.is_applicant %}
+			<td>{{form.exam_duties}}</td>
+			<script>
+			 $('input[name=exam_duties]').attr('readonly', true); 
+			</script>
+		{% else %}	
+			<td>{{form.exam_duties}}</td>
+		{% endif %}
+        <td style="display:none;">{{form.actl_api_ed}}</td>
+        <td>{{form.self_api_ed}}</td>
+		{% if not user.is_applicant %}
+			<td>{{form.veri_api_ed}}</td>
+			<script>
+			 $('input[name=veri_api_ed]').attr('readonly', false); 
+			</script>
+		{% else %}
+			<td style="display:none;">{{form.veri_api_ed}}</td>
+		{% endif %}
+		
+		{% if not admin %}
+			<td>{{form.url_ed}}</td>
+		{% endif %}
+        
+		{% if api1.url_ed %}
+			<td><a name="url_ed"  id="id_url_ed" href="{{api1.url_ed}}" target="_blank"  style="max-width:100%;" class="btn btn-primary ">View</a></td>							
+		{% else %}
+			<td><label name="no_url_ed" class="form-control" style="max-width:100%" readonly >None</label></td>						
+		{% endif %}
+		
+		
+		{% comment %}
+        {% if not user.is_applicant %}
+            {% if user_var %}
+                {% if api1.pdf_ed %}       
+		            <td><a name="pdf_ed"  id="id_pdf_ed" href="{{api1.pdf_ed.url}}" target="_blank"  style="max-width:70%" class="btn btn-primary ">View</a></td>
+                {% else%}
+                    <td><label name="no_pdf_ed" class="form-control" style="max-width:45%" readonly >None</label></td>
+                {% endif %}
+            {% endif %}        
+        {% else %}			
+            <td style="width:5%;">{{form.pdf_ed|as_crispy_field}}</td>
+		{% endif %}
+		{% endcomment %}
+       
+        
+        <td id="ed_marks" style="display:none;">{{ed_marks}}</td>
+        <td id="ed_factor" style="display:none;">{{ed_factor}}</td> 
+        <td id="api_ed" style="display:none;"></td>
+
+    </tr>
+    
+
+    <tr>
+        <td>3.</td>
+        <td>Innovative Teaching-<br>learning methodologies,
+            <br> updating of subject <br> contents/courses, mentoring etc.
+            <br>(self declaration)
+        </td>
+        <td>{{it_marks}}</td>
+		{% if not user.is_applicant %}
+			<td>{{form.innovating_teaching}}</td>
+			<script>
+			 $('input[name=innovating_teaching]').attr('readonly', true); 
+			</script>
+		{% else %}
+			<td>{{form.innovating_teaching}}</td>
+		{% endif %}	
+        <td style="display:none;">{{form.actl_api_it}}</td>
+        <td>{{form.self_api_it}}</td>
+		
+		{% if not user.is_applicant %}
+			<td>{{form.veri_api_it}}</td>
+			<script>
+			 $('input[name=veri_api_it]').attr('readonly', false); 
+			</script>			
+		{% else %}	
+			<td style="display:none;">{{form.veri_api_it}}</td>
+		{% endif %}
+		
+		{% if not admin %}
+			<td>{{form.url_it}}</td>
+		{% endif %}
+		
+		{% if api1.url_it %}
+			<td><a name="url_it"  id="id_url_it" href="{{api1.url_it}}" target="_blank"  style="max-width:100%;" class="btn btn-primary ">View</a></td>							
+		{% else %}
+			<td><label name="no_url_link" class="form-control" style="max-width:100%" readonly >None</label></td>						
+		{% endif %}
+		
+        <td id="it_marks" style="display:none;">{{it_marks}}</td>
+        <td id="it_factor" style="display:none;">{{it_factor}}</td> 
+        <td id="api_it" style="display:none;"></td>
+
+    </tr>
+	
+    <tr style="font-weight:bolder;">
+        <td></td>
+        <td>Total : </td>
+        <td>{{tot_marks}}</td>
+        <td style="display:none;"></td>
+        <td></td>               
+        <td style="padding-left:25px;">{{tot_self_api}}</td>
+        {% if not user.is_applicant %}
+			<td style="padding-left:25px;">{{tot_veri_api}}</td>
+		{% else %}
+			<td style="padding-left:25px; display:none;">{{tot_veri_api}}</td>
+		{% endif %}
+		<td></td>
+    </tr>
+	
+
+	</table>
+	
+		<div class="row" >	
+		
+				<a href="{% url 'account:orient' user_id=pk_var %}" style="width:5%;padding:0;margin-left:12px;font-weight:bold;margin-right:20px;font-size:2rem;" class="btn btn-primary btn-lg">&laquo;</a>
+				<a href="{% url 'account:api-2' user_id=pk_var %}" style="width:5%;padding:0;font-weight:bold;font-size:2rem;" class="btn btn-success btn-lg">&raquo;</a>
+		
+				<button style="margin-left:20px;padding:0;width:7%;float:right;font-size:2rem;" type="submit" class="btn btn-info btn-block btn-lg">
+				Save</button>
+			
+				
+		</div>
+		
+
+    </div>
+</div>
+</form>
+
+   <!-- Footer -->
+    <!-- Copyrights
+    <div class="bg-transparent py-4">
+        <div class="container text-center" style="height:30px;">
+          <p class="text-muted mb-0 py-2">© 2022 Jadavpur University | All rights reserved.</p>
+        </div>
+      </div>
+    </footer> -->
+	
+
+<script type="text/javascript">
+
+    function totFunction() {              
+        tot_self=(tot_self_dt+tot_self_ed+tot_self_it);         
+        alert("Self Appraisal Score is : " + tot_self);
+       
+    }
+	
+	
+	
+    var tot_self_dt=parseFloat(document.getElementById("id_self_api_dt").value);
+    var tot_self_ed=parseFloat(document.getElementById("id_self_api_ed").value);
+    var tot_self_it=parseFloat(document.getElementById("id_self_api_it").value);
+    
+    var tot_self=0;
+
+    function limit_input() {
+        var field = document.getElementById("dt_hrs");
+        var max_length = 3;
+        
+        if (field.value.length > max_length) {
+            field.value = field.value.slice(0, max_length); 
+        }
+		
+		
+		
+        var field1 = document.getElementById("ed_hrs");
+        var max_length = 3;
+        
+        if (field1.value.length > max_length) {
+            field1.value = field1.value.slice(0, max_length); 
+        }
+
+		var field2 = document.getElementById("it_hrs");
+        var max_length = 3;
+        
+        if (field2.value.length > max_length) {
+            field2.value = field1.value.slice(0, max_length); 
+        }
+
+    }
+
+    $(document).ready(function(){
+    $('#dt_hrs').change(function(event){
+            var name = $(this).val();
+            var factor = $('#factor').text();
+            var dt_marks = $('#dt_marks').text();
+            var dt_marks1 = parseInt(dt_marks);
+            var api1 = (parseInt(name) / parseFloat(factor)).toFixed(2);
+           
+
+            if(api1 > dt_marks1){
+                $("#api").text(dt_marks);
+                var field1 = document.getElementById("id_actl_api_dt");				
+				field1.value = parseFloat(api1);
+                var field2 = document.getElementById("id_self_api_dt");				
+				field2.value = dt_marks1;
+                tot_self_dt=dt_marks1;
+                var field3 = document.getElementById("id_veri_api_dt");
+                field3.value = dt_marks1;
+               
+            }  
+            else{
+                $("#api").text(api1);
+                var field1 = document.getElementById("id_actl_api_dt");				
+				field1.value = parseFloat(api1);
+                var field2 = document.getElementById("id_self_api_dt");				
+				field2.value = parseFloat(api1);
+                tot_self_dt=parseFloat(api1);
+                var field3 = document.getElementById("id_veri_api_dt");
+                field3.value = parseFloat(api1);
+                
+                document.getElementById('id_actl_api_dt').innerHtml = parseFloat(api1);
+               
+            }
+
+            
+        });
+
+    });
+    
+    
+
+    $(document).ready(function(){
+        $('#ed_hrs').change(function(event){
+            var name = $(this).val();
+            var factor = $('#ed_factor').text();
+            var ed_marks = $('#ed_marks').text();
+            var ed_marks1 = parseInt(ed_marks)
+            var api1 = (parseInt(name) / parseFloat(factor)).toFixed(2);
+            
+            if(api1 > ed_marks1){               
+                var field1 = document.getElementById("id_actl_api_ed");				
+				field1.value = parseFloat(api1);
+                var field2 = document.getElementById("id_self_api_ed");				
+				field2.value = ed_marks1;
+                tot_self_ed=ed_marks1;
+                var field3 = document.getElementById("id_veri_api_ed");
+                field3.value = ed_marks1;
+            }  
+            else{               
+                var field1 = document.getElementById("id_actl_api_ed");				
+				field1.value = parseFloat(api1);
+                var field2 = document.getElementById("id_self_api_ed");				
+				field2.value = parseFloat(api1);
+                tot_self_ed=parseFloat(api1)
+                var field3 = document.getElementById("id_veri_api_ed");
+                field3.value = parseFloat(api1);
+
+                document.getElementById('id_actl_api_ed').innerHtml = parseFloat(api1);
+           
+            }
+
+
+        });
+        
+      });
+
+      
+    $(document).ready(function(){
+        $('#it_hrs').change(function(event){
+            var name = $(this).val();
+            var factor = $('#it_factor').text();
+            var it_marks = $('#it_marks').text();
+            var it_marks1 = parseInt(it_marks)
+            var api1 = (parseInt(name) / parseFloat(factor)).toFixed(2);
+            
+            if(api1 > it_marks1){               
+                var field1 = document.getElementById("id_actl_api_it");				
+				field1.value = parseFloat(api1);
+                var field2 = document.getElementById("id_self_api_it");				
+				field2.value = it_marks1;
+                tot_self_it=it_marks1;
+                var field3 = document.getElementById("id_veri_api_it");
+                field3.value = it_marks1;
+            }  
+            else{               
+                var field1 = document.getElementById("id_actl_api_it");				
+				field1.value = parseFloat(api1);
+                var field2 = document.getElementById("id_self_api_it");				
+				field2.value = parseFloat(api1);
+                tot_self_it=parseFloat(api1);
+                var field3 = document.getElementById("id_veri_api_it");
+                field3.value = parseFloat(api1);
+
+                document.getElementById('id_actl_api_it').innerHtml = parseFloat(api1);
+           
+            }
+
+        });
+              
+    });
+
+
+</script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js">
+
+{% endblock content %}

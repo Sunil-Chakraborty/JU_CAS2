@@ -1,0 +1,53 @@
+<style>
+  html,body{
+    width: 100%;
+  }
+  
+  #container{
+      background-color: orange;
+  }
+  
+  #wrapper{
+    color: white;
+    width: 200px;
+    height: 200px;
+  }
+  
+  #wrapper:hover{
+    background-color: red;
+  }
+  
+  #container p{
+    opacity: 0;
+    transition: 0.5s;
+  }
+  
+</style>
+<body>
+  <div id="container">
+    <div id="wrapper">
+      <p id="text">Some content</p>
+    </div>
+  </div>
+</body>
+
+  <script>
+    window.onload = function(){
+        var container = document.getElementById('container');
+        var text = document.getElementById('text');
+        var wrapper = document.getElementById('wrapper');
+      
+        container.onclick = function(){
+          if(text.style.opacity == 0){
+            text.style.opacity = 1;
+            wrapper.style.backgroundColor = "red";
+          }
+          else{
+            text.style.opacity = 0;
+            wrapper.style.backgroundColor = '';
+          }
+        };
+      }  
+</script>
+
+  

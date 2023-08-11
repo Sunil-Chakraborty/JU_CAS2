@@ -1,0 +1,159 @@
+{% extends 'base_v2.html' %}
+{% load static %}
+
+
+{% block content %}
+
+ <style type="text/css">
+           .container{
+                margin:100px;
+                width:1000px;
+                height:800px;
+                padding-left:10px;
+                padding-right:10px;
+                border: 1px solid black;
+            }
+            .header{
+                height:250px;
+               
+            }
+            .subject{
+                margin-left:40%;
+                font-size:25px;
+
+            }
+            .content{
+                font-size:20px;
+            }
+            .adios{
+                float:right;
+                margin-right: 100px;
+            }
+            #wrapper {
+                width: 1000px;
+                padding-top:70px;
+                overflow: hidden; /* add this to contain floated children */
+            }
+            #date {
+                width: 500px;
+                float:left; /* add this */
+                font-size:20px;
+                
+            }
+            .sign {
+                font-size:20px;
+                width: 300px;
+                padding-top:10px;
+                float: right; /* add this */
+               
+            }
+            .seal {
+                width: 50px;
+               
+                float: right; /* add this */
+                font-size:20px;
+                
+            }
+            .address{
+                font-size:20px;
+            }
+			
+			
+			#report-summary {
+
+			}
+			body {visibility:hidden;}
+			.print {visibility:visible;}
+
+
+        </style>
+    </head>
+	
+    <body>
+	<a class="printPage print" href="{% url 'catg_3:api-summary-view' user_id=request.user.id %}"  style="margin:100px;">Back to API Summary</a>
+	
+	<span class="printbtn print" style="margin-left:20px;">
+		<a class="printPage" href="#">Print Forwarding Letter</a>
+	</span>
+	
+	
+    <div id="report-summary" class="container print">
+		
+            <div class="header"></div>
+            <div class="subject"><strong>Forwarding Letter</strong><br></div>
+
+            <div class="address">
+                To<br>
+                The Registrar<br>
+                Jadavpur University<br><br>
+            </div>
+
+            <div class="content">
+                <p>Dear Madam,</p>
+                <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Prof./Dr./Mr./Ms. {{account.username}}, a faculty member in the Department / School of {{account.Department}}, is applying for promotion under the "Career advancement scheme(CAS)" from
+                {{account.get_from_dsg_display}} to {{account.get_to_dsg_display}}. </p>
+                <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I forward his/her application for submission to the Universiy and for due consideration.</p>
+                <p> Thanking you</p>
+                
+            </div>
+
+            <div id="wrapper">
+                <div id="date">Date:</div>
+                <div class="sign">(Head of the Department / Director of School)</div><br>
+                <div id="date">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                <div class="sign">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Seal</div><br>
+                
+            </div>
+            
+
+            <!-- <div class="adios">
+             <button onclick="window.print()">Print this page</button>   
+                <p></p>
+                <p>Seal</p>
+                
+            </div> -->
+            
+
+
+        </div>
+		
+    </body>
+   
+
+<script type="text/javascript">
+
+		$("document").ready(function() {
+			
+			$('#myfooter').hide();
+            
+		});
+
+		$('a.printPage').click(function(){
+          $('#report-summary').show();
+			$('a.printPage').hide();
+             window.print();
+             return false;
+		});	
+		
+		/*
+		function PrintElem(elem: HTMLElement)
+			{
+				var mywindow = window.open('', 'PRINT', 'height=400,width=600');
+
+				mywindow.document.write(elem.innerHTML);
+
+				mywindow.document.close(); // necessary for IE >= 10
+				mywindow.focus(); // necessary for IE >= 10*/
+
+		//		mywindow.print();
+		//		setTimeout(() => {
+					// Without the timeout, the window seems to close immediately.
+		//			mywindow.close();    	
+		//		}, 250);
+		//}
+
+		
+
+</script>
+
+{% endblock content %}

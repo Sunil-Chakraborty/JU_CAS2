@@ -1,0 +1,69 @@
+{% extends 'base2.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<style>
+    .div_col{
+        font-weight: bolder;
+    }
+</style>
+
+<form action="" method="post" autocomplete="off">
+    {% csrf_token %}
+    <div class="row">
+        <div class="col-md-4 h6">
+            {{form.username|as_crispy_field}}
+        </div>
+        <div class="col-md-4 h6">    
+            {{form.email|as_crispy_field}}
+        </div>
+        <div class="col-md-2 h6">    
+            {{form.gender|as_crispy_field}}
+        </div>
+        <div class="col-md-2 h6">
+            {{form.pan_no|as_crispy_field}}
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-md-4 h6">
+            {{form.Designation|as_crispy_field}}
+        </div>
+        <div class="col-md-4 h6">
+            {{form.Department|as_crispy_field}}
+        </div>       
+        <div class="col-md-4 h6">
+            {{form.highest_quali|as_crispy_field}}
+        </div>        
+    </div>
+    <br>
+    <div class="row">       
+        <div class="col-md-4 h6">
+            {{form.dt_ob|as_crispy_field}}
+        </div>
+        <div class="col-md-4 h6">
+            {{form.date_joined|as_crispy_field}}
+        </div>
+        <div class="col-md-2 h6">
+            {{form.quali_year|as_crispy_field}}
+        </div>
+        <div class="col-md-2 h6">            
+            {{form.tot_experience|as_crispy_field}} years
+            
+        </div>
+        
+    </div>
+    
+   <br>
+    <div class="row">
+        <div class="col-md-12">
+            <button type="submit" class="btn btn-success btn-block btn-lg"><i class="fas fa-database"></i>
+                Submit</button>
+        </div>
+
+    </div>
+
+</form>
+
+{% endblock content %}

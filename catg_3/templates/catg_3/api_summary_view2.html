@@ -1,0 +1,524 @@
+{% extends 'base_v2.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<style>
+     html {
+        font-family: verdana;
+        font-size: 10pt;        
+      }
+      
+    table {
+        border-collapse: collapse;        
+        display: block;
+		color:black;
+		font-size:20px;
+		
+    }
+     tr{
+         width:1200px;
+     } 
+     td,
+     th {        
+        height: 15px;       
+        border: dashed 1px lightblue;
+        }
+     td{       
+       font-size:20px;
+	   color:blue;	
+     }   
+     .form-number{
+        text-align: center; 
+        width: 60pt;        
+     }
+
+     input[type=number]::-webkit-inner-spin-button, 
+     input[type=number]::-webkit-outer-spin-button { 
+           -webkit-appearance: none; 
+           margin: 0; 
+     }
+     .card {
+      margin: 0 auto; /* Added */
+      float: none; /* Added */
+      margin-bottom: 10px; /* Added */
+      }
+     
+</style>
+
+<body>
+
+
+<h2 style="text-align:center;font-size:30px;">
+Welcome : {{account.username}}
+</h2>
+<hr>
+
+<script>
+var stage ="";
+</script>
+<div style="margin-left:310px;">
+<table class="table">
+	<tr>
+		<th>Stage / Designation From&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp:</th>
+		<td>{{account.get_from_dsg_display}}</td>
+	</tr>
+	
+	<tr>
+		<th>Stage / Designation To&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp:</th>
+		<td >{{account.get_to_dsg_display}}</td>
+	</tr>
+	
+	<tr>
+		<th>Date of last promotion ,( if any ) :</th>
+		<td>{{account.dt_last_promo|date:"d-m-Y"}}</td>
+	</tr>
+	<tr>
+		<th>Date of eligibility for promotion :</th>
+		<td>{{account.dt_eligibility|date:"d-m-Y"}}</td>
+	</tr>
+	<tr>
+		<th>Assessment Period (no.of years)&nbsp&nbsp:</th>
+		<td>{{account.ass_yr}}</td>
+	</tr>
+	
+	
+</table>
+</div>
+
+<hr>
+<h2 style="text-align:center;font-size:30px;background-color:#00b3b3;color:white;">API Score Summary
+</h2>
+<hr>
+<div style="margin-left:150px;">
+<table  class="table center">
+
+	<tr>
+		<th>Category</th>
+		<th>Period</th>
+		<th>Self Appraisal Score</th>
+		<th>Verified Sore <br>(only for verifier)</th>
+		<th>Status <br> (options)</th>
+	</tr>
+	
+	<!-- API Catg-I -->
+	<script>
+		var api_1 = 0;
+		var api_1 = parseFloat({{api1.self_api_dt}})+parseFloat({{api1.self_api_ed}})+parseFloat({{api1.self_api_it}});
+		
+	</script>
+	<tr>
+		<td style="text-align:center;">I</td>
+		<td>Yearly</td>
+		<td id="api1" style="text-align:center;"></td>
+		<td id="api2" style="text-align:center;"></td>
+		<td id="api3" style="text-align:left;"></td>		
+	</tr>
+	
+	<!-- API Catg-II -->
+	<script>
+		var api_2 = 0;
+		var api_2 = parseFloat({{api2.self_api_fba}})+parseFloat({{api2.self_api_clm}})+parseFloat({{api2.self_api_pda}});
+		
+		var api_2 = api_2 * parseInt({{account.ass_yr}});
+		
+	</script>
+	<tr>
+		<td style="text-align:center;">II</td>
+		<td>Assessment Period</td>
+		<td id="api2a" style="text-align:center;"></td>
+		<td id="api2b" style="text-align:center;"></td>
+		<td id="api2c" style="text-align:left;"></td>		
+	</tr>
+
+
+	
+<div id="dtl" style="display: none;">
+
+	
+	<!-- API Catg-III-a -->
+	
+	<script>
+		var api_3a = 0;
+	</script>
+	
+	{% for item in jrnl %}	
+		<script>
+			var api_3a = api_3a + parseFloat({{item.self_api_score}});						
+		</script>
+	{% endfor %}
+	
+	<tr>
+		<td style="text-align:center;">III-a</td>
+		<td>Assessment Period</td>
+		<td id="api3a" style="text-align:center;"></td>
+		<td id="api3b" style="text-align:center;"></td>
+		<td id="api3c" style="text-align:left;"></td>		
+	</tr>
+	
+	<!-- API Catg-III-b -->
+	
+	<script>
+		var api_3b = 0;
+	</script>
+	
+	{% for item in pub %}	
+		<script>
+			var api_3b = api_3b + parseFloat({{item.self_api_score}});						
+		</script>
+	{% endfor %}
+	
+	<tr>
+		<td style="text-align:center;">III-b</td>
+		<td>Assessment Period</td>
+		<td id="api4a" style="text-align:center;"></td>
+		<td id="api4b" style="text-align:center;"></td>
+		<td id="api4c" style="text-align:left;"></td>		
+	</tr>
+	
+	
+	<!-- API Catg-III-c -->
+	
+	<script>
+		var api_3c = 0;
+	</script>
+	
+	{% for item in res %}	
+		<script>
+			var api_3c = api_3c + parseFloat({{item.self_api_score}});						
+		</script>
+	{% endfor %}
+	
+	<tr>
+		<td style="text-align:center;">III-c</td>
+		<td>Assessment Period</td>
+		<td id="api5a" style="text-align:center;"></td>
+		<td id="api5b" style="text-align:center;"></td>
+		<td id="api5c" style="text-align:left;"></td>		
+	</tr>
+	
+	<!-- API Catg-III-d -->
+	
+	<script>
+		var api_3d = 0;
+	</script>
+	
+	{% for item in cons %}	
+		<script>
+			var api_3d = api_3d + parseFloat({{item.self_api_score}});						
+		</script>
+	{% endfor %}
+	
+	<tr>
+		<td style="text-align:center;">III-d</td>
+		<td>Assessment Period</td>
+		<td id="api6a" style="text-align:center;"></td>
+		<td id="api6b" style="text-align:center;"></td>
+		<td id="api6c" style="text-align:left;"></td>		
+	</tr>
+	
+	<!-- API Catg-III-e -->
+	
+	<script>
+		var api_3e = 0;
+	</script>
+	
+	{% for item in out %}	
+		<script>
+			var api_3e = api_3e + parseFloat({{item.self_api_score}});						
+		</script>
+	{% endfor %}
+	
+	<tr>
+		<td style="text-align:center;">III-e</td>
+		<td>Assessment Period</td>
+		<td id="api7a" style="text-align:center;"></td>
+		<td id="api7b" style="text-align:center;"></td>
+		<td id="api7c" style="text-align:left;"></td>		
+	</tr>
+	
+	<!-- API Catg-III-f -->
+	
+	<script>
+		var api_3f = 0;
+	</script>
+	
+	{% for item in guide %}	
+		<script>
+			var api_3f = api_3f + parseFloat({{item.self_api_score}});						
+		</script>
+	{% endfor %}
+	
+	<tr>
+		<td style="text-align:center;">III-f</td>
+		<td>Assessment Period</td>
+		<td id="api8a" style="text-align:center;"></td>
+		<td id="api8b" style="text-align:center;"></td>
+		<td id="api8c" style="text-align:left;"></td>		
+	</tr>
+	
+	<!-- API Catg-III-g -->
+	
+	<script>
+		var api_3g = 0;
+	</script>
+	
+	{% for item in fell %}	
+		<script>
+			var api_3g = api_3g + parseFloat({{item.self_api_score}});						
+		</script>
+	{% endfor %}
+	
+	<tr>
+		<td style="text-align:center;">III-g</td>
+		<td>Assessment Period</td>
+		<td id="api9a" style="text-align:center;"></td>
+		<td id="api9b" style="text-align:center;"></td>
+		<td id="api9c" style="text-align:left;"></td>		
+	</tr>
+	
+	<!-- API Catg-III-h -->
+	
+	<script>
+		var api_3h = 0;
+	</script>
+	
+	{% for item in lec %}	
+		<script>
+			var api_3h = api_3h + parseFloat({{item.self_api_score}});						
+		</script>
+	{% endfor %}
+	
+	<tr>
+		<td style="text-align:center;">III-h</td>
+		<td>Assessment Period</td>
+		<td id="api10a" style="text-align:center;"></td>
+		<td id="api10b" style="text-align:center;"></td>
+		<td id="api10c" style="text-align:left;"></td>		
+	</tr>
+	
+	<!-- API Catg-III-i -->
+	
+	<script>
+		var api_3i = 0;
+	</script>
+	
+	{% for item in elearn %}	
+		<script>
+			var api_3i = api_3i + parseFloat({{item.self_api_score}});						
+		</script>
+	{% endfor %}
+	
+	<tr>
+		<td style="text-align:center;">III-i</td>
+		<td>Assessment Period</td>
+		<td id="api11a" style="text-align:center;"></td>
+		<td id="api11b" style="text-align:center;"></td>
+		<td id="api11c" style="text-align:left;"></td>		
+	</tr>
+	
+</div>
+
+
+	
+	<!-- API Catg-III-Total -->
+	
+	<script>
+		var api_3t = 0;
+		var api_3t = parseFloat(api_3a + api_3b + api_3c + api_3d + api_3e + api_3f + api_3g + api_3h + api_3i);
+	</script>
+	
+	
+	<tr>
+		<td style="text-align:center;">III-Total</td>
+		<td>Assessment Period</td>
+		<td id="api12a" style="text-align:center;"></td>
+		<td id="api12b" style="text-align:center;"></td>
+		<td id="api12c" style="text-align:left;"></td>		
+	</tr>
+	
+	
+	
+</table>
+
+</div>
+
+
+
+</body>
+
+<script type="text/javascript">
+
+	$( document ).ready(function() {
+
+		const api1 = document.getElementById('api1');	// self api score
+		const api2 = document.getElementById('api2');	// verified score
+		const api3 = document.getElementById('api3');	// comment	
+		
+		api1.innerHTML = api_1.toFixed(2);
+		api2.innerHTML = api_1.toFixed(2);
+		
+		var stage = "{{account.to_dsg}}";
+		
+		
+		
+		// Summary of API I Category
+		
+		if (stage == "Stage 2" || stage == "Stage 3" ){
+			
+			if (api_1 < 80) {
+				api3.innerHTML = "Min Score not attained" ;				
+			}
+			else {
+				api3.innerHTML = "Criteria Satisfied" ;
+			}
+		}	
+		
+		if (stage == "Stage 4"){
+			
+			if (api_1 < 75) {
+				api3.innerHTML = "Min Score not attained" ;				
+			}
+			else {
+				api3.innerHTML = "Criteria Satisfied" ;
+				
+			}
+		}
+		
+		if (stage == "Stage 5"){
+			
+			if (api_1 < 70) {
+				api3.innerHTML = "Min Score not attained" ;				
+			}
+			else {
+				api3.innerHTML = "Criteria Satisfied" ;
+			}
+		}
+		
+		// Summary of API II Category
+		
+		const api2a = document.getElementById('api2a');
+		const api2b = document.getElementById('api2b');
+		const api2c = document.getElementById('api2c');
+		
+		api2a.innerHTML = api_2.toFixed(2);
+		api2b.innerHTML = api_2.toFixed(2);
+		
+		if (api_2 < 50) {
+				api2c.innerHTML = "Min Score not attained" ;				
+		}
+		else {
+				api2c.innerHTML = "Criteria Satisfied" ;
+		}
+		
+		// API III-A.  Journal Publication								
+
+		const api3a = document.getElementById('api3a');
+		const api3b = document.getElementById('api3b');
+		const api3c = document.getElementById('api3c');
+		
+		api3a.innerHTML = api_3a.toFixed(2);
+		api3b.innerHTML = api_3a.toFixed(2);		
+		api3c.innerHTML = "Journal Publication" ;
+		
+		// API III-B.   Publications other than journal articles 								
+
+		const api4a = document.getElementById('api4a');
+		const api4b = document.getElementById('api4b');
+		const api4c = document.getElementById('api4c');
+		
+		api4a.innerHTML = api_3b.toFixed(2);
+		api4b.innerHTML = api_3b.toFixed(2);		
+		api4c.innerHTML = "Other publications" ;
+		
+		// API III-C.    Research Projects -- Sponsored Project								
+
+		const api5a = document.getElementById('api5a');
+		const api5b = document.getElementById('api5b');
+		const api5c = document.getElementById('api5c');
+		
+		api5a.innerHTML = api_3c.toFixed(2);
+		api5b.innerHTML = api_3c.toFixed(2);		
+		api5c.innerHTML = "Sponsored Project" ;
+		
+		// API III-C.    Research Projects -- Consultancy Project								
+
+		const api6a = document.getElementById('api6a');
+		const api6b = document.getElementById('api6b');
+		const api6c = document.getElementById('api6c');
+		
+		api6a.innerHTML = api_3d.toFixed(2);
+		api6b.innerHTML = api_3d.toFixed(2);		
+		api6c.innerHTML = "Consultancy Project" ;
+		
+		// API III-D.    Research Projects -- Projects Outcome/Output								
+
+		const api7a = document.getElementById('api7a');
+		const api7b = document.getElementById('api7b');
+		const api7c = document.getElementById('api7c');
+		
+		api7a.innerHTML = api_3e.toFixed(2);
+		api7b.innerHTML = api_3e.toFixed(2);		
+		api7c.innerHTML = "Projects Outcome/Output" ;
+		
+		
+		// API III-F.     Research Guidance								
+
+		const api8a = document.getElementById('api8a');
+		const api8b = document.getElementById('api8b');
+		const api8c = document.getElementById('api8c');
+		
+		api8a.innerHTML = api_3f.toFixed(2);
+		api8b.innerHTML = api_3f.toFixed(2);		
+		api8c.innerHTML = "Research Guidance" ;
+		
+		// API III-G.     Fellowship / Award from Academic Bodies/Associations								
+
+		const api9a = document.getElementById('api9a');
+		const api9b = document.getElementById('api9b');
+		const api9c = document.getElementById('api9c');
+		
+		api9a.innerHTML = api_3g.toFixed(2);
+		api9b.innerHTML = api_3g.toFixed(2);		
+		api9c.innerHTML = "Fellowship/Award" ;
+		
+		// API III-H.     Invited Lecture / Paper presented								
+
+		const api10a = document.getElementById('api10a');
+		const api10b = document.getElementById('api10b');
+		const api10c = document.getElementById('api10c');
+		
+		api10a.innerHTML = api_3h.toFixed(2);
+		api10b.innerHTML = api_3h.toFixed(2);		
+		api10c.innerHTML = "Invited Lecture";
+		
+		// API III-I.    e-Learning Delivery Process/Material								
+
+		const api11a = document.getElementById('api11a');
+		const api11b = document.getElementById('api11b');
+		const api11c = document.getElementById('api11c');
+		
+		api11a.innerHTML = api_3i.toFixed(2);
+		api11b.innerHTML = api_3i.toFixed(2);		
+		api11c.innerHTML = "e-Learning Delivery Process";
+		
+		// API III-Total								
+
+		const api12a = document.getElementById('api12a');
+		const api12b = document.getElementById('api12b');
+		const api12c = document.getElementById('api12c');
+		
+		api12a.innerHTML = api_3t.toFixed(2);
+		api12b.innerHTML = api_3t.toFixed(2);		
+		api12c.innerHTML = "Summary of Catg-III";
+		
+		
+		
+	});
+	
+	
+</script>
+
+{% endblock content %}
+    

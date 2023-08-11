@@ -1,0 +1,118 @@
+{% extends 'base_v2.html' %}
+{% load static %}
+
+{% block content %}
+<head>
+
+	<style>
+	hr.new4 {
+			border: 1px solid black;
+			font-weight:bolder;
+	}
+	.navba {
+        margin-top: 30px;
+        margin-bottom: 10px;
+        position:relative;
+        z-index:-1;
+        background-color:#34495E;
+		color: white;
+        box-shadow: 0 8px 8px -4px lightblue;
+        height: 30px;
+		letter-spacing: 2px;
+		
+    	}	
+	</style>
+</head>
+<div style="margin-left:2rem;">		
+<form action="" method="POST" enctype="multipart/form-data">
+
+    {% csrf_token %} 
+
+	
+    <div class="card shadow p-3 mb-5 bg-white rounded" style="width: 95%;margin-left:45px;">
+          
+        <div class="card-body" >
+                    <h2 class="card-title" style="font-weight:bold;">Part E. Orientation / Induction Program(s) or Refresher / Short-term Course(s):
+				   
+						<a href="{% url 'account:home' user_id=pk_var %}" class="previous" style="text-decoration:none;float:right;"><i class="fa fa-window-close" style="font-size:36px"></i></a>
+				 
+				    </h2>
+					
+					<h4 style="margin-top:10px">Program(s) / Course(s) Attended :
+						{% if user.is_applicant %}
+							<a href="{% url 'orient-add' %}" class="w3-button w3-circle w3-teal" style="text-decoration:none;">+</a>
+							<small style="color:Tomato;font-weight:bolder">Add</small>							
+						{% endif %}
+					</h4>
+			
+			
+			
+			<table class = "table" >				
+				
+					<tr >
+						
+						<th  VALIGN=TOP style="text-align: left;">Title of the Course</th>
+						<th  VALIGN=TOP style="text-align: left;">Place</th>
+						<th  VALIGN=TOP style="text-align: left;">Duration (No. of Weeks)</th>
+						<th  VALIGN=TOP style="text-align: left;">Period :<br> From Date- To Date</th>
+						<th  VALIGN=TOP style="text-align: left;">Doc Link</th>
+						{% if user.is_applicant %}
+							<th  VALIGN=TOP colspan="2">&nbsp&nbsp&nbsp&nbspActions</th>	
+						{% endif %}
+					</tr>
+					
+			
+				
+		
+				{% for item in orient %}
+						<tr>
+							{% if item.title %}
+							<td>{{item.title|wordwrap:40|default_if_none:"BLANK"|linebreaks}}</td>							
+							<td>{{item.place|wordwrap:40|default_if_none:"BLANK"}}</td>
+							<td>{{item.duration|wordwrap:40|default_if_none:"BLANK"}}</td>
+							<td>{{item.period|wordwrap:40|default_if_none:"BLANK"|linebreaks}}</td>
+								
+										
+							{% if item.url_link %}
+									<td><a name="url_link"  id="id_url_link" href="{{item.url_link}}" target="_blank"  style="max-width:90%;" class="btn btn-primary ">Doc View</a></td>							
+							{% else %}
+									<td><label name="no_url_link" class="form-control" style="max-width:70%" readonly >None</label></td>						
+							{% endif %}
+		
+							{% if user.is_applicant %}
+								<td><a style="font-weight:bolder;width:20px;" class="text-information" href="{% url 'account:orient-edit1' pk=item.id %}">Edit</a></td>
+								<td><a style="font-weight:bolder;width:20px;" class="text-warning" href="{% url 'account:orient-delete' pk=item.id %}">Delete</a></td>				
+							{% endif %}
+							
+							{% endif %}
+						</tr>
+
+				{% endfor %}
+
+				{% if not orient %}
+				<tr>
+					<td colspan="8" style="line-height: 10px;background-color:powderblue;text-align:center;" >No data available in table</td>
+				</tr>
+				{% endif %}
+				
+				
+			</table>
+			
+			<div class="row" >			
+				<a href="{% url 'account:teaching' user_id=pk_var %}" style="margin-left:12px;width:5%;height:50%;font-weight:bold;margin-right:20px;font-size:2rem;" class="btn btn-primary btn-lg">&laquo;</a>
+				<a href="{% url 'account:api-1' user_id=pk_var %}" style="float:right;width:5%;font-weight:bold;font-size:2rem;" class="btn btn-success btn-lg">&raquo;</a>
+			</div>
+
+			
+
+
+		</div>
+	</div>
+</form>
+</div>	
+<script type="text/javascript">
+	
+
+</script>
+
+{% endblock content %}

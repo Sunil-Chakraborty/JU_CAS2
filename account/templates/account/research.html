@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+
+<form action="" method="POST" enctype="multipart/form-data">
+
+    {% csrf_token %}
+
+	<h5 style="margin-left:5px">B.Research Degrees:
+		<a style="font-weight:bolder;" class="p-2 text-information" href="#">Add</a>
+	</h5>
+
+	<table class="table">
+	<tr>
+		<td style="display:none;">{{form2.email|as_crispy_field}}</td>
+        <td>{{form2.degree|as_crispy_field}}</td>
+		<td>{{form2.thesis|as_crispy_field}}</td>
+		<td>{{form2.dt_award|as_crispy_field}}</td>
+		<td>{{form2.institute|as_crispy_field}}</td>
+		
+	</tr>
+	</table>
+	
+
+	<button type="submit" class="btn btn-success btn-block btn-lg"><i class="fas fa-database"></i>
+		Save & Exit</button>
+
+        {% comment %}  	
+	     <a style="font-weight:bolder;" class="btn btn-success btn-block btn-lg" href="{% url 'research-cancel' %}">Cancel</a>
+        {% endcomment %}
+
+
+</form>
+
+<script type="text/javascript">
+
+	function max_input() {
+
+		var field = document.getElementById("pass_out");
+		var max_length = 4;
+		var min_length = 4;
+		
+		if (field.value.length > max_length) {
+			field.value = field.value.slice(0, max_length);
+
+		}
+
+	}
+
+</script>
+
+{% endblock content %}

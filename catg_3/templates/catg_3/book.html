@@ -1,0 +1,18 @@
+<div >
+
+    <form method="POST" action="book">
+        {% csrf_token %}
+        {{formset.management_form}}
+
+        {% for form in formset%}
+        {{form}}
+        <hr>
+        {% endfor %}
+        <br/>
+        <div >
+            <button type="submit" class="btn btn-danger btn-lg">Submit</button>
+        </div>
+
+    </form>
+
+</div>

@@ -1,0 +1,271 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<style type="text/css">
+	#main{
+		margin:0px;
+	}
+	table {
+		border: 2px solid black;
+	  }
+	td {		
+		height: 20px;
+		border:0px;
+	}  
+	th {		
+		height: 10px;
+	}  
+	.gfg {
+		border-collapse:separate;
+		
+	}
+	
+	h2{
+		display:inline;
+		float:left;
+		}
+	h3{
+		display:inline;
+		float:right;
+	}
+	.image-container{
+		max-width: 250px;
+		height: auto;
+	}
+	.field-heading{
+		color: var(--secondary-text-color);
+	}
+	.icon-container:hover {
+		opacity: 0.3;
+		cursor: pointer;
+	}
+	.friends-icon{
+		color: #4287f5;
+		font-size: 40px;
+	}
+	.person-add-icon{
+		color: #4287f5;
+		font-size: 40px;
+	}
+	.friend-text{
+		font-weight: 500;
+		color: black;
+	}
+	.friends-btn{
+		background-color: #cccccc;
+		border-color: #cccccc;
+		color: #000;
+		font-weight: 500;
+	}
+	.friends-btn:hover {
+		background-color: #bfbfbf;
+		border-color: #bfbfbf;
+	}
+	.dropdown-toggle::after { 
+		content: none; 
+	}
+	.card{
+		border-radius: 12px;
+	}
+	.material-icons{
+		font-size: 30px;
+	}
+	.material-icons:hover{
+		cursor: pointer;
+	}
+	.confirm-friend-request{
+		color: green;
+	}
+	.confirm-friend-request:hover {
+		opacity: 0.3;
+	}
+	.decline-friend-request:hover {
+		opacity: 0.3;
+	}
+	.decline-friend-request{
+		color: red;
+	}
+	.message-btn-text{
+		font-weight: 500;
+	}
+	th{
+		color:blue
+	}
+</style>
+
+<div class="container-fluid">
+	<div id="main" class="d-flex flex-row justify-content-center flex-wrap align-items-start">
+
+		<div class="card profile-card m-2">
+		  <div class="card-body" style="width: 60rem;">
+		  	<div class="d-flex flex-column justify-content-center p-4">
+<!--  		  		
+				<div class="image-container mx-auto mb-4">
+		  			<img class="d-block border border-dark rounded-circle img-fluid mx-auto profile-image" alt="codingwithmitch logo" 
+					  id="id_profile_image" src="{{profile_image}}" width="80" height="50">
+		  		 
+				</div>
+				 -->
+				<table >
+					<thead>
+					  <tr>						
+						<th scope="col">Full Name</th>
+						
+						<th scope="col">Email</th>
+						
+						<th scope="col">Department</th>	
+						
+						<th scope="col">Designation</th>						
+					  </tr>
+					</thead>
+					<tbody>
+						<tr>						  
+						  <td><h5>{{username}}</h5></td>
+						
+
+						{%  if is_self %}
+						<td><h5>{{email}}</h5></td>
+		  				{% else %}
+		  					{% if hide_email %}
+			  			   		<td>********</td>
+			  				{% else %}
+					 	   		<td>{{email}}</td>
+			  				{% endif %}
+			  			{% endif %}
+						  						  
+							<td><h5>{{Department}}</h5></td>
+							
+							<td><h5>{{Designation}}</h5></td>
+																  							 
+						</tr>
+
+						
+						<tr><td></td><td></td></tr>	
+											
+						<tr>
+							<th scope="col">Date of Birth</th>
+							
+							<th scope="col">Date of joining</th>
+												
+							<th scope="col">PAN No</th>
+							
+							<th scope="col">Gender</th>						
+						</tr>
+						
+						
+						<tr>
+							<td><h5>{{dt_ob|date:"M d, Y"}}</h5></td>
+							
+							<td><h5>{{date_joined|date:"M d, Y"}}</h5></td>
+													  
+							<td><h5>{{pan_no}}</h5></td>
+							
+							<td><h5>{{gender}}</h5></td>
+						</tr>
+						
+						<thead>
+						<tr><td></td><td></td></tr>
+						<tr>						
+							<th scope="col">Highest Qualification</th>
+							
+							<th scope="col">Qualifying year</th>
+							
+							<th scope="col">Total Experiences</th>						
+						</tr>
+						</thead>
+						<tr>						  
+							<td><h5>{{highest_quali}}</h5></td>
+							
+							<td><h5>{{quali_year}}</h5></td>
+							
+							<td><h5>{{tot_experience}}&nbspyear(s)</h5></td>
+						</tr>
+						
+					</tbody>	
+				</table>
+
+
+		  		<!-- If Auth user is viewing their own profile -->
+		  		{% if is_self %}
+		  		<a  class="mt-4 btn btn-primary" href="{% url 'account:edit' user_id=id %}">Update</a>
+				<div class="d-flex flex-column mt-4">
+					<a class="m-auto" href="{% url 'password_change' %}">Change password</a>
+				</div>
+		  		{% endif %} 
+		  	</div>
+		  </div>
+		</div>
+		
+	</div>
+</div>
+
+
+<script type="text/javascript">
+
+	// called from base_js.html
+	//preloadImage("{{profile_image|safe}}", 'id_profile_image')
+
+	function onFriendRequestSent(){
+		location.reload();
+	}
+
+	function onFriendRequestCancelled(){
+		location.reload();
+	}
+
+	function onFriendRemoved(){
+		location.reload();
+	}
+
+	function onFriendRequestAccepted(){
+		location.reload();
+	}
+
+	function onFriendRequestDeclined(){
+		location.reload();
+	}
+
+
+	var sendFriendRequestBtn = document.getElementById("id_send_friend_request_btn")
+	if (sendFriendRequestBtn != null){
+		sendFriendRequestBtn.addEventListener("click", function(){
+			//sendFriendRequest("{{id}}", onFriendRequestSent)
+		})
+	}
+
+	var cancelFriendRequestBtn = document.getElementById("id_cancel_friend_request_btn")
+	if(cancelFriendRequestBtn != null){
+		cancelFriendRequestBtn.addEventListener("click", function(){
+			//cancelFriendRequest("{{id}}", onFriendRequestCancelled)
+		})
+	}
+
+	var removeFriendBtn = document.getElementById("id_unfriend_btn")
+	if (removeFriendBtn != null){
+		removeFriendBtn.addEventListener("click", function(){
+			//removeFriend("{{id}}", onFriendRemoved)
+		})
+	}
+
+	function triggerAcceptFriendRequest(friend_request_id){
+		//acceptFriendRequest(friend_request_id, onFriendRequestAccepted)
+	}
+
+	function triggerDeclineFriendRequest(friend_request_id){
+		//declineFriendRequest(friend_request_id, onFriendRequestDeclined)
+	}
+	
+</script>
+
+{#% include 'snippets/send_friend_request.html' %#}
+{#% include 'snippets/accept_friend_request.html' %#}
+{#% include 'snippets/decline_friend_request.html' %#}
+{#% include 'snippets/cancel_friend_request.html' %#}
+{#% include 'snippets/remove_friend.html' %#}
+{#% include 'chat/create_or_return_private_chat.html' %#}
+
+
+
+{% endblock content %}

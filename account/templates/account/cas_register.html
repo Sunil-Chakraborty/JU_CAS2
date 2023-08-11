@@ -1,0 +1,877 @@
+{% extends 'base_v2.html' %}
+
+{% load static %}
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+
+<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+	
+<style type="text/css">
+
+	input[type=number]::-webkit-inner-spin-button, 
+    input[type=number]::-webkit-outer-spin-button { 
+           -webkit-appearance: none; 
+           margin: 0; 
+    }
+
+	
+	a {
+		text-decoration: none;
+		display: inline-block;
+		padding: 8px 16px;
+	  }
+	  
+	  a:hover {
+		background-color: #ddd;
+		color: black;
+	  }
+	  
+	  .previous {
+		background-color: #f1f1f1;
+		color: black;
+	  }
+	  
+	  .next {
+		background-color: #04AA6D;
+		color: white;
+	  }
+	  
+	  .round {
+		border-radius: 50%;
+	  }
+		
+		h5{
+			text-align: center;
+			color: blue;
+		}	
+		th{	  
+			color: black;  
+		}  
+		.card-signin {
+			width: 92%;
+			max-width: 1200px;
+			padding: 15px;
+			height: 100%;
+			margin-top:10px;
+			margin-left:60px;			 
+			margin-bottom:10px;
+			
+
+		}
+		#id_mobile{
+			max-width: 200px;
+		}
+		.form-signin input[type="password"] {
+			margin-bottom: -1px;
+			margin-top: 5px;
+			border-top-left-radius: 0;
+			border-top-right-radius: 0;
+			width:330px;
+			height:20px;
+		}
+		.form-number{
+			text-align: center; 
+			width: 25pt;        
+		}
+     
+		.container{
+			width: 100%;
+			max-width: 100%;	
+			height: 700px;
+			margin-left: 30px;
+			
+		}
+		
+		th{
+			
+			height:10px;
+			padding:0;
+			
+		}  
+		.table{
+			
+			font-size: 20px;
+			
+		}
+		td{
+		
+			height:10px;
+					
+		}
+		
+		.alert {
+		  padding: 20px;
+		  background-color: #f44336;
+		  color: white;
+		}
+		
+		span{
+		    margin-top:2px;
+			padding-left:0;
+			color:red;
+		}
+		
+		
+				
+		tr {
+		   line-height: 20px;
+		   min-height: 15px;
+		   height: 15px;
+		}
+		
+		input[type='file'] {
+			color: transparent;
+		}
+	
+</style>
+
+ 
+ 
+<div class="container" >
+	<div class="row justify-content-left">
+		
+		<div class="card card-signin">
+			
+		  <div class="card-body" style="position:sticky;">
+
+
+		    <form action="" class="form-signin" method="POST" enctype="multipart/form-data">
+				
+				{% csrf_token %}
+
+				
+				{% for error in form.non_field_errors %}
+					<li><strong>{{ error }}</strong></li>
+					
+				{% endfor %}
+				
+				{% if form.errors %}
+				  <div class="alert-warning center">
+					  <h2>{{form.non_field_errors}}</h2>
+				  </div> 
+				{% endif %}
+				
+				
+					
+					<h2 class="card-title" style="font-weight:bold;color:#04355C">Part A. General Information 
+					{% if user.is_applicant %}
+						<a href="{% url 'account:home' user_id=request.user.id %}" class="previous" style="text-decoration:none;float:right;"><i class="fa fa-window-close" style="font-size:36px"></i></a>
+					{% endif %}
+					</h2>
+					<hr style="height:2px">
+			
+				<div>
+					{% if not user.is_applicant %}
+						<h4 style="color:black;margin-left:10px;font-weight:bold;">Stage / Designation :&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp From :<span>*</span>
+							{{accounts.from_dsg.label_tag}}
+							{{accounts.get_from_dsg_display}}							
+							&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp To : <span>*</span>
+							{{accounts.to_dsg.label_tag}}
+							{{accounts.get_to_dsg_display}}
+						</h4>
+					{% else %}							
+						<h4 style="color:black;margin-left:60px;font-weight:bold;">
+						Stage / Designation :&nbsp&nbsp&nbsp&nbsp From : <span>*</span>
+						{{form.from_dsg}}&nbsp&nbsp&nbsp <br><br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+						&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+						&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+						To : <span>*</span>
+						<label>{{form.to_dsg}}</label></h4>
+					{% endif %}
+
+				</div>
+				
+				<hr>
+				
+					<h4>
+					<table  class="table table-striped borderless" >	 					
+						<tr>
+							<th>1. Employee Id</th>
+							
+								{% if not user.is_applicant %}
+								<td>
+										
+										{{accounts.emp_id}}										
+								</td>		
+								{% else %}
+								<td id="emp">
+								
+									<script>
+										var emp = "{{accounts.emp_id}}";										
+										var emp2 = String('000000' + emp).slice(-6);
+										document.getElementById("emp").innerHTML = emp2;
+									</script>
+									
+								</td>		
+								{% endif %}
+							</td>
+						</tr>
+						<tr>
+							<th>2. Full Name</th>
+							
+								{% if not user.is_applicant %}
+								<td style="text-transform:uppercase;">
+										
+										{{accounts.username}}										
+								</td>		
+								{% else %}
+								<td style="text-transform:uppercase;">
+										{{form.username}}
+								</td>		
+								{% endif %}
+							</td>
+						</tr>
+						<tr>
+							<th>3. Father's Name / Mother's Name <span>*</span></th>
+							{% if not user.is_applicant %}
+								<td style="text-transform:uppercase;">
+								
+								{{accounts.parent}}
+								</td>
+							{% else %}							
+								<td>{{form.parent}}</td>
+							{% endif %}	
+						</tr>
+						<tr>
+							<th>4. Date of Birth<span>*</span></th>
+							<td>
+							{% if not user.is_applicant %}
+								
+								{{accounts.dt_ob|date:"d-m-Y" }}
+							{% else %}	
+								{{form.dt_ob}}
+							{% endif %}	
+							</td>
+						</tr>
+						<tr>
+							<th>5. Category&nbsp<span>*</span> <br><small style="color:tomato;">&nbsp&nbsp&nbsp&nbsp&nbsp(If Category is not "GEN", please provide document link.)</small>
+							</th>
+							<td>
+								{% if not user.is_applicant %}
+									
+									{{accounts.get_catg_display}}&nbsp&nbsp&nbsp&nbsp
+
+									{% if accounts.doc_link %}       
+										<a name="doc_link"  id="id_doc_link" href="{{accounts.doc_link}}" target="_blank"  style="max-width:60%" class="btn btn-primary ">Doc Attached</a>									
+									{% else %}
+										{% if accounts.catg != 'cast-5' %}
+					    					<label  name="no_doc"  class="form-control" style="float:right;max-width:50%;color:red;" readonly >Ask to attach Link</label>
+										
+										{% endif %}
+									{% endif %}	
+									
+								{% else %}
+									<div>
+									{{form.catg}}
+									
+									<span id="other" >
+									
+										{% if accounts.doc_link %}
+											<a name="doc_link"  id="id_doc_link" href="{{accounts.doc_link}}" target="_blank"  style="max-width:50%;margin-top:5px;margin-bottom:7px;float:left;" class="btn btn-primary ">Doc View</a>									
+										{% endif %}
+										
+										{{form.doc_link}}
+										
+									</span>	
+									</div>
+									
+								{% endif %}	
+							</td>
+						</tr>	
+						<tr>
+							<th>6. Differently Abled&nbsp
+							<br><small style="color:tomato;">&nbsp&nbsp&nbsp&nbsp&nbsp(If &#10004;, put the document link)</small>
+							
+							
+							</th>
+							<td >
+							
+							{% if not user.is_applicant %}
+							
+							
+									{% if accounts.pwd_link %}
+										Yes
+										<a name="pwd_link"  id="id_pwd_link" href="{{accounts.pwd_link}}" target="_blank"  style="vertical-align:top;max-width:45%;padding-top:0;height:30px;margin-left:14px;margin-bottom:5px;" class="btn btn-primary ">Doc Attached</a>									
+									{% else %}
+										No
+									{% endif %}
+									
+									
+							{% else %}
+									
+									{{form.is_pwd}}
+									
+									<span id="pwd1" >
+										{% if accounts.pwd_link %}
+											<a name="pwd_link"  id="id_pwd_link" href="{{accounts.pwd_link}}" target="_blank"  style="vertical-align:top;max-width:45%;padding-top:0;height:30px;;margin-bottom:5px;" class="btn btn-primary ">Doc View</a>									
+										{% endif %}
+										
+										{{form.pwd_link}}
+										
+									</span>	
+									
+									
+							{% endif %}
+							
+							
+								
+							</td>
+						</tr>	
+						
+						<tr>
+							<th>7. Department/School<span>*</span></th>
+							<td style="text-transform:uppercase;">
+							{% if not user.is_applicant %}
+									{{accounts.Department.label_tag}}
+									{{accounts.Department}}
+							{% else %}
+									{{form.Department}}
+							{% endif %}
+							</td>
+						</tr>
+						<tr>
+							<th>8. Current designation<span>*</span></th>
+							<td style="text-transform:uppercase;">
+								{% if not user.is_applicant %}
+										{{accounts.Designation.label_tag}}
+										{{accounts.get_Designation_display}}
+								{% else %}
+										{{form.Designation}}
+								{% endif %}
+							</td>
+						</tr>
+						<tr>
+							<th>9. Current Academic Grade Pay (AGP)/<br>Academic Level<span>*</span></th>
+							<td style="text-transform:uppercase;">
+								{% if not user.is_applicant %}
+										{{accounts.agp.label_tag}}
+										{{accounts.get_agp_display}}
+								{% else %}
+										{{form.agp}}
+								{% endif %}
+							</td>
+						</tr>
+						<tr>
+							<th>10. Highest Qualification<span>*</span></th>
+							<td style="text-transform:uppercase;">
+								{% if not user.is_applicant %}
+										{{accounts.highest_quali.label_tag}}
+										{{accounts.get_highest_quali_display}}
+								{% else %}
+										{{form.highest_quali}}
+								{% endif %}
+							</td>
+						</tr>
+						<tr>
+							<th>11. Date of last promotion , if any</th>
+							<td>
+							
+								{% if not user.is_applicant %}
+									{{accounts.dt_last_promo.label_tag}}
+									{{accounts.dt_last_promo|date:"d-m-Y" }}
+									
+								{% else %}
+								
+									{{form.dt_last_promo}}
+									
+									<span id="promo" style="color:black;">
+										{% if accounts.promo_link %}
+											<a name="promo_link"  id="id_promo_link" href="{{accounts.promo_link}}" target="_blank"  style="vertical-align:top;max-width:45%;padding-top:0;height:30px;margin-bottom:3px;margin-top:3px;" class="btn btn-primary ">Doc View</a>									
+										{% else %}
+										&nbsp&nbspDoc-Link 
+										
+										{% endif %}
+										{{form.promo_link}}
+										
+									</span>	
+									
+								{% endif %}	
+							</td>
+						</tr>
+						<tr>
+							<th>12. Date of eligibility for promotion<span>*</span></th>
+							<td>
+								{% if not user.is_applicant %}
+									{{accounts.dt_eligibility.label_tag}}
+									{{accounts.dt_eligibility|date:"d-m-Y" }}
+								{% else %}	
+									{{form.dt_eligibility}}
+									{% comment %} <a style="padding:0;" href="#" id="ass">Check assessment year</a> {% endcomment %}
+								{% endif %}	
+							</td>							
+						</tr>
+						<tr>
+							<th>13. Assessment Period (in years)<span>*</span></th>
+							<td>
+							{% if not user.is_applicant %}
+								{{accounts.ass_yr}}&nbspyears
+							{% else %}	
+								{{form.ass_yr}}
+							{% endif %}	
+							</td>							
+						</tr>
+						<tr>
+							<th>14. Address for correspondence<span>*</span></th>
+							{% if not user.is_applicant %}
+								<td style="text-transform:uppercase;">
+								
+								{{accounts.addr_corres|linebreaks}}
+								
+								</td>
+							{% else %}							
+								<td>{{form.addr_corres}}</td>
+							{% endif %}
+						</tr>
+						<tr>
+							<th>15. Permanent Address (Same as above)<span>*</span>
+								{% if user.is_applicant %}
+									{{form.is_carry}}
+								{% endif %}
+							</th>
+							{% if not user.is_applicant %}
+								<td style="text-transform:uppercase;">
+								{{accounts.addr_perm.label_tag}}
+								{{accounts.addr_perm|linebreaks}}
+								
+								</td>
+							{% else %}							
+								<td>{{form.addr_perm}}</td>
+							{% endif %}
+						</tr>
+						<tr>
+							<th>16. Mobile No.<span>*</span></th>
+							<td>
+								{% if not user.is_applicant %}
+										{{accounts.mobile.label_tag}}
+										{{accounts.mobile}}
+								{% else %}
+										{{form.mobile}}
+								{% endif %}
+							</td>
+						</tr>
+						
+						<tr>
+							<th>17. E-mail Id</th>
+							<td>
+								{% if not user.is_applicant %}
+										{{accounts.email.label_tag}}
+										{{accounts.email}}
+								{% else %}
+										{{form.email}}
+								{% endif %}
+							</td>			
+						</tr>
+						<tr>
+							<th>18. Upload Signature(JPG/PNG)<span>*</span></th>
+							<td >
+								{% if not user.is_applicant %}
+										{{accounts.pdf.label_tag}}
+										{{accounts.pdf}}
+								{% else %}
+								
+									{% if accounts.pdf %}
+										{{form.pdf}}
+									{% else %}																			
+										<input style="width:150px;" id="id_pdf" name="pdf" type="file" />
+										<span id="i_file" >No file selected</span>
+										
+									{% endif %}									
+								{% endif %}
+							</td>				
+						</tr>
+						
+					</table>
+					
+						<div >
+						{% if not user.is_applicant %}
+							<a href="{% url 'account:home' user_id=pk_var %}" style="padding:0;width:5%;font-weight:bold;font-size:2rem;" class="btn btn-primary btn-lg">&laquo;</a>
+							<a href="{% url 'account:academy' user_id=pk_var  %}" style="padding:0;width:5%;font-weight:bold;font-size:2rem;" class="btn btn-success btn-lg">&raquo;</a>
+						{% else %}
+						    <div style="margin-left:12px;height:5%;background-color:white;width:85%;">
+								<a href="{% url 'account:home' user_id=pk_var %}" style="padding:0;width:5%;font-weight:bold;font-size:2rem;" class="btn btn-primary btn-lg">&laquo;</a>
+								
+								<button style="padding:0;float:right;width:110px;color:white;font-size:25px;" type="submit" onclick="errorMessage()" class="btn btn-info btn-block btn-lg">
+										Save</button>
+										
+								<a href="{% url 'account:academy' user_id=pk_var  %}" style="padding:0;width:5%;font-weight:bold;font-size:2rem;" class="btn btn-success btn-lg">&raquo;</a>
+								
+			
+							</div>
+									
+								
+						{% endif %}
+						
+						</div>
+						
+				
+				
+			
+
+			</form>	
+						
+				
+		</div>
+		</div>
+		</div>
+		</div>	
+		
+		
+		<script type="text/javascript">
+			
+			$('#id_pdf').change(function(){
+			  var filename = $(this)[0].files[0].name;			  
+			  $('#i_file').text(filename);
+			  document.getElementById("i_file").style.color = "blue";
+			  
+			});
+			
+			function JSalert(){
+				swal('{{msg1|wordwrap:40|linebreaksbr}}');
+			}
+			
+						
+			$( document ).ready(function() {
+
+				var gen_info  = '{{accounts.frm_general_info}}'
+				
+				
+				if (gen_info!="True"){				
+					JSalert();
+				}
+				
+				var catg = $('select#id_catg').val();
+				
+				$('#id_to_dsg').attr("disabled", true);
+				
+				if (catg != 'cast-5') {
+				   $("#other").show("fast");       
+				}
+				else {
+				  $("#other").hide("fast");		 
+				  
+				}
+				
+				if ($('#chk_pwd').is(":checked")){
+					 $("#pwd1").show("fast");				
+				}
+				else {
+					 $("#pwd1").hide("fast");
+				}
+				
+				
+				const promo_dt = document.getElementById('id_dt_last_promo');
+				
+				if (promo_dt.value){
+					 $("#promo").show("fast");				
+				}
+				else {
+					 $("#promo").hide("fast");
+				}
+				
+			});
+			
+			function check_promo() {
+				
+				if ($('input[name=dt_last_promo]').val()){
+					 $("#promo").show("fast");				
+				}
+				else {
+					 $("#promo").hide("fast");
+				}
+				
+			}
+		
+			
+			function check_dsg() {
+			
+				var from_dsg = $('select#id_from_dsg').val();
+				
+				var to_dsg = document.getElementById("id_to_dsg");
+				
+				$('#id_to_dsg').attr("disabled", true);
+				
+				if (from_dsg == 'Stage 1') {								    
+					to_dsg.value = 'Stage 2';				  				   
+				}
+				else if (from_dsg == 'Stage 2') {				  
+				  to_dsg.value = 'Stage 3';
+				}
+				else if (from_dsg == 'Stage 3') {				  
+				  to_dsg.value = 'Stage 4';
+				}
+				else if (from_dsg == 'Stage 4') {				  
+				  to_dsg.value = 'Stage 5';
+				}
+				
+				
+			}
+			
+			
+			
+			$("#ass").click(function(){
+					var last_promo  = $('#id_dt_last_promo').val();
+					var eligibility = $('#id_dt_eligibility').val();
+					var max_quali = $('#id_highest_quali').val();
+					var to_dsg = $('#id_to_dsg').val();
+					
+					const d1 = new Date(eligibility).getFullYear();
+					const d2 = new Date(last_promo).getFullYear();
+					var yr_dif = (d1-d2);
+					
+					
+					/*
+					('Stage 2', 'Assistant Prof. (Stage 2)'),
+					('Stage 3', 'Assistant Prof. (Stage 3)'),
+					('Stage 4', 'Associate Prof. (Stage 4)'),
+					('Stage 5', 'Professor (Stage 5)')
+					*/
+
+				if (to_dsg == "Stage 2"){	
+					
+					
+					var myhtml = document.createElement("div");
+					myhtml.innerHTML = "M.phil/ M.E/ M.Tech/ M.Arch/ M.Pharm <br> should be of 5 years (min)";
+				
+					if (max_quali == "q1") {
+						if (parseInt(yr_dif) < 4) {
+							
+							swal({
+								title: "Please ensure the minimum Assessment Period",
+								text:  "Ph.D - should be of 4 years(min)",
+														
+							});
+							
+						}
+						else {
+							swal({
+									title: "Assessment Period is OK",
+									text:  "Please save the changes (if any)",
+									icon:  "success"						
+							});
+						}
+					}
+					else if (max_quali == "q2" || max_quali == "q3" || max_quali == "q4" || max_quali == "q5" || max_quali == "q6"){
+						if (parseInt(yr_dif) < 5) {
+							
+							swal({
+								html:true,
+								title: "Please ensure the minimum Assessment Period",
+								content: myhtml,
+																					
+							});
+						}
+						else {
+							swal({
+									title: "Assessment Period is OK",
+									text:  "Please save the changes (if any)",
+									icon:  "success"						
+							});
+						}
+					}
+					else {
+						if (parseInt(yr_dif) < 6) {
+						
+							
+							swal({
+								html:true,
+								title: "Please ensure the minimum Assessment Period",
+								text:  "M.Sc./M.A & others - should be of 6 years(min)",
+																					
+							});
+													
+							
+						}
+						else {
+							swal({
+									title: "Assessment Period is OK",
+									text:  "Please save the changes (if any)",
+									icon:  "success"						
+							});
+						}
+					
+					
+					}
+				}
+				else if (to_dsg == "Stage 3"){
+				
+					if (parseInt(yr_dif) < 5) {
+							
+							swal({
+								title: "Please ensure the minimum Assessment Period",
+							});
+							
+					}
+					else {
+							swal({
+									title: "Assessment Period is OK",
+									text:  "Please save the changes (if any)",
+									icon:  "success"						
+							});
+					}
+
+				}	
+				else if (to_dsg == "Stage 4"){
+				
+					if (parseInt(yr_dif) < 3) {
+							
+							swal({
+								title: "Please ensure the minimum Assessment Period",
+							});
+							
+					}
+					else {
+							swal({
+									title: "Assessment Period is OK",
+									text:  "Please save the changes (if any)",
+									icon:  "success"						
+							});
+					}
+
+				}
+				else if (to_dsg == "Stage 5"){
+						
+					if (parseInt(yr_dif) < 3) {
+							
+							swal({
+								title: "Please ensure the minimum Assessment Period",
+							});
+							
+					}
+					else {
+							swal({
+									title: "Assessment Period is OK",
+									text:  "Please save the changes (if any)",
+									icon:  "success"						
+							});
+					}
+
+
+				}
+				
+				
+				
+			});
+				
+   
+			function check_other() {
+			
+				var catg = $('select#id_catg').val();
+				
+				if (catg != 'cast-5') {
+				   $("#other").show("fast");				  				   
+				}
+				else {				  
+				  $("#other").hide("fast");				  
+				 
+				}
+				
+			}
+
+			
+			function check_pwd() {
+			
+				//$("#pwd1").toggle();
+				
+				if ($('#chk_pwd').is(":checked")){
+					 $("#pwd1").show("fast");				
+				}
+				else {
+					 $("#pwd1").hide("fast");
+				}
+				
+			}
+		
+			function limit_input() {
+				var field = document.getElementById("number_field");
+				var max_length = 10;
+				
+				if (field.value.length > max_length) {
+					field.value = field.value.slice(0, max_length); 
+				}
+				
+			}
+
+			function check_box() {				
+				var field1 = document.getElementById("addr_perm");
+				var field2 = document.getElementById("addr_corres");
+				field1.value = field2.value;
+				
+			}
+			
+			 
+			
+			 $("form").submit(function(){
+				
+				
+				var last_promo  = $('#id_dt_last_promo').val();
+				var eligibility = $('#id_dt_eligibility').val();
+				$('#id_to_dsg').attr("disabled", false); 
+				
+				const d1 = new Date(eligibility).getFullYear();
+				const d2 = new Date(last_promo).getFullYear();
+				
+				var yr_dif = (d1-d2);
+				
+				//document.getElementById("id_ass_yr").value = yr_dif;
+				
+				if ($('#chk_pwd').not(':checked').length) {					
+					$('input[name=pwd_link]').val("");
+					$('input[name=pwd_link]').attr('required', false); 
+				}
+				
+				var catg = $('select#id_catg').val();
+				
+				if (catg == 'cast-5') {
+				   $('input[name=doc_link]').val("");
+				   $('input[name=doc_link]').attr('required', false);       
+				}
+				
+				if (catg != 'cast-5') {				   	
+				   var d_link  = $('input[name=doc_link]').val();
+				   
+				   if (d_link == '' ){						
+					    
+						alert("In Category ,cast certificate is required!,\nplease provide the link.");
+					}
+					
+				}
+				
+				
+				if ($('#chk_pwd').is(":checked")){
+					var e_link  = $('input[name=pwd_link]').val();										
+					
+					if (e_link == ''){					
+						
+						alert("Are you differently abled ,\nplease put the document link and save it.");
+					} 
+    			
+				}
+				
+				if ($('input[name=dt_last_promo]').val()){
+					var p_link  = $('input[name=promo_link]').val();
+					
+					
+					
+					if (p_link == ''){				
+										
+						alert("Page is not saved, \nReference document link is required against srl-11");
+						
+					} 
+    			
+				}
+				else {
+				 $('input[name=promo_link]').val("");
+				}
+				
+				
+			});
+		
+			
+  
+
+
+		</script>
+
+{% endblock content %}

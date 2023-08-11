@@ -1,0 +1,1611 @@
+{% load static %}
+{% load crispy_forms_tags %}
+
+<head>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	
+	<meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+
+<style>
+        @page {
+            size: a4 portrait;
+			
+			background-image: url(draft.jpg);
+			
+            @frame header_frame {           /* Static Frame */
+                -pdf-frame-content: header_content;
+                left: 50pt; width: 512pt; top: 10pt; height: 950pt;
+				
+            }
+			
+            @frame content_frame {          /* Content Frame */
+                left: 30pt; width: 512pt; top: 100pt; height: 660pt;
+				
+								
+            }
+			
+            
+			@frame footer_frame {           
+            -pdf-frame-content: footer_content;
+            left: 50pt; width: 470pt; top: 770pt; height: 40pt;
+            display: block;
+           
+            
+			}
+			
+        }
+		
+		@page jrnl_pub{
+			size:landscape;
+			
+			@frame footer_frame {           
+            -pdf-frame-content: footer_content;
+            left: 60pt; width: 470pt; top: 770pt; height: 40pt;
+            display: block;
+			}
+			
+			margin: .8cm;
+			
+		}
+		@page api_summ{
+			size: a4 portrait;
+            @frame header_frame {           /* Static Frame */
+                -pdf-frame-content: header_content;
+                left: 50pt; width: 512pt; top: 10pt; height: 950pt;
+				
+            }
+			
+            @frame content_frame {          /* Content Frame */
+                left: 30pt; width: 512pt; top: 70pt; height: 660pt;				
+            }
+			
+            
+			@frame footer_frame {           
+            -pdf-frame-content: footer_content;
+            left: 50pt; width: 470pt; top: 770pt; height: 40pt;
+            display: block;
+			}
+			
+		}
+		
+		@page fwd_link{
+			size: a4 portrait;
+           
+			
+            @frame content_frame {          /* Content Frame */
+                left: 30pt; width: 512pt; top: 70pt; height: 660pt;				
+            }
+			
+            
+			@frame footer_frame {           
+            -pdf-frame-content: footer_content;
+            left: 50pt; width: 470pt; top: 770pt; height: 40pt;
+            display: block;
+			}
+			margin: 1cm;	
+		}
+		
+		
+        th, td.box{
+            text-align:left;
+            vertical-align: middle;
+            font-size:12px;			
+            text-decoration:none;			
+			width: auto;
+        }
+		
+        .wd{
+            width: 10%;
+        }
+
+        .alert{            
+            color: red;
+        }
+        th.sub{
+            width:30%;
+        }
+        th.marks, th.year, td.marks, td.year{
+            width:11%;
+            text-align:center;
+        }
+
+        .content-loader tr td {
+            white-space: nowrap;
+        }
+        .centered {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+			
+		.no-display{
+			display:none;
+		}	
+    </style> 
+    
+    
+
+
+    </head>
+    
+    <body>
+	
+		<div id="spinner1">
+		<div class="d-flex justify-content-center text-primary">
+		  <div class="spinner-border" role="status">
+			
+		  </div>
+		</div>
+		</div>
+		
+        <!-- Content for Static Frame 'header_frame' -->
+        <div id="header_content" >
+		
+           
+            <img src="http://192.168.191.103:8000/static/images/ju_logo.png" style="width:60px;text-align:center;">
+			<!-- <img src="http://localhost:8000/static/images/ju_logo.png" style="width:60px;text-align:center;">-->
+			
+            <h2 style="text-align:center">JADAVPUR UNIVERSITY
+               <br> KOLKATA - 700032               
+               <br> 
+            </h2>
+            <br>
+            
+        </div>
+		
+		<h3 style="text-align:center;padding-top:7px;letter-spacing:1px;" >GO No.1343-Edn(U)/1U-41/11(Pt) dt.07.12.2017
+         <br>EC Res. No. 18 Dated 12.11.2022  
+        </h3>
+        <h2 style="text-align:center;padding-top:7px;" >APPLICATION FORM FOR PROMOTION OF UNIVERSITY TEACHERS UNDER CAREER ADVANCEMENT SCHEME
+            
+        </h2>
+    
+        <!-- Content for Static Frame 'footer_frame' -->
+        <div id="footer_content">(c) - page <pdf:pagenumber>
+            of <pdf:pagecount>
+        </div>
+        
+        <!-- HTML Content -->
+
+        <h1 style="margin-left:190px">From :
+            Stage/ Designation :&nbsp&nbsp<span style="font-weight:400">{{from_dsg}}</span>
+        </h1>
+        
+        <h1 style="margin-left:190px">To :
+            Stage/ Designation :&nbsp&nbsp<span style="font-weight:400">{{to_dsg}}</span>
+        </h1>
+        
+        <h2 style="text-align:center" >(Assistant Professor Stage 1 to Stage 2, Stage 2 to Stage 3),Assistant Professor (Stage 3) to Associate Professor
+            <br> (Stage 4), Associate Professor (Stage 4) to Professor/equivalent cadres (Stage 5). 
+          
+        </h2>
+        
+        <div style="background-color: blue;color:white;">
+        <h2 style="padding-top:7px;font-size:15px">PART A : GENERAL INFORMATION AND ACADEMIC BACKGROUND</h2>
+        </div>
+        <table  width="100%" border="1" cellspacing="0" cellpadding="5">
+
+            <tr>
+                <th class="box">1. Employee Id</th>
+                <td class="box">{{emp_id}}</td>
+            </tr>
+			<tr>
+                <th class="box">2. Full Name</th>
+                <td class="box">{{username}}</td>
+            </tr>
+            <tr>
+                <th class="box">3. Father's Name / Mother's Name</th>
+                <td class="box">{{parent}}</td>
+            </tr>
+            <tr>
+                <th class="box">4. Date of Birth</th>
+                <td class="box">{{dt_ob|date:"d-m-Y"}}</td>
+            </tr>
+            <tr>
+                <th class="box">5. Category</th>
+                <td class="box">{{catg}}
+				
+					{% if doc_link %}
+						&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<a class="box" href="{{doc_link}}" target="_top">Doc Link</a>
+					{% endif %}	
+					
+				</td>
+                
+            </tr>
+			<tr>
+				<th class="box">6. Differently Abled</th>
+				<td class="box" style="font-weight:bold;">
+					{% if is_pwd %}
+						Yes
+					{% else %}
+						No
+					{% endif %}	
+					{% if pwd_link %}
+						&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<a class="box" href="{{pwd_link}}" target="_top">Doc Link</a>
+						
+						
+					{% endif %}	
+				</td>
+			</tr>
+            <tr>
+                <th class="box">7. Department / School</th>
+                <td class="box">{{Department}}</td>
+            </tr>
+            <tr>
+                <th class="box">8. Current Designation</th>
+                <td class="box">{{Designation}}</td>
+            </tr>
+            <tr>
+                <th class="box">9. Academic Grade Pay (AGP) / Level</th>
+                <td class="box">{{agp}}</td>
+            </tr>
+			<tr>
+                <th class="box">10. Highest Qualification</th>
+                <td class="box">{{highest_quali}}</td>
+            </tr>
+           <tr>
+                <th class="box">11. Date of last promotion , if any</th>
+                <td class="box">{{dt_last_promo|date:"d-m-Y"|default_if_none:"Not Applicable"}}
+				{% if promo_link %}
+						&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<a class="box" href="{{promo_link}}" target="_top">Doc Link</a>
+				{% endif %}
+				</td>	
+            </tr>
+            <tr>
+                <th class="box">12. Date of eligibility for promotion</th>
+                <td class="box">{{dt_eligibility|date:"d-m-Y"}}</td>
+            </tr>
+			<tr>
+				<th>13. Assessment Period (in years)</th>
+				<td class="box">{{ass_yr}}</td>				
+            <tr>
+                <th class="box">14. Address for correspondence</th>
+                <td class="box">{{addr_corres|title|linebreaks}}</td>
+            </tr>
+            <tr>
+                <th class="box">15. Permanent Address</th>
+                <td class="box">{{addr_perm|title|linebreaks}}</td>
+            </tr>
+            <tr>
+                <th class="box">16. Mobile No.</th>
+                <td class="box">{{mobile}}</td>
+            </tr>
+            <tr>
+                <th class="box">17. E-mail Id</th>
+                <td class="box">{{email}}</td>
+            </tr>
+        </table>
+
+        <div>
+            <pdf:nextpage /> 
+        </div> 
+        
+        <br>
+        <div style="background-color: blue;color:white;">
+            <h2 style="padding-top:7px;font-size:15px">Part B. Academic Qualifications :</h2>
+        </div>
+
+        <h1 style="text-align:left;font-size:15px"> A. Last Academic Qualifications (From graduation onwards excluding research degree(s)):
+        </h1>
+
+
+        <table repeat="1" width="100%" border="1" cellspacing="0" cellpadding="5">
+           
+            <tr>
+                <th class="box" style="width:15%;">Degree/<BR>Diploma</th>
+                <th class="board" style="width:16%;" >Name of the<BR>Board/<BR>University</th>
+                <th class="year" style="width:5%;">Year of <BR>Passing</th>
+                <th class="marks" style="width:5%;">(%)of<BR>Marks<BR>Obtained</th>	
+                <th class="box" style="width:12%;">Division/<BR>Class/Grade</th>	
+                <th class="sub">Subject(s)</th>
+                <th class="box wd">Doc Link</th>
+            </tr>
+            
+            {% for item in academy %}
+			  {% if item.degree %}
+                 <tr>
+                    <td class="box">{{item.degree|default_if_none:"Blank"}}</td>
+                    {% if item.name_board_university == None %}
+                        <td class="box alert">{{item.name_board_university|default_if_none:"Blank"}}</td>
+                    {% else %}
+                        <td class="box">{{item.name_board_university|default_if_none:"Blank"}}</td>
+                    {% endif %}
+                    {% if item.year_passing == None %}
+                        <td class="year box alert">{{item.year_passing|default_if_none:"Blank"}}</td>
+                    {% else %}
+                        <td class="year box">{{item.year_passing|default_if_none:"Blank"}}</td>
+                    {% endif %}
+                    <td class="marks box">{{item.marks_obtained|default_if_none:"Blank"}}%</td>
+                    <td class="box">{{item.div_class_grade|default_if_none:"Blank"}}</td>
+                    <td class="box">{{item.subject|title|linebreaks|default_if_none:"Blank"}}</td>
+					
+					{% if item.doc_link %}
+                        <td ><a class="box" href="{{item.doc_link}}" target="_blank">View</a></td>                        
+                    {% endif %}
+					
+                </tr>
+				{% endif %}
+                
+            {% endfor %} 
+            </table>
+            <br>
+            <h1 style="text-align:left;font-size:15px"> B.Research Degrees:
+            </h1>
+
+            <table repeat="1" width="100%" border="1" cellspacing="0" cellpadding="5">
+     
+                <tr>
+                    <th class="box">Degree</th>
+                    <th class="box">Title of Dissertion/Thesis</th>
+                    <th class="box">Date of Award</th>
+                    <th class="box">Name of the University</th>
+                    <th class="box wd">Doc Link</th>
+                </tr>
+                
+      
+            {% for item in research %}
+				{% if item.degree %}
+                 <tr>
+                    <td class="box">{{item.degree|default_if_none:"Blank"}}</td>
+                    <td class="box">{{item.thesis|title|linebreaks|default_if_none:"Blank"}}</td>    
+                    <td class="box">{{item.dt_award|date:"d-m-Y"|default_if_none:"Blank"}}</td>
+                    <td class="box">{{item.institute|default_if_none:"Blank"}}</td>                  
+
+                    {% if item.url_link %}
+                        <td ><a class="box" href="{{item.url_link}}" target="_blank">View</a></td>
+                        
+                    {% endif %}
+                    
+                </tr> 
+				{% endif %}		
+            {% endfor %} 
+
+            </table> 
+
+            <div>
+                <pdf:nextpage /> 
+            </div>
+
+            
+            <br>
+            
+
+            <div style="background-color: blue;color:white;">
+                <h2 style="padding-top:7px;font-size:15px">Part C. Professional Experience :</h2>
+            </div>
+    
+            <h1 style="text-align:left;font-size:15px"> A.Position(s) held Prior to Joining this University, if any:
+            </h1>
+
+            <table repeat="1" class="content-loader" width="100%" border="1" cellspacing="0" cellpadding="5">
+     
+                <tr>
+                    <th class="box">Desig-<br>nation</th>
+                    <th class="box">Name of Employer</th>
+                    <th class="box marks">Date of Joining</th>
+                    <th class="box marks">Date of Leaving</th>
+                    <th class="box marks">Gross Salary</th>                    
+                    <th class="box">Reason for Leaving</th>
+					<th class="box wd">Doc Link</th>					
+                    
+                </tr>
+                
+      
+            {% for item in prests %}
+				{% if item.designation %}
+                 <tr>
+                    <td class="box marks">{{item.designation|default_if_none:"Blank"}}</td>
+                    <td class="box">{{item.employer|default_if_none:"Blank"}}</td>    
+                    <td class="box marks">{{item.dt_join|date:"d-m-Y"|default_if_none:"Blank"}}</td>
+                    <td class="box marks">{{item.dt_leav|date:"d-m-Y"|default_if_none:"Blank"}}</td>
+                    <td class="box marks">{{item.gross_salary|default_if_none:"Blank"}}</td>    
+                    <td class="box">{{item.reason_leaving|default_if_none:"Blank"}}</td>
+					{% if item.url_link %}
+                        <td ><a class="box" href="{{item.url_link}}" target="_blank">View</a></td>                        
+                    {% endif %}					
+                 </tr>  
+				{% endif %}		
+            {% endfor %} 
+
+            </table> 
+
+            <h1 style="text-align:left;font-size:15px"> B.Posts held after Appointment at the University :
+            </h1>
+
+            <table repeat="1" class="content-loader" width="100%" border="1" cellspacing="0" cellpadding="5">
+     
+                <tr>
+                    <th class="box">Designation</th>
+                    <th class="box">Department/School</th>
+                    <th class="box">From date</th>
+                    <th class="box">To date</th>
+                    <th class="box">Pay Scale</th>
+                    <th class="box">AGP/Level</th>
+					<th class="box wd">Doc Link</th>
+                </tr>
+                
+      
+            {% for item in curpost %}
+				{% if item.designation %}
+                 <tr>
+                    <td class="box">{{item.get_designation_display|default_if_none:"Blank"}}</td>
+                    <td class="box">{{item.department|default_if_none:"Blank"}}</td>    
+                    <td class="box marks">{{item.period_from|date:"d-m-Y"|default_if_none:"Blank"}}</td>
+                    <td class="box marks">{{item.period_to|date:"d-m-Y"|default_if_none:"Blank"}}</td>
+                    <td class="box marks">{{item.pay_scale|default_if_none:"Blank"}}</td>    
+                    <td class="box marks">{{item.get_agp_display|linebreaks|default_if_none:"Blank"}}</td>
+					{% if item.url_link %}
+                        <td ><a class="box" href="{{item.url_link}}" target="_blank">View</a></td>                        
+                    {% endif %}							
+                 </tr>
+				{% endif %} 
+            {% endfor %} 
+
+            </table> 
+
+            
+            <div>
+                <pdf:nextpage /> 
+            </div>
+
+            
+            <br>
+
+            <div style="background-color: blue;color:white;">
+                <h2 style="padding-top:7px;font-size:15px">Part D. Teaching Experience :</h2>
+            </div>
+    
+            <h1 style="text-align:left;font-size:15px"> A.Period of Teaching and / or Research Experience :
+            </h1>
+
+            <table repeat="1" class="content-loader" width="100%" border="1" cellspacing="0" cellpadding="5">
+     
+                <tr>
+                    <th class="box">Level of Classes</th>
+                    <th class="box">No. of Years</th>
+                </tr>
+                <tr>
+                    <th class="box">PG Classes</th>
+                    {% for item in teach %}
+                    <td class="box">{{item.pg_class}}</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <th class="box">UG Classes</th>
+                    {% for item in teach %}
+                    <td class="box">{{item.ug_class}}</td>
+                    {% endfor %}
+                </tr>
+				<tr>
+                    <th class="box">Post-doctoral Research</th>
+                    {% for item in teach %}
+                    <td class="box">{{item.postdoc_yrs}}</td>
+                    {% endfor %}
+                </tr>
+				<tr>
+                    <th class="box">Doctoral Research</th>
+                    {% for item in teach %}
+                    <td class="box">{{item.doc_yrs}}</td>
+                    {% endfor %}
+                </tr>
+				
+				
+                
+            </table> 
+
+            <h1 style="text-align:left;font-size:15px"> B.Field(s) of Specialisation under the Subject/Discipline :
+            </h1>
+
+            <table repeat="1" class="content-loader" width="100%" border="1" cellspacing="0" cellpadding="5">
+                
+                <tr>
+                   
+                    {% for item in teach %}
+                    <td class="box">{{item.specialisation|linebreaks}}</td>
+                    {% endfor %}
+
+                </tr>
+          
+            </table> 
+
+             
+            <div>
+                <pdf:nextpage /> 
+            </div>
+
+
+            
+            <br>
+
+            <div style="background-color: blue;color:white;">
+                <h2 style="padding-top:7px;font-size:15px">Part E. Orientation / Induction Program(s) or Refresher / Short-term Course(s):</h2>
+            </div>
+    
+            <h1 style="text-align:left;font-size:15px"> Program(s) / Course(s) Attended :
+            </h1>
+
+            <table repeat="1" class="content-loader" width="100%" border="1" cellspacing="0" cellpadding="5">
+     
+                 
+                <tr>
+                    <th VALIGN=TOP class="box">Title of the Course</th>
+                    <th VALIGN=TOP class="box">Place</th>
+                    <th VALIGN=TOP class="box">Duration (No. of Weeks)</th>
+                    <th VALIGN=TOP class="box" style="text-align: center;">Period :<br> From Date- To Date</th>
+                    <th VALIGN=TOP class="box wd">Doc Link</th>
+                    
+                </tr>
+				{% for item in orient %}
+					{% if item.title %}					
+						<tr>
+							<td class="box">{{item.title|default_if_none:"Blank"|linebreaks}}</td>
+							<td class="box">{{item.place|default_if_none:"Blank"}}</td>    
+							<td class="box">{{item.duration|default_if_none:"Blank"}}</td>
+							<td class="box">{{item.period|default_if_none:"Blank"|linebreaks}}</td>
+							{% if item.url_link %}
+								<td ><a class="box" href="{{item.url_link}}" target="_blank">View</a></td>                        
+							{% endif %}	
+						</tr>					
+					{% endif %}	
+				{% endfor %}
+            </table>
+			
+			<div>
+                <pdf:nextpage /> 
+            </div>
+			
+            <br>
+
+            <div style="background-color: blue;color:white;">
+                <h2 style="padding-top:7px;font-size:15px">API SCORE CALCULATION MATRIX</h2>
+            </div>
+    
+            <h1 style="text-align:left;font-size:15px"> API CATEGORY : I. TEACHING, LEARNING AND EVALUATION RELATED ACTIVITIES
+            </h1>
+
+            <table repeat="1" class="content-loader" width="100%" border="1" cellspacing="0" cellpadding="5">
+				<tr>
+					<th style="width:7%;">Sl.No.</th>
+					<th>Nature of Activity</th>
+					<th style="text-align:center;width:12%;">Max Marks</th>
+					<th style="text-align:center;">Hours spent per<br>academic year</th>
+					<th style="display:none;width:15%;">Actual score</th>
+					<th style="text-align:center;width:15%;">Self Appraisal Score</th> 
+					{% if admin %}			
+						<th style="text-align:center;">Verified API Score</th>					
+					{% endif %}	
+					<th>Doc.Link</th>
+					
+				</tr> 
+				<tr>
+					<td>1.</td>
+					<td>Direct Teaching<br>(self declaration)</td>
+					<td style="text-align:center;">{{dt_marks}}</td>
+					<td style="text-align:center;">{{api1.direct_teaching}}</td>
+					<td style="text-align:center;">{{api1.self_api_dt}}</td>
+					{% if admin %}
+						<td style="text-align:center;">{{api1.veri_api_dt}}</td>				
+					{% endif %}
+					
+					{% if api1.url_dt %}
+						<td><a name="url_dt"  id="id_url_dt" href="{{api1.url_dt}}" target="_blank"  style="max-width:100%;" class="btn btn-primary ">View</a></td>							
+					{% else %}
+						<td><label name="no_url_dt" class="form-control" style="max-width:100%" readonly >None</label></td>						
+					{% endif %}
+				</tr>
+				<tr>
+					<td>2.</td>
+					<td>Examination duties<br>(question paper setting,<br> Invigilation, evaluation of <br> answer scripts etc.)<br> (self declaration)</td>
+					<td style="text-align:center;">{{ed_marks}}</td>
+					<td style="text-align:center;">{{api1.exam_duties}}</td>
+					<td style="text-align:center;">{{api1.self_api_ed}}</td>
+					{% if admin %}
+						<td style="text-align:center;">{{api1.veri_api_ed}}</td>				
+					{% endif %}
+					
+					{% if api1.url_ed %}
+						<td><a name="url_ed"  id="id_url_ed" href="{{api1.url_ed}}" target="_blank"  style="max-width:100%;" class="btn btn-primary ">View</a></td>							
+					{% else %}
+						<td><label name="no_url_ed" class="form-control" style="max-width:100%" readonly >None</label></td>						
+					{% endif %}
+				</tr>
+				<tr>
+					<td>3.</td>
+					<td>Innovative Teaching-<br>learning methodologies,
+						<br> updating of subject <br> contents/courses, mentoring etc.
+						<br>(self declaration)
+					</td>
+					<td style="text-align:center;">{{it_marks}}</td>
+					<td style="text-align:center;">{{api1.innovating_teaching}}</td>
+					<td style="text-align:center;">{{api1.self_api_it}}</td>
+					{% if admin %}
+						<td style="text-align:center;">{{api1.veri_api_it}}</td>				
+					{% endif %}
+					
+					{% if api1.url_it %}
+						<td><a name="url_it"  id="id_url_it" href="{{api1.url_it}}" target="_blank"  style="max-width:100%;" class="btn btn-primary ">View</a></td>							
+					{% else %}
+						<td><label name="no_url_it" class="form-control" style="max-width:100%" readonly >None</label></td>						
+					{% endif %}
+				</tr>
+				<tr>
+					<td style="font-weight:bold;">Total</td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td style="text-align:center;font-weight:bold;">{{api_1}}</td>
+				</tr>	
+			</table>
+			
+			<div>
+			   <pdf:nextpage /> 
+            </div>
+			
+            <br>			
+			<div style="background-color: blue;color:white;">
+                <h2 style="padding-top:7px;font-size:15px">API SCORE CALCULATION MATRIX</h2>
+            </div>
+    
+            <h1 style="text-align:left;font-size:15px">CATEGORY II: PROFESSIONAL DEVELOPMENT, CO-CURRICULAR AND EXTENSION ACTIVITIES
+            </h1>
+			<table repeat="1" class="content-loader" width="100%" border="1" cellspacing="0" cellpadding="5">
+			<tr>
+				<th style="width:30%;">Nature of Activity</th>
+				<th>Max Marks</th>
+				<th style="text-align:center;">Hours spent per<br>academic year</th>
+				<th style="text-align:center;display:none">Actual score</th>
+				<th style="text-align:center;">Self Appraisal Score</th>
+				{% if admin %}			
+						<th style="text-align:center;">Verified API Score</th>					
+				{% endif %}		
+				
+				<th style="text-align:center;">Doc.Link </th>
+				
+			</tr>
+			<tr>
+				<td><textarea>a). Student related co-curricular, extension and field based activities.
+				(i) Discipline related co-curricular activities (e.g.remedial classes,career counseling,study visit,student seminar and other events.)
+				(ii) Other co-curricular activities(Cultural, Sports, NSS, NCC etc.).Extension and dissemination activities (public /popular lectures/talks/seminars etc.)
+				</textarea>		
+				</td>
+				<td style="text-align:center;">15</td>
+				<td style="text-align:center;">{{api2.field_based_activities}}</td>				
+				<td style="text-align:center;">{{api2.self_api_fba}}</td>
+				
+				{% if admin %}
+					<td style="text-align:center;">{{api2.veri_api_fba}}</td>
+				{% endif %}
+				
+				
+				{% if api2.url_fba %}
+					<td style="text-align:center;"><a name="url_fba"  id="id_url_fba" href="{{api2.url_fba}}" target="_blank"  style="max-width:97%;" class="btn btn-primary ">View</a></td>							
+				{% else %}
+					<td style="text-align:center;"><label name="no_url_fba" class="form-control" style="max-width:100%" readonly >None</label></td>						
+				{% endif %}
+			</tr>
+			<tr>
+				<td><textarea>b). Contribution to corporate life and management of the department and institution through participation in academic and administrative committees and responsibilities.		
+							  i). Administrative responsibility (including as Dean / Principal / Chairperson / Convener / Teacher-in-charge/  similar other duties that require regular office hrs for  its discharge)		
+							 ii). Participation in Board of Studies, Academic and Administrative Committees
+								  (Self declaration)				
+				</textarea>		
+				</td>
+				<td style="text-align:center;">15</td>
+				<td style="text-align:center;">{{api2.corp_life_management}}</td>				
+				<td style="text-align:center;">{{api2.self_api_clm}}</td>
+				
+				{% if admin %}
+					<td style="text-align:center;">{{api2.veri_api_clm}}</td>
+				{% endif %}
+				
+				
+				{% if api2.url_clm %}
+					<td style="text-align:center;"><a name="url_clm"  id="id_url_fba" href="{{api2.url_clm}}" target="_blank"  style="max-width:97%;" class="btn btn-primary ">View</a></td>							
+				{% else %}
+					<td style="text-align:center;"><label name="no_url_clm" class="form-control" style="max-width:100%" readonly >None</label></td>						
+				{% endif %}
+			</tr>
+			<tr>
+				<td><textarea>c.) Professional Development activities (such as participation in seminars, conferences, short term training courses, industrial experience, talks, lectures in refreshers/faculty development courses, dissemination and general articles and any other contribution			
+				</textarea>		
+				</td>
+				<td style="text-align:center;">15</td>
+				<td style="text-align:center;">{{api2.prof_dev_activity}}</td>				
+				<td style="text-align:center;">{{api2.self_api_pda}}</td>
+				
+				{% if admin %}
+					<td style="text-align:center;">{{api2.veri_api_pda}}</td>
+				{% endif %}
+				
+				
+				{% if api2.url_pda %}
+					<td style="text-align:center;"><a name="url_pda"  id="id_url_pda" href="{{api2.url_pda}}" target="_blank"  style="max-width:97%;" class="btn btn-primary ">View</a></td>							
+				{% else %}
+					<td style="text-align:center;"><label name="no_url_pda" class="form-control" style="max-width:100%" readonly >None</label></td>						
+				{% endif %}
+			</tr>
+			<tr>
+					<td style="font-weight:bold;">Total</td>
+					<td></td>
+					<td></td>					
+					<td style="text-align:center;font-weight:bold;">{{api_2}}</td>
+			</tr>
+			</table>
+			<div>
+				<pdf:nexttemplate name="jrnl_pub"/> 
+                <pdf:nextpage /> 
+            </div>
+			<br>
+            
+            <br>
+			 <div style="background-color: blue;color:white;" width="93%">
+                <h2 style="padding-top:7px;font-size:15px">API SCORE CALCULATION MATRIX</h2>
+            </div>
+    
+            <h1 style="text-align:left;font-size:15px"> CATEGORY III: Research and Academic Contribution
+            </h1>
+			<h2 style="text-align:left;font-size:14px">III-A : Journal Publication</h2>
+			
+			<table repeat="1" class="content-loader" width="100%" border="1" cellspacing="0" cellpadding="5">
+			<tr> 
+				<th style="width:3%;">Sl.<br>No.</th>
+				<th style="width:4%;">Yr.of<br>Publ.</th>
+				<th style="width:20%;text-align:left;">Title of the Paper</th>
+				<th style="width:4.5%;text-align:center;">No.of<br>authors</th>
+				<th style="width:11.5%;text-align:left;">Role of Applicant</th>
+				<th style="width:6%;text-align:left;">No.of other <br> co - authors</th>
+				<th style="width:8%;text-align:left;">Journal Name</th>
+				<th style="width:9%;text-align:left;">Volume (Issue),<br>pg no. from - to</th>
+				<th style="width:7%;text-align:left;">Journal Type</th>
+				<th style="width:4%;text-align:center;">Impact<br>Factor<br>(I.F)</th>
+				
+				<th style="width:4%;text-align:left;">I.F <br>Doc<br>link</th>
+				<th style="width:4%;text-align:left;">Jrnl.<br>Pub.<br>Link</th>
+				<th style="width:8%;text-align:center;">Self <br>Appraisal <br>Score</th>
+				
+				{% if admin %}			
+						<th style="width:5%;text-align:center;">Verified<br> API<br> Score</th>					
+				{% endif %}		
+				
+				
+				
+			</tr>
+			</tr>
+
+			{% for item in jrnl %}
+				{% if item.yr_pub %}
+					<tr>
+						<td style="display:none;">{{form.email}}</td>             
+						<td>{{ forloop.counter }}</td>
+						<td style="text-align:center;">{{item.yr_pub}}</td>               
+						<td><textarea rows="3" cols="40" wrap="hard" readonly>{{item.title_pub|default_if_none:"Blank"}}</textarea></td>
+						<td style="text-align:center;">{{item.no_auth|default_if_none:"Blank"}}</td>
+						
+						<td>{{item.get_role_appl_display|default_if_none:"Blank"}}</td>
+						<td style="text-align:center;">{{item.jrnl_oth|default_if_none:"Blank"}}</td>
+
+						<td><textarea rows="3" cols="20" wrap="hard" readonly>{{item.jrnl_name|default_if_none:"Blank"}}</textarea></td>
+						<td>{{item.vl_pg|default_if_none:"Blank"}}</td>
+						<td>{{item.get_jrnl_type_display|default_if_none:"Blank"}}</td>
+						<td style="text-align:center;">{{item.imp_fac|default_if_none:"Blank"}}</td>
+						
+						{% if item.jrnl_url %}
+							<td><a class="btn btn-secondary btn-lg" href='{{ item.jrnl_url }}' target=_blank>View</a></td>
+						{% else %}
+							<td>None</td>
+						{% endif %}                
+					  
+
+						{% if item.jrnl_link %}
+							<td><a class="btn btn-secondary btn-lg" href='{{ item.jrnl_link }}' target=_blank>View</a></td>
+						{% else %}
+							<td>None</td>
+						{% endif %}
+						<td id="api_score" style="text-align:center;">{{item.self_api_score|default_if_none:"Blank"}}</td>
+					
+					
+						{% if admin %}
+							<td style="text-align:center;">{{item.veri_api_score|default_if_none:"Blank"}}</td>
+						{% endif %}	
+					</tr>
+				{% endif %}
+				
+			{% endfor %}
+			<tr>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>					
+					<td style="font-weight:bold;">Total</td>					
+					<td style="text-align:center;font-weight:bold;">{{tot_3a.self_api_score__sum}}</td>
+					
+			</tr>
+			</table>
+			
+			<br>
+			
+			<table repeat="1">
+				<tr>
+					<td style="text-align:left;font-size:14px;font-weight:bold">III-B(i): Publications other than journal articles</td>
+				</tr>
+			</table>
+			
+			<table repeat="1" class="content-loader" width="100%" border="1" cellspacing="0" cellpadding="5">
+						
+						<tr>
+							
+							<th style="width:3%;">Sl.<br>No.</th>
+							<th style="width:4%;">Yr.of<br>Publ.</th>
+							<th style="width:14%;text-align:left;">Type of Publication</th>					
+							<th style="width:12%;text-align: left;">Title of <br> the Chapter/ Paper</th>
+							<th style="width:12%;text-align: left;">Title of <br> the Book/ Proceedings</th>
+							<th style="width:5%;text-align:center;">No.of<br>authors</th>
+							<th style="width:12%;text-align: left;">Name of <br> Publisher</th>
+							<th style="width:9%;text-align: left;">Status of Publisher</th>
+							<th style="width:11%;text-align: left;">ISBN/ISSN No</th>
+							<th style="width:4%;text-align:left;">Doc.<br> Link</th>
+							<th style="width:7%;text-align:center;">Self <br>Appraisal <br>Score</th>
+							
+							{% if admin %}			
+								<th style="width:5%;text-align:center;">Verified <br> API<br> Score</th>					
+							{% endif %}	
+							
+						</tr>
+						
+					{% for item in pub %}
+					
+						{% if item.yr_pub %}
+						<tr>
+							<td style="display:none;">{{form.email}}</td>             
+							<td>{{ forloop.counter }}</td>
+							<td style="text-align:center;">{{item.yr_pub}}</td>               
+							<td style="text-align:left;">{{item.get_pub_type_display|default_if_none:"Blank"}}</td>
+							{% if item.chap_title %}
+							<td style="text-align:left;"><textarea rows="3" cols="40" wrap="hard" readonly>{{item.chap_title}}</textarea></td>
+							{% else %}
+								<td style="text-align: left;">N/A</td>
+							{% endif %}
+							
+							<td style="text-align:left;"><textarea rows="3" cols="40" wrap="hard" readonly>{{item.bk_title|default_if_none:"Blank"}}</textarea></td>
+							<td style="text-align:center;">{{item.no_auth}}</td>        
+							<td style="text-align:left;"><textarea rows="3" cols="30" wrap="hard" readonly>{{item.name_pub|default_if_none:"Blank"}}</textarea></td>
+							<td style="text-align:left;">{{item.get_sts_pub_display|default_if_none:"Blank"}}</td>
+							<td style="text-align:left;">{{item.isbn_no|wordwrap:10|linebreaksbr}}</td>
+
+							
+							{% if item.pub_url %}
+								<td><a class="btn btn-secondary btn-lg" href='{{ item.pub_url }}' target=_blank>View</a></td>
+							{% else %}
+								<td>None</td>
+							{% endif %}
+							
+										
+							<td style="text-align:center;">{{item.self_api_score|default_if_none:"Blank"}}</td>
+							
+								
+							{% if admin %}
+								<td style="width:5%;text-align:center;">{{item.veri_api_score|default_if_none:"Blank"}}</td>
+							{% endif %}
+					  
+						</tr>
+						{% endif %}
+						
+					{% endfor %}
+					<tr>
+							
+							<td></td>					
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td style="font-weight:bold;">Total</td>									
+							<td style="text-align:center;font-weight:bold;">{{tot_3b.self_api_score__sum}}</td>
+							
+					</tr>
+					
+			</table>
+			<br>
+			<table repeat="1">
+				<tr>
+					<td style="text-align:left;font-size:14px;font-weight:bold">III-B(ii): Referring of Journal Papers from UGC list </td>
+				</tr>
+			</table>
+			
+			<table repeat="1" class="content-loader" width="93%" border="1" cellspacing="0" cellpadding="5">
+						
+						<tr>
+							
+							<th style="width:3%;">Sl.<br>No.</th>							
+							<th VALIGN=TOP style="width:28%;text-align:left;">Journal Name</th>
+							<th VALIGN=TOP style="width:28%;text-align:left;">Title of the paper</th>
+							<th VALIGN=TOP style="width:11%;text-align:center;">Year of review <br> submission</th>
+							<th VALIGN=TOP style="width:10%;text-align:center;">Review Invitation <br> Letter link</th>
+							<th VALIGN=TOP style="width:10%;text-align:center;">Review submission <br> document link</th>									   
+							<th style="width:10%;text-align:center;">Self <br>Appraisal <br>Score</th>
+							
+							{% if admin %}			
+								<th style="width:5%;text-align:center;">Verified <br> API<br> Score</th>					
+							{% endif %}	
+							
+						</tr>
+						
+					{% for item in jrnl_paper %}
+					
+						<tr>
+							<td style="display:none;">{{form.email}}</td>             
+							<td>{{ forloop.counter }}</td>
+							<td style="text-align:left;"><textarea rows="3" cols="40" wrap="hard" readonly>{{item.jrnl_name|default_if_none:"Blank"}}</textarea></td>
+							<td style="text-align:left;"><textarea rows="3" cols="40" wrap="hard" readonly>{{item.paper_title|default_if_none:"Blank"}}</textarea></td>	
+							<td style="text-align:center;">{{item.yr_review}}</td>
+							
+							
+							{% if item.ltr_url %}
+								<td style="text-align:center;"><a  class="btn btn-secondary btn-lg" href='{{ item.ltr_url }}' target=_blank>View</a></td>
+							{% else %}
+								<td style="text-align:center;">None</td>
+							{% endif %}
+							
+
+							{% if item.sub_ltr_url %}
+								<td style="text-align:center;"><a class="btn btn-secondary btn-lg" href='{{ item.sub_ltr_url }}' target=_blank>View</a></td>
+							{% else %}
+								<td style="text-align:center;">None</td>
+							{% endif %}
+							
+							<td style="text-align:center;">{{item.self_api_score|default_if_none:"Blank"}}</td>
+							
+								
+							{% if admin %}
+								<td style="width:5%;text-align:center;">{{item.veri_api_score|default_if_none:"Blank"}}</td>
+							{% endif %}
+					  
+						</tr>
+						
+					{% endfor %}
+					<tr>
+														
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td style="text-align:center;font-weight:bold;">Total</td>									
+							<td style="text-align:center;font-weight:bold;">{{tot_3b2.self_api_score__sum}}</td>
+							
+					</tr>
+					
+			</table>
+			
+			<div>				
+                <pdf:nextpage /> 
+            </div>
+			<br>
+           
+			
+    
+            <h1 style="text-align:left;font-size:14px"> CATEGORY III-C: Research Projects
+            </h1>
+			<h2 style="text-align:left;font-size:12px">III-C (i):  Sponsored Project</h2>
+			
+			<table repeat="1" class="content-loader" width="100%" border="1" cellspacing="0" cellpadding="5">
+						<tr>
+							
+							<th style="width:3%;">Sl.<br>No.</th>
+							<th style="width:15%;text-align: left;">Area of the Applicant</th>
+							<th style="width:25%;text-align: left;">Title of the Project</th>
+							<th style="width:22%;text-align: left;">Name of the Funding <br> Agency</th>						
+							<th style="width:7%;text-align:center;">Duration <br> (no.of years)</th>
+							<th style="width:8%;text-align: center;">Grant Sanctioned<br>(in Lakhs)</th>
+							<th style="width:6%;text-align: center;">Upload Grant<br>Letter link </th>           
+							<th style="width:7%;text-align:center;">Self <br>Appraisal <br>Score</th>
+								
+								{% if admin %}			
+									<th style="width:5%;text-align:center;">Verified <br> API<br> Score</th>					
+								{% endif %}	
+								
+						</tr>
+					
+				{% for item in res %}
+					{% if item.proj_title and item.proj_tag == "spon" %}
+						<tr>
+							<td style="display:none;">{{form.email}}</td>             
+							
+							<td>{{ forloop.counter }}</td>
+						   
+							<td>{{item.get_faculty_app_display|default_if_none:"Blank"}}</td>               
+							<td><textarea rows="3" cols="40" wrap="hard" readonly>{{item.proj_title|default_if_none:"Blank"}}</textarea></td>
+							<td><textarea rows="3" cols="30" wrap="hard" readonly>{{item.fund_agnc|default_if_none:"Blank"}}</textarea></td>
+							<td style="text-align:center;">{{item.no_yrs}}</td>
+							<td style="text-align:center;">{{item.prj_amt}}</td>        
+							
+							
+							{% if item.prj_url %}
+								<td style="text-align:center;"><a class="btn btn-secondary btn-lg" href='{{ item.prj_url }}' target=_blank>View</a></td>
+							{% else %}
+								<td style="text-align:center;">None</td>
+							{% endif %}
+							
+										
+							<td style="text-align:center;">{{item.self_api_score|default_if_none:"Blank"}}</td>
+							
+								
+							{% if admin %}
+								<td style="width:5%;text-align:center;">{{item.veri_api_score|default_if_none:"Blank"}}</td>
+							{% endif %}
+							
+
+						</tr>
+						
+					{% endif %}
+				{% endfor %}
+					<tr>
+							
+							<td></td>					
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td style="text-align:center;font-weight:bold;">Total</td>									
+							<td style="text-align:center;font-weight:bold;">{{tot_3c.self_api_score__sum}}</td>
+							
+					</tr>
+					
+			
+			</table>
+			<br>
+			<br>
+			<h2 style="text-align:left;font-size:12px">III-C (ii):  Consultancy Project</h2>
+			
+			<table repeat="1" class="content-loader" width="100%" border="1" cellspacing="0" cellpadding="5">
+			
+						<tr>
+							
+							<th style="width:3%;">Sl.<br>No.</th>
+							<th style="width:15%;text-align: left;">Area of the Applicant</th>
+							<th style="width:25%;text-align: left;">Title of the Project</th>
+							<th style="width:22%;text-align: left;">Name of the Funding <br> Agency</th>						
+							<th style="width:7%;text-align:center;">Duration <br> (in months)</th>
+							<th style="width:8%;text-align: center;">Amount Mobilized</th>
+							<th style="width:6%;text-align: center;">Upload Grant<br>Letter link</th>           
+							<th style="width:7%;text-align:center;">Self <br>Appraisal <br>Score</th>
+								
+								{% if admin %}			
+									<th style="width:5%;text-align:center;">Verified <br> API<br> Score</th>					
+								{% endif %}	
+								
+						</tr>
+					{% for item in cons %}
+					{% if item.proj_title and item.proj_tag == "cons" %}
+					  <tr>
+						<td style="display:none;">{{form.email}}</td>             
+						<td style="display:none;">{{prj_tag}}</td>            
+						<td>{{ forloop.counter }}</td>			
+						<td>{{item.get_faculty_app_display|default_if_none:"Blank"}}</td>               
+						<td><textarea rows="3" cols="40" wrap="hard" readonly>{{item.proj_title|default_if_none:"Blank"}}</textarea></td>
+						<td>{{item.fund_agnc|default_if_none:"Blank"}}</td>
+						<td style="text-align:center;">{{item.no_yrs}}</td>
+						<td style="text-align:center;">{{item.prj_amt}}</td>        
+						
+						
+						{% if item.prj_url %}
+							<td><a style="text-align:center;" class="btn btn-secondary btn-lg" href='{{ item.prj_url }}' target=_blank>View</a></td>
+						{% else %}
+							<td style="text-align:center;">None</td>
+						{% endif %}
+						
+									
+						<td style="text-align:center;">{{item.self_api_score|default_if_none:"Blank"}}</td>
+						
+						{% if admin %}
+							<td style="text-align:center;">{{item.veri_api_score|default_if_none:"Blank"}}</td>
+						{% endif %}
+				  
+
+					</tr>
+					{% endif %}
+					{% endfor %}
+					
+					<tr>
+							
+							<td></td>					
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td style="text-align:center;font-weight:bold;">Total</td>									
+							<td style="text-align:center;font-weight:bold;">{{tot_3d.self_api_score__sum}}</td>
+							
+					</tr>
+					
+    
+			</table>
+			<br>
+			<br>
+			<h2 style="text-align:left;font-size:12px">III-C (iii):  Projects Outcome/Output</h2>
+			
+			<table repeat="1" class="content-loader" width="100%" border="1" cellspacing="0" cellpadding="5">
+			
+				<tr>
+				  
+				  <th style="width:3%;">Sl.<br>No.</th>
+				  <th style="width:15%;text-align: left;">Area of the Applicant</th>
+				  <th style="width: 10%;text-align: left;">Type</th>
+				  <th style="width:23%;text-align: left;">Title</th>
+				  <th style="width: 10%;text-align: left;">Level</th>
+				  <th style="width: 10%;text-align: center;">Doc.No./<br>Patent No/<br>Other ref. no</th>
+				  <th style="width: 8%;text-align: center;">Status<br>(if patent only)</th>
+				  <th style="width: 5%;text-align: center;">Upload doc.link</th>           
+				 
+				  <th style="width: 9%;text-align: center;">Self Appraisal Score</th>
+				  
+				  {% if admin %}
+					<th style="width: 5%;text-align: center;">Verified <br> API Score</th>
+				  {% endif %}	
+				  
+			  </tr>
+			  
+			{% for item in prj %}
+				{% if item.proj_title %}
+				<tr>
+					  <td style="display:none;">{{form.email}}</td>            
+					  <td>{{ forloop.counter }}</td>		  
+					  <td>{{item.get_faculty_app_display|default_if_none:"Blank"}}</td>               
+					  <td>{{item.get_prj_type_display|default_if_none:"Blank"}}</td>
+					  <td><textarea rows="3" cols="40" wrap="hard" readonly>{{item.proj_title|default_if_none:"Blank"}}</textarea></td>
+					  <td>{{item.get_prj_lvl_display|default_if_none:"Blank"}}</td>
+					  <td style="text-align:center;">{{item.ref_no}}</td>
+					  {% if item.ptnt_sts %}
+						<td style="text-align: center;">{{item.get_ptnt_sts_display}}</td>
+					  {% else %}
+						<td style="text-align: center;">N/A</td>
+					  {% endif %}
+					  {% if item.prj_url %}
+						  <td style="text-align: center;"><a class="btn btn-secondary btn-lg" href='{{ item.prj_url }}' target=_blank>View</a></td>
+					  {% else %}
+						  <td style="text-align: center;">None</td>
+					  {% endif %}
+					  
+								  
+					  <td style="text-align: center;">{{item.self_api_score|default_if_none:"Blank"}}</td>
+					  
+					  {% if admin %}
+						<td style="text-align: center;">{{item.veri_api_score|default_if_none:"Blank"}}</td>
+					  {% endif %}
+					  
+				</tr>
+				{% endif %}
+			{% endfor %}
+				<tr>
+							
+							<td></td>					
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td style="text-align:center;font-weight:bold;">Total</td>									
+							<td style="text-align:center;font-weight:bold;">{{tot_3e.self_api_score__sum}}</td>
+							
+				</tr>
+					
+			</table>
+			
+			<br>
+			 
+			<h2 style="text-align:left;font-size:14px">III-D:  Research Guidance</h2>
+			
+			<table repeat="1" class="content-loader" width="100%" border="1" cellspacing="0" cellpadding="5">
+			
+			
+				<tr>
+				  
+				  <th style="width:3%;">Sl.<br>No.</th>
+				  <th style="width:20%;text-align: left;">Name of the Student</th>
+				  <th style="width:15%;text-align: left;">Degree</th>
+				  <th style="width:30%;text-align: left;">Title of the Thesis</th>
+				  <th style="width:9%;text-align: left;">Status</th>
+				  <th style="width: 7%;text-align: center;">Document Link</th>				           
+				 
+				  <th style="width: 9%;text-align: center;">Self API Score</th>
+				  
+				  {% if admin %}
+					<th style="width: 5%;text-align: center;">Verified <br> API Score</th>
+				  {% endif %}	
+				  
+			  </tr>
+			{% for item in res_guide %}
+				{% if item.student_name %}
+					  <tr>
+						<td style="display:none;">{{form.email}}</td>             
+						
+						<td>{{ forloop.counter }}</td>
+						<td>{{item.student_name|default_if_none:"Blank"}}</td>
+						<td>{{item.get_degree_display|default_if_none:"Blank"}}</td>
+						<td><textarea rows="3" cols="40" wrap="hard" readonly>{{item.title_thesis|default_if_none:"Blank"}}</textarea></td>
+						<td>{{item.get_status_display|default_if_none:"Blank"}}</td>			
+						
+						{% if item.prj_url %}
+							<td style="text-align: center;"><a class="btn btn-secondary btn-lg" href='{{ item.prj_url }}' target=_blank>View</a></td>
+						{% else %}
+							<td style="text-align: center;">None</td>
+						{% endif %}
+						
+									
+						<td style="text-align: center;">{{item.self_api_score|default_if_none:"Blank"}}</td>
+						
+						{% if admin %}
+						
+						<td style="text-align: center;">{{item.veri_api_score|default_if_none:"Blank"}}</td>
+						
+						{% endif %}	
+				  
+					</tr>
+				{% endif %}
+			{% endfor %}
+					<tr>
+							
+							<td></td>					
+							<td></td>
+							<td></td>
+							<td></td>							
+							<td></td>
+							<td style="text-align:center;font-weight:bold;">Total</td>									
+							<td style="text-align:center;font-weight:bold;">{{tot_3f.self_api_score__sum}}</td>
+							
+					</tr>
+					
+			</table>
+			<div>				
+                <pdf:nextpage /> 
+            </div>
+			
+			<br>
+			<table repeat="1">
+				<tr>
+					<td style="text-align:left;font-size:14px;font-weight:bold">III-E : Fellowships, Awards and Invited lectures delivered in conferences / seminars</td>
+				</tr>
+			</table>
+			
+    
+				
+			<h2 style="text-align:left;font-size:12px">III-E : (i)  Fellowship / Award from Academic Bodies/Associations</h2>
+			
+			<table repeat="1" class="content-loader" width="100%" border="1" cellspacing="0" cellpadding="5">
+			
+				<tr>
+				  
+				  <th style="width:3%;">Sl.<br>No.</th>
+				  <th style="width:10%;text-align: left;">Type</th>
+				  <th style="width:20%;text-align: left;">Name of the Fellowship/Award</th>
+				  <th style="width:30%;text-align: left;">Name of the Awarding <br> Body/Association</th>
+				  <th style="width:12%;text-align: left;">Level</th>
+				  <th style="width: 9%;text-align: center;">Document Link</th>				           
+				 
+				  <th style="width: 9%;text-align: center;">Self Appraisal Score</th>
+				  
+				  {% if admin %}
+					<th style="width: 5%;text-align: center;">Verified <br> API Score</th>
+				  {% endif %}	
+				  
+			  </tr>
+			  {% for item in fellow %}
+						{% if item.fellow_type %}
+						  <tr>
+							<td style="display:none;">{{form.email}}</td>             
+							
+							<td>{{ forloop.counter }}</td>
+							<td>{{item.get_fellow_type_display|default_if_none:"Blank"}}</td>
+							<td><textarea rows="3" cols="40" wrap="hard" readonly>{{item.name_fellow|default_if_none:"Blank"}}</textarea></td>
+							<td><textarea rows="3" cols="40" wrap="hard" readonly>{{item.name_body|default_if_none:"Blank"}}</textarea></td>
+							<td>{{item.get_prj_lvl_display|default_if_none:"Blank"}}</td>			
+							
+							{% if item.prj_url %}
+								<td style="text-align: center;"><a class="btn btn-secondary btn-lg" href='{{ item.prj_url }}' target=_blank>View</a></td>
+							{% else %}
+								<td style="text-align: center;">None</td>
+							{% endif %}
+							
+										
+							<td style="text-align: center;">{{item.self_api_score|default_if_none:"Blank"}}</td>
+							
+							{% if admin %}
+							<td style="width: 5%;text-align: center;">{{item.veri_api_score|default_if_none:"Blank"}}</td>
+							{% endif %}
+					    
+
+						</tr>
+					  {% endif %}
+				   {% endfor %}
+				   <tr>
+							
+							<td></td>					
+							<td></td>
+							<td></td>
+							<td></td>							
+							<td></td>
+							<td style="text-align:center;font-weight:bold;">Total</td>									
+							<td style="text-align:center;font-weight:bold;">{{tot_3g.self_api_score__sum}}</td>
+							
+					</tr>
+			</table>
+		
+			<br>			
+			<h2 style="text-align:left;font-size:12px">III-E : (ii) Invited Lecture / Paper presented</h2>
+			
+			<table repeat="1" class="content-loader" width="100%" border="1" cellspacing="0" cellpadding="5">
+		
+				<tr>
+				  
+				  <th style="width:3%;">Sl.<br>No.</th>
+				  <th style="width: 9%;text-align: left;">Type</th>
+				  <th style="width: 14%;text-align: left;">Title of the Lecture/Paper</th>
+				  <th style="width: 14%;text-align: left;">Name of the Conference/<br>Seminar/ Workshop</th>
+				  <th style="width: 10%;text-align: left;">Organized by</th>
+				  <th style="width: 10%;text-align: left;">Venue</th>
+				  <th style="width: 7%;text-align: left;">Duration of<br>Seminar/ Workshop</th>
+				  <th style="width: 8%;text-align: left;">Level</th>
+				  
+				  <th style="width: 9%;text-align: center;">Document Link</th>				           
+				 
+				  <th style="width: 9%;text-align: center;">Self Appraisal Score</th>
+				  
+				  {% if admin %}
+					<th style="width: 5%;text-align: center;">Verified <br> API Score</th>
+				  {% endif %}	
+				  
+			  </tr
+			  
+			  {% for item in lec %}
+					{% if item.invitation_type %}
+					  <tr>
+						<td style="display:none;">{{form.email}}</td>             
+						
+						<td>{{ forloop.counter }}</td>
+						<td>{{item.get_invitation_type_display|default_if_none:"Blank"}}</td>
+						<td><textarea rows="3" cols="40" wrap="hard" readonly>{{item.title_lecture|default_if_none:"Blank"}}</textarea></td>
+						<td><textarea rows="3" cols="40" wrap="hard" readonly>{{item.seminer|default_if_none:"Blank"}}</textarea></td>
+						<td><textarea rows="3" cols="20" wrap="hard" readonly>{{item.organizer|default_if_none:"Blank"}}</textarea></td>
+						<td><textarea rows="3" cols="20" wrap="hard" readonly>{{item.venue|default_if_none:"Blank"}}</textarea></td>
+						<td>{{item.duration|default_if_none:"Blank"}}</td>				
+						<td>{{item.get_prj_lvl_display|default_if_none:"Blank"}}</td>			
+						
+						{% if item.prj_url %}
+							<td style="text-align: center;"><a class="btn btn-secondary btn-lg" href='{{ item.prj_url }}' target=_blank>View</a></td>
+						{% else %}
+							<td style="text-align: center;">None</td>
+						{% endif %}
+						
+									
+						<td style="text-align: center;">{{item.self_api_score|default_if_none:"Blank"}}</td>
+						{% if admin %}
+						<td style="width: 5%;text-align: center;">{{item.veri_api_score|default_if_none:"Blank"}}</td>
+						{% endif %}
+
+					</tr>
+				  {% endif %}
+			{% endfor %}
+					<tr>
+							
+							<td></td>					
+							<td></td>
+							<td></td>
+							<td></td>							
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td style="text-align:center;font-weight:bold;">Total</td>									
+							<td style="text-align:center;font-weight:bold;">{{tot_3h.self_api_score__sum}}</td>
+							
+					</tr>
+			</table>
+		
+			<br>
+			<br>
+			<br>
+			<br>			
+			<h2 style="text-align:left;font-size:12px">III-E (iii): e-Learning Delivery Process/Material</h2>
+			
+			<table repeat="1" class="content-loader" width="100%" border="1" cellspacing="0" cellpadding="5">
+			
+			<tr>
+				  
+				  <th style="width:3%;">Sl.<br>No.</th>
+				  <th style="width: 25%;text-align: left;">Name of the Module</th>
+				  <th style="width: 20%;text-align: left;">Name of the Course</th>
+				  <th style="width: 20%;text-align: left;">Name of the Program</th>
+				 
+				  <th style="width: 15%;text-align: center;">Document Link</th>				           
+				 
+				  <th style="width: 10%;text-align: center;">Self Appraisal Score</th>
+				  
+				  {% if admin %}
+					<th style="width: 5%;text-align: center;">Verified <br> API Score</th>
+				  {% endif %}	
+				  
+			  </tr>
+			   {% for item in elearn %}
+					{% if item.model_name %}
+					  <tr>
+						<td style="display:none;">{{form.email}}</td>
+						<td>{{ forloop.counter }}</td>
+						<td><textarea rows="3" cols="40" wrap="hard" readonly>{{item.model_name|default_if_none:"Blank"}}</textarea></td>
+						<td><textarea rows="3" cols="40" wrap="hard" readonly>{{item.course_name|default_if_none:"Blank"}}</textarea></td>
+						<td><textarea rows="3" cols="40" wrap="hard" readonly>{{item.program_name|default_if_none:"Blank"}}</textarea></td>							
+									
+						
+						{% if item.prj_url %}
+							<td style="text-align: center;"><a class="btn btn-secondary btn-lg" href='{{ item.prj_url }}' target=_blank>View</a></td>
+						{% else %}
+							<td style="text-align: center;">None</td>
+						{% endif %}
+						
+									
+						<td style="text-align: center;">{{item.self_api_score|default_if_none:"Blank"}}</td>
+						
+						{% if admin %}
+						<td style="width: 5%;text-align: center;">{{item.veri_api_score|default_if_none:"Blank"}}</td>
+						{% endif %}
+				  
+
+					</tr>
+				  {% endif %}
+				{% endfor %}
+       
+					<tr>
+							
+							<td></td>					
+							<td></td>
+							<td></td>													
+							<td></td>
+							<td style="text-align:center;font-weight:bold;">Total</td>									
+							<td style="text-align:center;font-weight:bold;">{{tot_3i.self_api_score__sum}}</td>
+							
+					</tr> 
+			</table>
+			
+			<div>
+				<pdf:nexttemplate name="api_summ"/> 			
+                <pdf:nextpage /> 
+            </div>
+			<br>
+			<br>
+			
+			
+				<h1 align="left"> {{username}} - Final Report</h1>				
+			
+			<hr/>
+			
+				<table repeat="1"  class="content-loader" width="50%" align="center" border="1" cellspacing="0" cellpadding="5" >
+			
+					<tr >
+						<th>Stage / Designation From:</th>
+						<td>{{from_dsg}}</td>
+					</tr>
+					
+					<tr >
+						<th>Stage / Designation To:</th>
+						<td >{{to_dsg}}</td>
+					</tr>
+					
+					<tr >
+						<th>Date of last promotion,<br>( if any ) :</th>
+						<td>{{dt_last_promo|date:"d-m-Y"}}</td>
+					</tr>
+					<tr >
+						<th>Date of eligibility for promotion :</th>
+						<td>{{dt_eligibility|date:"d-m-Y"}}</td>
+					</tr>
+					<tr>
+						<th>Assessment Period <br>(no.of years):</th>
+						<td>{{ass_yr}}</td>
+					</tr>
+					
+				
+			
+				</table>
+				
+				<h2 style="line-height:0;text-align:center;font-size:20px;background-color:#00b3b3;color:white;">API Score Summary
+				</h2>
+				<table  class="content-loader" width="80%" align="center" border="1" cellspacing="0" cellpadding="5" >
+					<tr>
+						<th style="text-align:center;">Category</th>
+						<th>Period</th>
+						<th style="text-align: center;">Self Appraisal<br> Score</th>
+						
+						
+						<th style="text-align:center;">Status </th>
+					</tr>
+					
+				<!-- API Catg-I -->
+				
+				<tr>
+					<td style="text-align:center;">I</td>
+					<td>Yearly</td>
+					<td id="api1" style="text-align:center;">{{api_1}}</td>
+					<td id="api3" style="text-align:center;">{{api_sts1}}</td>
+					
+				</tr>
+				<tr>
+					<td style="text-align:center;">II</td>
+					<td>Assessment Period</td>
+					<td id="api1" style="text-align:center;">{{api_2a}}</td>
+					<td id="api3" style="text-align:center;">{{api2_sts}}</td>
+					
+				</tr>	
+				<tr>
+					<td style="text-align:center;">III</td>
+					<td>Assessment Period</td>
+					<td id="api1" style="text-align:center;">{{tot_3}}</td>
+					<td id="api3" style="text-align:center;">{{tot_sts3}}</td>
+					
+				</tr>
+				<tr>
+					<td style="text-align:center;">II + III</td>
+					<td>Assessment Period</td>
+					<td id="api1" style="text-align:center;">{{tot_2_3}}</td>
+					<td id="api3" style="text-align:center;">{{tot_sts3}}</td>
+					
+				</tr>
+				
+				</table>
+				<br>
+				<br>
+				<div style="margin-top:5px;">
+					<img src="http://192.168.191.103:8000{{pdf.url}}"  style="width:150px;height:50px;" align="right">
+					<!---<img src="http://localhost:8000{{pdf.url}}"  style="width:150px;height:100px;" align="right"/>-->
+					
+					<p style="margin-left:540px;letter-spacing:1px;" >Signature of Applicant</p>
+					
+				</div>
+				
+			<div>
+				<pdf:nexttemplate name="fwd_link"/> 			
+                <pdf:nextpage /> 
+            </div>
+			<br>
+			<div align="center" >
+				{% if fwd_link %}
+					<img src="http://192.168.191.103:8000{{fwd_link.url}}" style="width:550px;height:750px;" >
+				{% endif %}
+			</div>
+			
+	<script type="text/javascript">	
+		const spinner=document.getElementById("spinner1")
+		
+		
+		$.ajax({
+			type:'GET',
+			url:"/pdf_view/",
+			success: function(response){				
+				spinner.classList.add('no-display')
+				console.log("success")
+			},
+			error:function(error){
+				console.log('error')
+			},
+		})
+
+	</script>
+	
+	</body>
+	
+	
+    </html>

@@ -1,0 +1,322 @@
+<!--Html for adding records in Pub_other-->
+{% extends 'base_v2.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+
+<style>
+  
+
+      span{
+        color:red;
+      }
+      html {
+        font-family: verdana;
+        font-size: 10pt;        
+      }
+      
+      table {
+        border-collapse: collapse;
+        width: 900px;
+        height : 405px;
+        overflow-x: hidden !important;
+        display: block;
+      }
+
+      td,
+      th {        
+        height: 15px;
+        border: dashed 1px lightblue;
+        }
+
+     th{
+         width:400px;
+         font-size:20px;
+     }
+     td{
+        width:600px;
+        font-size:25px;
+    }
+
+     .form-number{
+        text-align: center; 
+        width: 60pt;        
+     }
+
+     input[type=number]::-webkit-inner-spin-button, 
+     input[type=number]::-webkit-outer-spin-button { 
+           -webkit-appearance: none; 
+           margin: 0; 
+     }
+     .card {
+        margin: 0 auto; /* Added */
+        float: none; /* Added */
+        margin-bottom: 10px; /* Added */
+     }
+  </style>
+
+
+<form id="formAdd" action="" method="POST" enctype="multipart/form-data" >
+
+    {% csrf_token %}
+
+     <div class="card shadow p-3 mb-5 bg-white rounded" style="width:70%;">
+          
+        <div class="card-body">
+		
+		{% if form1.errors %}
+          <div class="alert-warning center">
+              <h2>{{form1.non_field_errors}}</h2>
+          </div> 
+        {% endif %}
+		
+				<h2 class="card-title">III-C :  Research Projects <br>(iii)   Projects Outcome/Output (Add New)
+					<a href="{% url 'catg_3:resch-view' user_id=request.user.id %}" class="previous" style="text-decoration:none;float:right;"><i class="fa fa-window-close" style="font-size:36px"></i></a>
+				</h2> 
+          <br>
+  
+                
+          <table class="table table-striped">
+        
+                
+                
+                <tr>
+                    <th VALIGN=TOP>Area of the Applicant<span>*</span></th>
+                    <td>{{form1.faculty_app}}</td>                   
+                </tr>
+                <tr>
+                  <th VALIGN=middle>Type<span>*</span></th>
+                  <td>{{form1.prj_type}}</td>
+                </tr>
+                <tr>
+                    <th VALIGN=middle>Title of the Outcome/<br>Output<span>*</span></th>
+                    <td>{{form1.proj_title}}</td>
+                </tr>	
+                <tr>
+                    <th VALIGN=middle>Level<span>*</span></th>
+                    <td>{{form1.prj_lvl}}</td>
+                </tr>
+                <tr>
+                    <th VALIGN=middle>Document No./<br>Patent No/<br>Other reference no<span>*</span></th>
+                    <td>{{form1.ref_no}}</td>
+                </tr>
+				<tr id="other" style="display:none;">
+                    <th VALIGN=middle>Patent Status<span>*</span></th>
+                    <td>{{form1.ptnt_sts}}</td>
+                 </tr>                
+                <tr>
+                    <th VALIGN=middle>Link of documents<span>*</span></th>
+                    <td>{{form1.prj_url}}</td>
+                </tr> 
+				<tr>
+                  <td style="display:none;">{{form1.self_api_score}}</td>
+                  <td style="display:none;">{{form1.veri_api_score}}</td>
+                </tr>
+            </table>
+			<div style="width:200px;float:left;">
+	        <button type="submit" id="btnSubmit"  style="font-weight:bold; font-size:25px;" class="btn btn-success btn-block btn-lg">
+		        Save</button>
+			</div>
+				
+        </div>
+      </div>  
+
+</form>
+          
+
+<script type="text/javascript">
+
+	
+
+document.getElementById("id_prj_type").onchange = function () {
+		var role = $('select#id_prj_type').val();
+		var ptnt_sts = document.getElementById("id_ptnt_sts");
+		
+		if (role == 'PTNT') {
+			ptnt_sts.setAttribute("required", true);
+		}
+		
+		
+	}
+
+
+$( document ).ready(function() {
+	var role = $('select#id_prj_type').val();
+	
+    $('#id_prj_lvl option').remove(); // remove all options
+	
+
+
+   if (role == 'PTNT') {
+		$("#id_prj_lvl").append('<option value="None">Select</option>');
+		$("#id_prj_lvl").append('<option value="INTR">International</option>');
+		$("#id_prj_lvl").append('<option value="NATL">National</option>');		
+		
+        $("#other").show("fast")       
+    }
+    else if (role == 'MPD'){
+		$("#id_prj_lvl").append('<option value="None">Select</option>');
+		$("#id_prj_lvl").append('<option value="INTR">International</option>');				
+		$("#id_prj_lvl").append('<option value="CNGV">National (Central Govt.)</option>');
+		$("#id_prj_lvl").append('<option value="STGV">State Govt.</option>');
+		$("#id_prj_lvl").append('<option value="LCL">Local</option>');
+		
+        $("#other").hide("fast")     
+    }
+	else {
+		$("#id_prj_lvl").append('<option value="None">Select</option>');
+		$("#id_prj_lvl").append('<option value="INTR">International</option>');
+		$("#id_prj_lvl").append('<option value="NATL">National</option>');
+		
+		$("#other").hide("fast")
+	}
+   
+});
+
+function check_other() {    
+          
+    var role = $('select#id_prj_type').val();
+    var lvl  = $('#id_prj_lvl').val();
+	
+	$('#id_prj_lvl option').remove();
+	
+    if (role == 'PTNT') {
+		
+		$("#id_prj_lvl").append('<option value="INTR">International</option>');
+		$("#id_prj_lvl").append('<option value="NATL">National</option>');		
+		
+        $("#other").show("fast")       
+    }
+    else if (role == 'MPD'){
+		
+		$("#id_prj_lvl").append('<option value="INTR">International</option>');				
+		$("#id_prj_lvl").append('<option value="CNGV">National (Central Govt.)</option>');
+		$("#id_prj_lvl").append('<option value="STGV">State Govt.</option>');
+		$("#id_prj_lvl").append('<option value="LCL">Local</option>');
+		
+        $("#other").hide("fast")     
+    }
+	else {
+	
+		$("#id_prj_lvl").append('<option value="INTR">International</option>');
+		$("#id_prj_lvl").append('<option value="NATL">National</option>');
+		
+		$("#other").hide("fast")
+	}
+   
+    
+    
+  }
+
+
+$("form").submit(function(){    
+
+    var prj_type    = $('#id_prj_type').val();
+    var prj_lvl     = $('#id_prj_lvl').val();
+   
+		  if (prj_type == "MPD"){  
+			if (prj_lvl == "INTR") {
+				var score = 30;
+			}
+			else if (prj_lvl == "NATL") {
+				var score = 0;
+			}
+			else if (prj_lvl == "LCL") {
+				var score = 5;
+			}
+			else if (prj_lvl == "CNGV") {
+				var score = 20;
+			}
+			else if (prj_lvl == "STGV") {
+				var score = 10;
+			}
+		  }
+		  else if (prj_type == "PTNT") {
+			if (prj_lvl == "INTR") {
+				var score = 30;
+			}
+			else if (prj_lvl == "NATL") {
+				var score = 20;
+			}
+			else if (prj_lvl == "LCL") {
+				var score = 0;
+			}
+			else if (prj_lvl == "CNGV") {
+				var score = 0;
+			}
+			else if (prj_lvl == "STGV") {
+				var score = 0;
+			}
+		  } 
+		  else if (prj_type == "TETR") {
+
+			if (prj_lvl == "INTR") {
+				var score = 30;
+			}
+			else if (prj_lvl == "NATL") {
+				var score = 20;
+			}
+			else if (prj_lvl == "LCL") {
+				var score = 0;
+			}
+			else if (prj_lvl == "CNGV") {
+				var score = 0;
+			}
+			else if (prj_lvl == "STGV") {
+				var score = 0;
+			}
+		  } 
+		   else if (prj_type == "PRDT") {
+
+			if (prj_lvl == "INTR") {
+				var score = 30;
+			}
+			else if (prj_lvl == "NATL") {
+				var score = 20;
+			}
+			else if (prj_lvl == "LCL") {
+				var score = 0;
+			}
+			else if (prj_lvl == "CNGV") {
+				var score = 0;
+			}
+			else if (prj_lvl == "STGV") {
+				var score = 0;
+			}
+		  } 	
+		   else if (prj_type == "PRCS") {
+
+			if (prj_lvl == "INTR") {
+				var score = 30;
+			}
+			else if (prj_lvl == "NATL") {
+				var score = 20;
+			}
+			else if (prj_lvl == "LCL") {
+				var score = 0;
+			}
+			else if (prj_lvl == "CNGV") {
+				var score = 0;
+			}
+			else if (prj_lvl == "STGV") {
+				var score = 0;
+			}
+		  } 
+
+			var field1 = document.getElementById("id_self_api_score");				
+			field1.value = parseFloat(score);
+			
+			var field2 = document.getElementById("id_veri_api_score");				
+			field2.value = parseFloat(score);
+			
+			  
+});
+		  
+
+
+
+</script>
+
+{% endblock content %}

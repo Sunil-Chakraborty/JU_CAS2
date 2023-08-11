@@ -1,0 +1,67 @@
+{% extends 'base_v2.html' %}
+{% load static %}
+
+
+{% block content %}
+
+<style>
+     html {
+        font-family: verdana;
+        font-size: 10pt;        
+      }
+     .card {
+      margin: 0 auto; /* Added */
+      float: none; /* Added */
+      margin-bottom: 10px; /* Added */
+      }
+
+     
+    
+</style>
+
+
+<body>
+
+ <div class="card shadow p-3 mb-5 bg-white rounded" style="width: 90%;">
+          
+    <div class="card-body">
+        <h2 class="card-title" style="font-weight:bold;">
+			<a href="{% url 'catg_3:api-summary-view' user_id=request.user.id %}" class="previous" style="text-decoration:none;float:right;"><i class="fa fa-window-close" style="font-size:36px"></i></a>
+				
+		</h2>
+		<h2>
+		<p>Step 1: Click below to generate your endorsement form</p>
+		<br>
+		<a id="ltr" href="{% url 'catg_3:endo-view' user_id=pk_var %}" target="_blank" class="w3-button w3-circle w3-teal" style="text-decoration:none;">Endorsemment Form</a>
+		<span>-------> Creates the pdf of the form (opens in new tab)</span>
+        <br>
+		<br>
+		<p>Step 2: Copy and paste the link of the signed endorsement from below</p>
+		<form action="" method="POST" enctype="multipart/form-data">
+			{% csrf_token %}
+		<input name="fwd_link" class="form-control" placeholder="URL of signed scan copy of endorsement form"  id="id_fwd_link">
+		<br>
+		<p>Step 3: Click below to submit your form (appears only when the link is given)</p>
+		</h2>
+		
+		<button style="padding:0;width:100%;color:white;font-size:25px;" type="submit"  class="btn btn-info btn-block btn-lg">
+		Final Submit</button>
+		</form>
+	
+    </div>
+ </div>
+
+
+
+
+<script type="text/javascript">
+
+    $(document).ready(function(){
+       
+   });
+ 	  
+</script>
+</body>
+
+{% endblock content %}
+    

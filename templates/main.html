@@ -1,0 +1,138 @@
+{% load static %}
+
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="pragma" content="no-cache" />
+<meta http-equiv="cache-control" content="max-age=604800" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<title>JU CAS</title>
+
+<link href="{% static 'images/favicon.ico' %}" rel="shortcut icon" type="image/x-icon">
+
+
+<!-- Bootstrap4 files-->
+<script src="{% static 'bootstrap/js/jquery.min.js' %}"></script>
+<script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}" type="text/javascript"></script>
+<script src="{% static 'bootstrap/js/jquery.slim.min.js' %}" type="text/javascript"></script>
+<script src="{% static 'bootstrap/js/popper.min.js' %}" type="text/javascript"></script>
+
+<link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+
+<link rel="stylesheet" href="{% static 'css/accordian.css' %}">
+
+
+
+<style type="text/css">
+
+body {
+    padding: 0;
+    margin: 0;
+}
+#header {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    height: 100px;
+    background-color:  #008CBA;	
+    z-index: 1;
+	box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.5)
+}
+#sidebar {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    bottom: 0px;
+    width: 340px;
+    background-color:#330033;
+	margin-top:100px;
+	
+	filter: drop-shadow(5px 5px 5px rgba(0,0,0,0.3));
+	overflow-y: scroll;
+    
+}
+#parent {
+    margin-top: 100px;
+    margin-left: 320px;
+   
+}
+
+.btn{
+	text-decoration:none;
+	font-weight:bold;
+	border: 2px solid #e7e7e7;
+}
+.child{
+    display: inline-block;
+   
+}
+img {
+  display: block;
+  
+  margin-left:0;
+  padding:0;
+  border: 1px solid black; 
+  width: 100px;
+  height: 100px;
+  float:left;
+}
+
+</style>
+
+
+</head>
+
+<body>
+
+
+<div id="header">
+    <div class="child" style="text-align:center; width:70%; margin-left:320px; ">
+		
+         <h2  style="color:white; padding-top:7px;">JU Career Advancement Scheme Portal
+    					
+            {% if not user.is_applicant %}
+                <p style="color:white;">Welcome Admin, {{ request.user.username }}</p>
+            {% else %}		
+                <p style="color:white;">Welcome, {{ request.user.username }}</p>	
+            {% endif %}
+			
+         </h2>	
+    </div>
+<!--	
+	<div class="child" style="float:right;border: 1px solid black; width:20%; ">
+	
+					<a href="#">Change password</a>
+					<a href="#">Logout</a>
+	</div>	
+   
+ -->   
+   
+  
+</div>
+<div id="parent">
+   				
+    <div id="sidebar">
+	{% include 'snippets\sidebar_black.html' %}
+		
+	
+	</div>
+    
+    <div id="main-content">
+		{% block content %}
+
+		{% endblock %}
+        
+	</div>
+	
+    
+
+</div>
+{% include 'snippets\footer.html' %}
+
+
+</body>
+
+</html>

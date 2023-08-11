@@ -1,0 +1,165 @@
+{% extends 'base_v2.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<style>
+     html {
+        font-family: verdana;
+        font-size: 10pt;        
+      }
+      
+      table {
+        border-collapse: collapse;
+        overflow-x: scroll !important;
+	    white-space: nowrap;       
+        display: block;
+      }
+     tr{
+         width:1200px;
+     } 
+     td,
+     th {        
+        height: 15px;
+        width:200px;
+        border: dashed 1px lightblue;
+        }
+     td{       
+       font-size:20px;       
+     }   
+     .form-number{
+        text-align: center; 
+        width: 60pt;        
+     }
+
+     input[type=number]::-webkit-inner-spin-button, 
+     input[type=number]::-webkit-outer-spin-button { 
+           -webkit-appearance: none; 
+           margin: 0; 
+     }
+     .card {
+      margin: 0 auto; /* Added */
+      float: none; /* Added */
+      margin-bottom: 10px; /* Added */
+      }
+     
+</style>
+
+
+
+<form action="" method="POST" enctype="multipart/form-data">
+
+    {% csrf_token %}
+
+ <div class="card shadow p-3 mb-5 bg-white rounded" style="width: 95%;">
+          
+    <div class="card-body">
+        <h2 class="card-title" style="font-weight:bold;">CATEGORY III : Research and Academic Contribution
+			<a href="{% url 'account:home' user_id=request.user.id %}" class="previous" style="text-decoration:none;float:right;"><i class="fa fa-window-close" style="font-size:36px"></i></a>
+		</h2>
+        <h3 class="card-title" style="font-weight:bold;">III-D:  Research Guidance       
+            
+			{% if user.is_applicant %} 
+				<a href="{% url 'resch-guide-add' %}" class="w3-button w3-circle w3-teal" style="text-decoration:none;">+</a>
+					<small style="color:Tomato;font-weight:bolder;">Add</small>
+			{% endif %}
+        </h3>  
+    <br> 
+    <br>
+    <table class="table">
+        
+            <tr>
+                
+                <th VALIGN=TOP>Sl.No.</th>
+                <th VALIGN=TOP style="text-align: center;">Name of the Student</th>
+                <th VALIGN=TOP style="width: 10%;">Degree</th>
+                <th VALIGN=TOP style="text-align: center;">Title of the Thesis</th>
+                <th VALIGN=TOP style="text-align: center;">Status</th>
+                <th VALIGN=TOP style="text-align: center;">Document Link</th>
+                         
+               
+                <th VALIGN=TOP>Self Appraisal Score</th>
+				
+				        {% if admin %}
+					        <th VALIGN=TOP>Verified API Score</th>
+				        {% endif %}
+				
+                {% if user.is_applicant %}				
+					          <th  VALIGN=TOP colspan="2">&nbsp&nbsp&nbsp&nbspActions</th>
+				        {% endif %}           
+                
+            </tr>
+       
+			<script>
+				var score=0;
+			</script>
+			
+      {% for item in prj %}
+            {% if item.student_name %}
+              <tr>
+                <td style="display:none;">{{form.email}}</td>             
+                
+                <td>{{ forloop.counter }}</td>
+				        <td>{{item.student_name|default_if_none:"Blank"}}</td>
+                <td>{{item.get_degree_display|default_if_none:"Blank"}}</td>
+                <td><textarea rows="3" cols="40" wrap="hard" readonly>{{item.title_thesis|default_if_none:"Blank"}}</textarea></td>
+                <td>{{item.get_status_display|default_if_none:"Blank"}}</td>			
+                
+                {% if item.prj_url %}
+                    <td><a class="btn btn-secondary btn-lg" href='{{ item.prj_url }}' target=_blank>View</a></td>
+                {% else %}
+                    <td>None</td>
+                {% endif %}
+                
+                            
+                <td style="text-align:center;">{{item.self_api_score|default_if_none:"Blank"}}</td>
+				
+					<script>
+						var score = score + parseFloat({{item.self_api_score}});						
+					</script>
+					
+				{% if admin %}
+					<td style="text-align:center;">{{item.veri_api_score|default_if_none:"Blank"}}</td>
+				{% endif %}
+          
+                 {% if user.is_applicant %}
+                      <td><a style="font-weight:bolder;" name="edit-btn" class="text-information" href="{% url 'catg_3:resch-guide-edit' pk=item.id %}">Edit</a></td>
+                      <td><a style="font-weight:bolder;" class="text-warning" href="{% url 'catg_3:resch-guide-delete' pk=item.id %}">Delete</a></td>				
+                 {% endif %} 
+                      
+
+            </tr>
+          {% endif %}
+       {% endfor %}
+       
+        {% if not prj %}
+          <tr>
+            <td colspan="8" style="line-height: 10px;background-color:powderblue;text-align:center;" >No data available in table</td>
+          </tr>
+        {% endif %}
+        
+    </table>
+	
+	
+	<div class="row" >	
+		<label id="self_score" style="font-size:20px;font-weight:bold;"></label>	
+		<a href="{% url 'catg_3:resch-view' user_id=pk_var %}" style="margin-left:12px;width:5%;height:50%;font-weight:bold;margin-right:20px;font-size:2rem;" class="btn btn-primary btn-lg">&laquo;</a>
+		<a href="{% url 'catg_3:fellow-award-view' user_id=pk_var %}" style="float:right;width:5%;font-weight:bold;font-size:2rem;" class="btn btn-success btn-lg">&raquo;</a>
+	</div>
+
+
+  </div>
+
+</div>
+
+</form>
+
+<script type="text/javascript">
+
+ document.getElementById("self_score").innerHTML = "API Total (III-D) : " + (score.toFixed(2));
+
+</script>
+
+{% endblock content %}
+    

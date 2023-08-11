@@ -1,0 +1,44 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+
+<style>
+
+
+</style>
+
+
+</head>
+
+
+<body>
+
+<div style="text-align:center;">
+
+			
+	<script>
+		
+		
+		swal({
+			title: "Login failed ! check email/password!",
+			text: "Try again!",			
+			icon: "warning",		
+			
+		}).then(function() {
+			window.location.href = "{% url 'register' %}";
+		});	
+		
+	</script>
+	
+</div>
+
+</body>
+
+</html>
+
+ 

@@ -1,0 +1,244 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<head>
+
+	<style>
+	hr.new4 {
+			border: 1px solid black;
+			font-weight:bolder;
+	}
+	.navba {
+        margin-top: 30px;
+        margin-bottom: 10px;
+        position:relative;
+        z-index:-1;
+        background-color:#34495E;
+	color: white;
+        box-shadow: 0 8px 8px -4px lightblue;
+        height: 30px;
+	letter-spacing: 2px;
+		
+    }	
+	</style>
+</head>
+
+<div style="margin-left:2rem;">	
+
+<form action="" method="POST" enctype="multipart/form-data">
+
+    {% csrf_token %} 
+			
+			<nav class="navba" style="position:relative;z-index:-1">
+				<h4 style="text-align:left;margin-left:5px">Part A. General Information </h4>
+				
+			</nav>
+		
+				<em><small class="text-muted">*Please fill the first row and add accordingly</em></small>	
+			</div>
+			
+			<br>
+
+				<div class="container">
+					<h4>
+					<table class="table table-striped">						
+						<tr>
+							<th>1. Full Name<span>*</span></th>
+							<td>{{form7.username}}</td>
+						</tr>
+						<tr>
+							<th>2. Father's Name / Mother's Name <span>*</span></th>
+							<td><label>{{form7.parent}}</label></td>
+						</tr>
+						<tr>
+							<th>3. Date of Birth<span>*</span></th>
+							<td><label>{{form7.dt_ob}}</label></td>
+						</tr>
+						<tr>
+							<th>4. Category<span>*</span></th>
+							<td>{{form7.catg}}
+
+							{% if form7.pdf %}
+								<a name="pdf"  id="id_pdf" href="{{accounts.pdf.url}}" target="_blank"  style="max-width:100%" class="btn btn-primary ">Doc attached</a>
+							{% else %}
+								{{form7.pdf}}
+							{% endif %}
+
+							</td>
+						</tr>
+						<tr>
+							<th>5. Department/School<span>*</span></th>
+							<td>{{form7.Department}}</td>
+						</tr>
+						<tr>
+							<th>6. Current designation<span>*</span></th>
+							<td>{{form7.Designation}}</td>
+						</tr>
+						<tr>
+							<th>7. Academic Grade Pay (AGP)<span>*</span></th>
+							<td>{{form7.agp}}</td>
+						</tr>
+						<tr>
+							<th>8. Date of last promotion , if any</th>
+							<td>{{form7.dt_last_promo}}</td>
+						</tr>
+						<tr>
+							<th>9. Date of eligibility for promotion</th>
+							<td>{{form7.dt_eligibility}}</td>
+						</tr>
+						<tr>
+							<th>10. Address for correspondence<span>*</span></th>
+							<td>{{form7.addr_corres}}</td>
+						</tr>
+						<tr>
+							<th>11. Permanent Address (Same as above){{form.is_carry}}</th>
+							<td>{{form7.addr_perm}}</td>
+						</tr>
+						<tr>
+							<th>12. Mobile No.<span>*</span></th>
+							<td>{{form7.mobile}}</td>
+						</tr>
+						
+						<tr>
+							<th>13. E-mail Id</th>
+							<td>{{form7.email}}</td>
+						</tr>
+						
+
+
+
+						{% for error in field.errors %}
+						<p style="color: red">{{ error }}</p>
+						{% endfor %}
+			
+					</table>
+						
+					<div class="row">
+
+						<div style="margin-left:150px" class="col-md-12 text-center">
+							<button type="submit" class="btn btn-success btn-block btn-lg">
+								Save & Next</button>
+						</div>
+						
+					<div >
+						
+					</div>
+					</h4>
+
+{% comment %} 		
+			<hr class="new4">
+			<table class = "table">				
+				<thead >
+					<tr >
+						
+						<th  VALIGN=TOP style="text-align: left;">Designation</th>
+						<th  VALIGN=TOP style="text-align: left;">Name of Employer</th>
+						<th  VALIGN=TOP style="text-align: left;">Date of Joining</th>
+						<th  VALIGN=TOP style="text-align: left;">Date of Leaving</th>
+						<th  VALIGN=TOP style="text-align: left;">Gross Salary with AGP</th>
+						<th  VALIGN=TOP style="text-align: left;">Reason for Leaving</th>
+						<th  VALIGN=TOP style="text-align: left;">Attachment(if any)</th>				
+						<th  VALIGN=TOP colspan="2">&nbsp&nbsp&nbsp&nbspActions</th>	
+						
+					</tr>
+					
+				</thead>
+				
+		
+				{% for item in prests %}
+						<tr>
+		
+							<td><label name="designation" cols="30" rows="3" class="form-control" style="text-transform:uppercase;max-width:100%" maxlength="300" readonly id="id_designation" >{{item.designation|default_if_none:"BLANK"}}</label></td>							
+							<td><label name="employer" cols="30" rows="3" class="form-control" style="text-transform:uppercase;max-width:100%" maxlength="200" readonly id="id_employer" >{{item.employer|default_if_none:"BLANK"}}</label></td>
+							<td><label class="form-control" readonly>{{item.dt_join|date:'d/m/Y'|default:"BLANK"}}</label></td>
+							<td><label class="form-control" readonly>{{item.dt_leav|date:'d/m/Y'|default:"BLANK"}}</label></td>
+							<td><label class="form-control" readonly>{{item.gross_salary|default_if_none:"BLANK"}}</label></td>
+							<td><label name="reason_leaving" cols="30" rows="3" class="form-control" style="text-transform:uppercase;max-width:100%" maxlength="300" readonly id="id_reason_leaving" >{{item.reason_leaving|default_if_none:"BLANK"}}</label></td>
+						
+							{% if item.pdf %}       
+								<td><a name="pdf"  id="id_pdf" href="{{item.pdf.url}}" target="_blank"  style="max-width:70%" class="btn btn-primary ">View</a></td>
+							{% else %}
+								<td><label name="no_pdf" class="form-control" style="max-width:70%" readonly >None</label></td>
+								
+							{% endif %}
+		
+		
+						
+							<td><a style="font-weight:bolder;width:20px;" class="text-information" href="{% url 'account:prests-edit1' pk=item.id %}">Edit</a></td>
+							<td><a style="font-weight:bolder;width:20px;" class="text-warning" href="{% url 'account:prests-delete' pk=item.id %}">Delete</a></td>				
+						</tr>
+
+				{% endfor %}
+			
+			</table>		
+
+
+			<h5 style="margin-top:10px">B.Posts held after Appointment at the University :
+				<a style="font-weight:bolder;margin-top:5px" class="btn btn-success btn-lg" href="{% url 'curpost-add' %}">Add + </a>
+			</h5>
+			<div>
+				<em><small class="text-muted">*Please fill the first row and add accordingly</em></small>	
+			</div>
+			
+		
+			<hr class="new4">
+			<table class = "table">				
+				<thead >
+					<tr >
+						
+						<th  VALIGN=TOP style="text-align: left;">Designation</th>
+						<th  VALIGN=TOP style="text-align: left;">Department/School</th>
+						<th  VALIGN=TOP style="text-align: left;">Period (From)</th>
+						<th  VALIGN=TOP style="text-align: left;">Period (To)</th>
+						<th  VALIGN=TOP style="text-align: left;">Pay Scale</th>
+						<th  VALIGN=TOP style="text-align: left;">Academic Grade Pay(AGP)</th>
+						<th  VALIGN=TOP style="text-align: left;">Attachment(if any)</th>				
+						<th  VALIGN=TOP colspan="2">&nbsp&nbsp&nbsp&nbspActions</th>	
+						
+					</tr>
+					
+				</thead>
+				
+		
+				{% for item in curpost %}
+						<tr>
+		
+							<td><label name="designation" class="form-control" style="text-transform:uppercase;max-width:100%" maxlength="30" readonly id="id_designation" >{{item.get_designation_display|default_if_none:"BLANK"}}</label></td>							
+							<td><label name="department"  class="form-control" style="text-transform:uppercase;max-width:100%" maxlength="50" readonly id="id_department" >{{item.department|default_if_none:"BLANK"}}</label></td>
+							<td><label class="form-control" readonly>{{item.period_from|date:'d/m/Y'|default:"BLANK"}}</label></td>
+							<td><label class="form-control" readonly>{{item.period_to|date:'d/m/Y'|default:"BLANK"}}</label></td>
+							<td><label class="form-control" readonly>{{item.pay_scale|default_if_none:"BLANK"}}</label></td>
+							<td><label name="agp" class="form-control" style="text-transform:uppercase;max-width:100%" maxlength="20" readonly id="id_agp" >{{item.get_agp_display|default_if_none:"BLANK"}}</label></td>
+							
+							
+							{% if item.pdf %}       
+								<td><a name="pdf"  id="id_pdf" href="{{item.pdf.url}}" target="_blank"  style="max-width:70%" class="btn btn-primary ">View</a></td>
+							{% else %}
+								<td><label name="no_pdf" class="form-control" style="max-width:70%" readonly >None</label></td>
+								
+							{% endif %}
+		
+		
+						
+							<td><a style="font-weight:bolder;width:20px;" class="text-information" href="{% url 'account:curpost-edit1' pk=item.id %}">Edit</a></td>
+							<td><a style="font-weight:bolder;width:20px;" class="text-warning" href="{% url 'account:curpost-delete' pk=item.id %}">Delete</a></td>				
+						</tr>
+
+				{% endfor %}
+			
+			</table>		
+
+ {% endcomment %}
+
+
+
+</form>
+</div>
+
+<script type="text/javascript">
+	
+
+</script>
+
+{% endblock content %}

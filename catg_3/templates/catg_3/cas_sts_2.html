@@ -1,0 +1,285 @@
+{% extends 'base_v2.html' %}
+{% load static %}
+
+{% block content %}
+
+<head>
+
+<style type="text/css">
+
+		 
+		.card-body{
+			background-color: #5d5c61;
+			cursor:default;
+			
+		} 
+		
+		thead.sticky {
+		  position: -webkit-sticky;
+		  position: sticky;
+		  top: 0;		  	  
+		  padding: 50px;
+		  font-size: 22px;
+		  height : 150px;
+		  background: #92a8d1;;
+		  
+		}
+		
+		th{
+		  color:black;	
+		}
+		
+		span{
+		  color:red; 	
+		}
+		
+		table {
+			border:none !important;
+			border-spacing: 10px !important;
+		}
+		table tr td.me {
+			  background: pink;
+			  color:black;			  	
+			  border-radius: 50%;
+			  text-align: center;
+			  margin-left: 10px;
+		}
+		table tr td.me1 {
+			  background: red;
+			  color:black;			  	
+			  border-radius: 50%;
+			  text-align: center;
+			  margin-left: 10px;
+		}
+		table tr td.me2 {
+			  background: yellow;
+			  color:black;
+			  font-size:30px;
+			  font-weight:bolder;
+			  border-radius: 50%;
+			  text-align: center;
+			  
+		}
+		table tr td.me3 {
+			  background: #e1f8f9;			  
+			  color:black;
+		      font-size:20px;		
+			  font-weight:bolder;			  			  
+			  text-align: left;
+		}
+		table tr td.me4 {
+			  background: black;			  
+			 
+		}
+		table tr td.me5 {
+			  background: pink;			  
+			  color:black;
+		      font-size:25px;		
+			  font-weight:bolder;			  			  
+			  text-align: center;
+		}
+		span{
+			color:white;
+		}
+		
+</style>
+
+
+</head>
+
+          
+	<div class="card-body">
+		<h2 class="card-title" style="margin-left:20px;color:white;">Overview Applicant Statuses</h2>
+	
+	<table id="cas" class = "table  rounded shadow display " style="width:100% ">
+				
+				<h2 style="color:white;font-weight:bolder;font-size:30px;text-align:center">Applicant's Status</h2>
+				
+				<thead class="sticky">
+					<tr>
+						<th style="text-align: left; width:1%">Srl.</th>
+						<th style="text-align: left; width:1%">ID</th>
+						<th style="text-align: left; width:10%">Name</th>	
+						<th style="text-align: left; width:30%">Department</th>
+						<th style="text-align: center; width:1%;">Gen-Info<span>*</span></th>
+						<th style="text-align: center; width:1%" class="w3-tooltip">Part-B(a)<span class="w3-text" style="color:white;"><em>Last Academic Quali</em>*</span></th>
+						<th style="text-align: center; width:1%" class="w3-tooltip">Part-B(b)<span class="w3-text" style="color:white;"><em>Research Degrees</em>*</span></th>
+						<th style="text-align: center; width:1%" class="w3-tooltip">Part-C(a)<span class="w3-text" style="color:white;"><em>Prior joining</em>*</span></th>
+						<th style="text-align: center; width:1%" class="w3-tooltip">Part-C(b)<span class="w3-text" style="color:white;"><em>After joining</em>*</span></th>
+						<th style="text-align: center; width:1%" class="w3-tooltip">Part-D(a)<span class="w3-text" style="color:white;"><em>Teaching Experience</em>*</span></th>
+						<th style="text-align: center; width:1%" class="w3-tooltip">Part-E<span class="w3-text" style="color:white;"><em>Orientation</em>*</span></th>
+						<th style="text-align: center; width:1%" class="w3-tooltip">API-Cat-1<span>*</span></th>
+						<th style="text-align: center; width:1%" class="w3-tooltip">API-Cat-2<span>*</span></th>
+					
+						<th style="text-align: center; width:1%" class="w3-tooltip">III-A<span class="w3-text" style="color:white;"><em>Journal Publication</em>*</span></th>
+						<th style="text-align: center; width:1%" class="w3-tooltip">III-B(i)<span class="w3-text" style="color:white;"><em>Pub.other than jrnl</em>*</span></th>
+						<th style="text-align: center; width:1%" class="w3-tooltip">III-B(ii)<span class="w3-text" style="color:white;"><em>Jrnl from UGC list</em>*</span></th>
+						<th style="text-align: center; width:1%" class="w3-tooltip">III-C(i)<span class="w3-text" style="color:white;"><em>Sponsored Project</em>*</span></th>
+						<th style="text-align: center; width:1%" class="w3-tooltip">III-C(ii)<span class="w3-text" style="color:white;"><em>Consultancy Project</em>*</span></th>
+						<th style="text-align: center; width:1%" class="w3-tooltip">III-C(iii)<span class="w3-text" style="color:white;"><em>Projects Outcome</em>*</span></th>
+						<th style="text-align: center; width:1%" class="w3-tooltip">III-D<span class="w3-text" style="color:white;"><em>Research Guidance</em>*</span></th>
+						<th style="text-align: center; width:1%" class="w3-tooltip">III-E(i)<span class="w3-text" style="color:white;"><em>Fellowship / Award</em>*</span></th>
+						<th style="text-align: center; width:1%" class="w3-tooltip">III-E(ii)<span class="w3-text" style="color:white;"><em>Invited Lecture</em>*</span></th>
+						<th style="text-align: center; width:1%" class="w3-tooltip">III-E(iii)<span class="w3-text" style="color:white;"><em>e-Learning Delivery</em>*</span></th>
+						<th style="text-align: center; width:1%" class="w3-tooltip">Final<span class="w3-text" style="color:white;"><em>Final submission</em>*</span></th>
+									
+					</tr>
+				</thead>
+				
+				 {% for appl in account %}
+					<tr>
+						<td class="me3">{{ forloop.counter }}</td>
+						<td class="me3">{{ appl.id }}</td>
+						<td class="me3">{{ appl.username }}</td>
+						<td class="me3">{{ appl.Department.name }}</td>
+						
+						{% if appl.frm_general_info %}							
+								<td class="me"><i class="fa fa-step-forward" style="font-size:48px;color:black"></i></td>
+						{% else %}
+								<td class="me3"></td>
+						{% endif %}
+							
+						{% for item in cas_sts %}
+							{% if item.email_id ==  appl.id  %}
+								{% if item.academy_no > 0 %}
+									<td class="me2">{{ item.academy_no }}</td>
+								{% else %}
+								    <td class="me3"></td>
+								{% endif %}
+								
+								{% if item.research_paper_no > 0 %}
+									<td class="me2">{{ item.research_paper_no }}</td>
+								{% else %}
+									<td class="me3"></td>
+								{% endif %}
+								
+								{% if item.priorpost_no > 0 %}
+									<td class="me2">{{ item.priorpost_no }}</td>
+								{% else %}
+									<td class="me3"></td>
+								{% endif %}
+								
+								{% if item.present_post_no > 0 %}
+									<td class="me2">{{ item.present_post_no }}</td>
+								{% else %}
+									<td class="me3"></td>
+								{% endif %}
+								
+								{% if item.teaching_no > 0 %}
+									<td class="me2">{{ item.teaching_no }}</td>
+								{% else %}
+									<td class="me3"></td>
+								{% endif %}
+								
+								{% if item.orientation_no > 0 %}
+									<td class="me2">{{ item.orientation_no }}</td>
+								{% else %}
+									<td class="me3"></td>
+								{% endif %}
+								
+								{% if item.api_catg1_no > 0 %}
+									<td class="me2">{{ item.api_catg1_no }}</td>
+								{% else %}
+									<td class="me3"></td>
+								{% endif %}
+		
+								{% if item.api_catg2_no > 0 %}
+									<td class="me2">{{ item.api_catg2_no }}</td>								
+								{% else %}
+									<td class="me3"></td>
+								{% endif %}
+								
+								{% if item.jrnl_pub_no > 0 %}
+									<td class="me2">{{ item.jrnl_pub_no }}</td>								
+								{% else %}
+									<td class="me3"></td>
+								{% endif %}
+								
+								{% if item.pub_other_no > 0 %}
+									<td class="me2">{{ item.pub_other_no }}</td>								
+								{% else %}
+									<td class="me3"></td>
+								{% endif %}
+								
+								{% if item.jrnlpaper_no > 0 %}
+									<td class="me2">{{ item.jrnlpaper_no }}</td>								
+								{% else %}
+									<td class="me3"></td>
+								{% endif %}
+								
+								{% if item.resch_proj_no > 0 %}
+									<td class="me2">{{ item.resch_proj_no }}</td>								
+								{% else %}
+									<td class="me3"></td>
+								{% endif %}
+								
+								{% if item.resch_cons_no > 0 %}
+									<td class="me2">{{ item.resch_cons_no }}</td>								
+								{% else %}
+									<td class="me3"></td>
+								{% endif %}
+								
+								{% if item.prj_outcm_no > 0 %}
+									<td class="me2">{{ item.prj_outcm_no }}</td>								
+								{% else %}
+									<td class="me3"></td>
+								{% endif %}
+								
+								{% if item.resch_guide_no > 0 %}
+									<td class="me2">{{ item.resch_guide_no }}</td>								
+								{% else %}
+									<td class="me3"></td>
+								{% endif %}
+								
+								{% if item.fellow_award_no > 0 %}
+									<td class="me2">{{ item.fellow_award_no }}</td>								
+								{% else %}
+									<td class="me3"></td>
+								{% endif %}
+								
+								{% if item.lecture_paper_no > 0 %}
+									<td class="me2">{{ item.lecture_paper_no }}</td>								
+								{% else %}
+									<td class="me3"></td>
+								{% endif %}
+								
+								{% if item.e_learning_no > 0 %}
+									<td class="me2">{{ item.e_learning_no }}</td>								
+								{% else %}
+									<td class="me3"></td>
+								{% endif %}
+								
+							{% endif %}
+							
+						{% endfor %}
+						
+						{% if appl.frm_submitted  %}							
+								<td class="me"><i class="fa fa-thumbs-up" style="font-size:48px;color:green"></i></td>
+						{% else %}
+								<td class="me3"></td>
+						{% endif %}
+						
+					</tr>
+						
+				 {% endfor %}
+				 <tr><td class="me4" colspan="25"></td></tr>
+				 <tr>
+					<td class="me3" colspan="2"></td>
+					<td class="me3" style="font-size:25px;">Total(nos.)</td>
+					<td class="me3" style="font-size:25px;">Only Registered :&nbsp&nbsp{{ only_reg }}</td>					
+					<td class="me5" style="background-color:yellow;">{{ gen_info }}</td>
+					<td class="me3" style="font-size:25px;" colspan="2">In process</td>
+					<td class="me3" colspan="14"></td>
+					<td class="me3" style="font-size:25px;" colspan="2">Completed</td>
+					<td class="me5" style="background-color:green;color:yellow;">{{ frm_sub }}</td>
+				 </tr>
+	</table>
+	
+	
+	</div>
+	
+<script type="text/javascript">
+        
+</script>
+
+{% endblock content %}

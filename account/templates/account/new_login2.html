@@ -1,0 +1,705 @@
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Login & Signup Form | JU CAS</title>    
+	<link rel="icon" type="image/png" href="{% static 'image/favicon.png' %}"> 
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	
+	
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
+	
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+	
+	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	
+	
+	
+	<style>
+			/* Chrome, Safari, Edge, Opera: hide arrows fom number input */
+			input::-webkit-outer-spin-button,
+			input::-webkit-inner-spin-button {
+			  -webkit-appearance: none;
+			  margin: 0;
+			}
+
+			/* Firefox:hide arrows fom number input */
+			input[type=number] {
+			  -moz-appearance: textfield;
+			}
+			
+			@import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap');
+			*{
+			  margin: 0;
+			  padding: 0;
+			  box-sizing: border-box;
+			  font-family: 'Poppins', sans-serif;
+			}
+			html,body{
+				  display: grid;
+				  height: 100%;
+				  width: 100%;
+				  place-items: center;
+				  background: #314755;  /* fallback for old browsers */
+				  background: -webkit-linear-gradient(to right, #26a0da, #314755);  /* Chrome 10-25, Safari 5.1-6 */
+				  background: linear-gradient(to right, #26a0da, #314755); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+			}
+			.section-title {
+					font-size: 32px;
+					letter-spacing: 1px;
+					color: #314755;
+					margin:0;
+				}
+				
+				#topbar{
+					position: fixed; /* Set the navbar to fixed position */
+					top: 0; /* Position the navbar at the top of the page */
+					width: 100%; /* Full width */
+					z-index:2;
+					background-color: #e1c8d0;
+					
+					height:70px;
+					box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+				
+				}
+			.heading{
+			 
+				padding-left:550;
+				padding-top:0;
+				font-variant: small-caps;
+				letter-spacing: 2px;
+				text-shadow: 2px 2px 2px #aaa;
+				white-space: nowrap;
+				font-size: 30px;
+				font-family:  Times, serif;
+				color:black;
+			}
+			::selection{
+			  background: #fa4299;
+			  color: #fff;
+			}
+			.wrapper{
+			  overflow: hidden;
+			  max-width: 500px;			  
+			  background: #fff;
+			  padding: 30px;
+			  margin-top:85px;			  
+			  border-radius: 5px;
+			  box-shadow: 0px 15px 20px rgba(0,0,0,0.1);
+			}
+			.wrapper .title-text{
+			  display: flex;			  
+			  width: 200%;
+			  height:40px;
+			}
+			.wrapper .title{
+			  width: 50%;
+			  font-size: 35px;
+			  font-weight: 600;
+			  text-align: center;
+			  transition: all 0.6s cubic-bezier(0.68,-0.55,0.265,1.55);
+			}
+			.wrapper .slide-controls{
+			  position: relative;
+			  display: flex;
+			  height: 50px;
+			  width: 100%;
+			  overflow: hidden;
+			  margin: 20px 0 10px 0;
+			  justify-content: space-between;
+			  border: 1px solid lightgrey;
+			  border-radius: 5px;
+			}
+			.slide-controls .slide{
+			  height: 90%;
+			  width: 100%;
+			  color: #fff;
+			  font-size: 18px;
+			  font-weight: 500;
+			  text-align: center;
+			  line-height: 48px;
+			  cursor: pointer;
+			  z-index: 1;
+			  transition: all 0.6s ease;
+			}
+			.slide-controls label.signup{
+			  color: #000;
+			}
+			.slide-controls .slider-tab{
+			  position: absolute;
+			  height: 100%;
+			  width: 50%;
+			  left: 0;
+			  z-index: 0;
+			  border-radius: 5px;
+			  background: #314755;
+			  transition: all 0.6s cubic-bezier(0.68,-0.55,0.265,1.55);
+			}
+			input[type="radio"]{
+			  display: none;
+			}
+			#signup:checked ~ .slider-tab{
+			  left: 50%;
+			}
+			#signup:checked ~ label.signup{
+			  color: #fff;
+			  cursor: default;
+			  user-select: none;
+			}
+			#signup:checked ~ label.login{
+			  color: #000;
+			}
+			#login:checked ~ label.signup{
+			  color: #000;
+			}
+			#login:checked ~ label.login{
+			  cursor: default;
+			  user-select: none;
+			}
+			#login:checked ~ a{
+			  color: #000;
+			}
+			.wrapper .form-container{			 
+			  width: 100%;
+			  overflow: hidden;
+			}
+			.form-container .form-inner{
+			  display: flex;
+			  width: 200%;
+			}
+			.form-container .form-inner form{
+			  width: 50%;
+			  transition: all 0.6s cubic-bezier(0.68,-0.55,0.265,1.55);
+			}
+			.form-inner form .field{
+			  height: 40px;
+			  width: 100%;
+			  margin-top: 7px;
+			}
+			.form-inner form .field input{
+			  height: 40px;
+			  width: 100%;
+			  outline: none;
+			  padding-left: 15px;
+			  border-radius: 5px;
+			  border: 1px solid lightgrey;
+			  border-bottom-width: 2px;
+			  font-size: 17px;
+			  transition: all 0.3s ease;
+			}
+			.form-inner form .field input:focus{
+			  border-color: #fc83bb;
+			  /* box-shadow: inset 0 0 3px #fb6aae; */
+			}
+			.form-inner form .field input::placeholder{
+			  color: #999;
+			  transition: all 0.3s ease;
+			}
+			form .field input:focus::placeholder{
+			  color: #b3b3b3;
+			}
+			.form-inner form .pass-link{
+			  margin-top: 5px;
+			}
+			.form-inner form .signup-link{
+			  text-align: center;
+			  margin-top: 30px;
+			}
+			.form-inner form .pass-link a,
+			.form-inner form .signup-link a{
+			  color: #fa4299;
+			  text-decoration: none;
+			}
+			.form-inner form .pass-link a:hover,
+			.form-inner form .signup-link a:hover{
+			  text-decoration: underline;
+			}
+			form .btn{
+			  height: 50px;
+			  width: 100%;
+			  border-radius: 5px;
+			  position: relative;
+			  overflow: hidden;
+			}
+			form .btn .btn-layer{
+			  height: 100%;
+			  width: 300%;
+			  position: absolute;
+			  left: -100%;
+			  background: -webkit-linear-gradient(right, #a445b2, #fa4299, #a445b2, #fa4299);
+			  border-radius: 5px;
+			  transition: all 0.4s ease;;
+			}
+			form .btn:hover .btn-layer{
+			  left: 0;
+			}
+			form .btn input[type="submit"]{
+			  height: 100%;
+			  width: 100%;
+			  z-index: 1;
+			  position: relative;
+			  background: none;
+			  border: none;
+			  color: #fff;
+			  padding-left: 0;
+			  border-radius: 7px;
+			  font-size: 20px;
+			  font-weight: 500;
+			  cursor: pointer;
+			}
+			
+			::placeholder {
+			  margin:0;
+			  color: gray;
+			  font-weight:bold;
+			  font-family:sans-sarif;
+			  
+			}
+
+			
+			select {
+			  font-size:15px;
+			  padding:10px;
+			  color: gray;
+			  font-weight:bold;
+			  font-family:sans-sarif;
+			  
+			}
+
+			.sweet-alert {
+				background-color: #2f2f2f96;
+				font-weight:bold;
+				font-family:sans-sarif;
+			}
+			
+	</style>
+	
+  </head>
+  
+  
+  <body>
+  
+	<!-- Top container -->
+<div id="topbar" class="w3-bar w3-top w3-large w3-card w3-display-topmiddle w3-margin-bottom " >
+	
+	<span class="w3-bar-item " style="padding-left:20px; padding-top:5px;">
+	  <img  src="{% static 'image/ju_logo.png' %}" alt="Ju Logo" width="280" height="60" style="float:left;"> 
+	</span>
+  
+	<h3 class="heading w3-text-shadow" style="margin-top:0;padding-left:410px;">
+	  Career Advancement Scheme (CAS) Portal For Teachers
+	</h3>
+	
+  </div>	
+	
+	<!--Form starts-->
+    <div class="wrapper">
+	<!--Form Heading-->
+	
+      <div class="title-text" style="height:35px;">
+	  
+        <div class="title login">Login Here </div>
+        <div class="title signup">Register Here</div>
+      
+	  </div>
+	  
+      <div class="form-container">
+	  	
+	  
+	  <!--Form buttons Top-->
+        <div class="slide-controls" style="padding:0;height:45px;">
+		
+          <input type="radio" name="slide" id="login" >
+          <input type="radio" name="slide" id="signup">
+		  <label for="login" class="slide login">Login</label>
+          <label for="signup" class="slide signup">Signup</label>
+		  
+		  <div class="slider-tab" ></div>
+		  
+        </div>
+		<!-- Login Form starts-->
+        <div  class="form-inner">
+          <form   action="{% url 'login' %}"  class="login" method="post">{% csrf_token %}
+		  
+			<br>
+            <div class="field"> 
+			  
+			  <input type="email" name="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+			  
+            </div>
+			<br>
+            <div class="field">
+             
+			  <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" required>
+            </div>
+			<br>
+			
+            <div class="pass-link"><a href="{% url 'reset_password' %}">Forgot password?</a></div>
+			
+			{% for field in login_form %}
+				<p>
+				{% for error in field.errors %}
+					<p id="log_err" style="color: red">{{ error }}</p>
+				{% endfor %}
+				</p>
+			{% endfor %}
+			
+			{% if login_form.non_field_errors %}
+				<div style="color: red">
+				<p>{{login_form.non_field_errors}}</p>
+				</div>
+			{% endif %}
+			
+			
+			
+            <div class="field btn" style="display:flex; justify-content:center; height:50px;">
+              <div class="btn-layer" style="height:60px;"></div>
+              <input style="height:40px;" type="submit" value="Login">
+			  
+            </div>
+            <div id="signup" class="signup-link"><a href="/">Signup now</a>
+			
+			</div>
+			
+          </form>
+		 
+		  <!-- Registration Form starts-->
+		  {% if registration_form %}
+            <form  action="{% url 'register' %}" class="signup" method="post">
+				{% csrf_token %}
+			
+			<div class="field">
+				
+				{{registration_form.emp_id}}
+				
+				
+			</div>		
+				
+				{% for field in registration_form %}
+					{% if forloop.counter == 1 %}
+						<p  style="color: red">{{ registration_form.emp_id.errors.as_text }}</p>
+					{% endif %}	
+				{% endfor %}
+			
+			<div class="field">
+				
+				{{registration_form.username}}
+				
+			</div>	
+			
+			<div class="field">    
+				{{registration_form.Department}}
+			</div>
+			
+			<div class="field">					
+				{{registration_form.Designation}}
+			</div>
+
+			<div class="field"> 					
+				{{registration_form.faculty}}
+			</div>			
+				
+            <div class="field">
+			  {{registration_form.email}}
+            </div>
+			
+			
+			
+			{% for field in registration_form %}
+			
+							{% if forloop.counter == 1 %}
+							   
+								<p id="err1" style="color: red">{{ registration_form.email.errors.as_text }}</p>
+								
+								
+							{% endif %}
+						
+						
+				
+			{% endfor %}
+			
+            <div class="field">			
+              <input type="password" name="password1" placeholder="Password" required>			 
+			</div>
+			
+			{% for field in registration_form %}
+					{% if forloop.counter == 8 %}
+						<p  style="color: red">{{ registration_form.password1.errors.as_text }}</p>
+					{% endif %}	
+				{% endfor %}
+			
+			<div class="field">			
+              <input type="password" name="password2" placeholder="Confirm password" required>	
+			</div>
+			
+			{% for field in registration_form %}
+					{% if forloop.counter == 9 %}
+						<p  style="color: red">{{ registration_form.password2.errors.as_text }}</p>
+					{% endif %}	
+				{% endfor %}
+			
+			<div class="row" >
+					<div class="col-md-6 h6" style="display:none;height:5px;">
+						{{registration_form.is_applicant|as_crispy_field}}
+					</div>					
+					<div class="col-md-6 h6" style="color:blue;font-weight:bold;height:15px; display:none;">
+						{{registration_form.is_hod|as_crispy_field}}
+					</div>
+			</div>
+			
+			<script>
+				var data=[];
+			</script>				
+			
+			{% for field in registration_form %}
+						
+				{% for error in field.errors %}
+				
+					<script>
+					  					   
+						data.push("{{error}}");
+					   	
+					</script>	
+					
+					<p id="err"></p>
+					
+					
+				{% endfor %}
+				
+			
+			{% endfor %}
+				
+			
+			
+			
+				<script>
+					    if ( data.length == 0 ) { 
+							console. log("NO DATA!")														
+						}
+						else {
+						str = JSON.stringify(data);
+						const strNl = str.replaceAll('.', '.\n');
+						let res = strNl.replace(/"/g, "");
+						let res1 = res.replace(/,/g, "");
+						//swal(res1);
+						}
+				</script>
+				
+			
+			
+			
+			
+			
+            <div class="field btn">
+              <div class="btn-layer"></div>
+              <input type="submit"  value="Signup">
+			</div>
+			
+          </form>
+		  
+		 {% endif %}
+		 
+        </div>
+      </div>
+    </div>
+	 <!-- Footer -->
+    <!-- Copyrights -->
+    <div class="bg-transparent py-4">
+		<div class="container text-center" style="height:30px; color:#fff;">
+		  <p class="mb-0 py-2">© Sayantani Chakraborty | IQAC, JU</p>
+		</div>
+	  </div>
+	</footer>
+	
+	
+    <script>	  
+	  
+	  const loginText = document.querySelector(".title-text .login");
+	  const signupText = document.querySelector(".title-text .signup");
+      const loginForm = document.querySelector("form.login");
+	  const signupForm = document.querySelector("form.signup");
+      const loginBtn = document.querySelector("label.login");
+	  const loginBtn2 = document.querySelector("label.login");
+      const signupBtn = document.querySelector("label.signup");
+	  const signupBtn2 = document.querySelector("label.signup");
+      const signupLink = document.querySelector("form .signup-link a");
+	  
+	  
+	  signupBtn.onclick = (()=>{			  
+        loginForm.style.marginLeft = "-50%";
+        loginText.style.marginLeft = "-50%";
+				
+      });
+	  
+	
+      loginBtn.onclick = (()=>{
+        loginForm.style.marginLeft = "0%";
+        loginText.style.marginLeft = "0%";
+		
+      });
+	 
+	 
+      signupLink.onclick = (()=>{				
+		signupBtn.click();
+		return false;
+      });
+	  
+	  var errAray = [];
+	  
+	  $(function() {			
+		if($("#err")) {
+			signupBtn.click();
+			return false;
+		}
+			
+	  });
+	  
+
+	  
+		function limit_input() {
+				var field = document.getElementById("id_emp_id");
+				var max_length = 6;
+				
+				if (field.value.length > max_length) {
+					field.value = field.value.slice(0, max_length); 
+				}
+				
+		}
+		
+		
+	   /*
+	  $(function() {			
+		if($("#log_err")) {
+			loginBtn.click();
+			return false;
+		}
+			
+	  });
+	  */
+	  
+	  /*
+	  
+			<!--
+				{% if registration_form.errors %}
+				<div style="color: red">
+					<p>{{registration_form.errors}}</p>
+				</div>
+				{% endif %}
+				$("ol").append("<li>{{error}}</li>");
+			-->	
+			
+	   $("document").ready(function() {
+			if($("#err")) {
+				swal("The returned value is ");					
+			}		
+		   
+	   }); 
+	   
+	    $( "form" ).submit(function( event ) {
+			console.log( $( this ).serializeArray() );			
+			event.preventDefault();
+			
+	  });
+	 
+	 
+	 $(function() {
+		if($("#signup").is(":checked")) {
+			document.location.href = "{% url 'register' %}"; 
+		}
+		else if($("#login").is(":checked")) {
+			document.location.href = "{% url 'login' %}"; 
+		}
+	 });
+	 
+	   $("document").ready(function() {
+		  $("loginBtn").ready(function() {
+			$(this).click();
+		  });    
+	  });
+	 
+	 $( document ).ready(function() {
+	 
+	   if($("#login").is(":checked")) {
+			document.location.href = "{% url 'register' %}"; 
+		}
+	
+	
+	 });
+	  
+	  
+	  $('#signup').click(function() {
+		loginForm.style.marginLeft = "-50%";
+        loginText.style.marginLeft = "-50%";
+        window.location.href='{% url 'register' %}';
+	  });
+	  
+	  $('#login').click(function() {
+		loginForm.style.marginLeft = "0%";
+        loginText.style.marginLeft = "0%";
+		window.location.href='{% url 'login' %}';
+	  });
+	 
+	 
+	 
+	
+	  $(function(){
+		$('input[type="radio"]').click(function(){
+			if ($(this).is(':checked'))
+		{
+		  let link = $('#login')
+		  let currentHref = link.attr("href")
+		  let newHref = currentHref.split("?radio_id=")[0] + "?radio_id=" + $(this).val()
+		  link.attr("href", newHref);
+		}
+	  });
+	  
+	  
+	  $('#login').click(function() {
+      window.location.href='{% url 'login' %}';
+	  });
+	  
+	  $('#signup').click(function() {
+      window.location.href='{% url 'register' %}';
+	  });
+	  
+	  
+	   $(document).on('click', '#signup', function () { 
+			// Generate URL without the final path element 
+			window.location.href = "{% url 'register' %}";
+	   }); 
+	  
+	   loginLink.onclick = (()=>{
+        window.location.href = "{% url 'login' %}";
+		return false;
+      });
+	  
+	  regLink.onclick = (()=>{
+        window.location.href = "{% url 'register' %}";
+		return false;
+      });
+	  
+	  
+	  $(document).on('click', '.alink', function () {
+		var url = "{% url 'register' %}";
+		var id = $(this).attr('id');
+		// Construct the full URL with "id"
+		document.location.href = url.replace('123', id);
+	  });
+	  */
+	
+    </script>
+
+  </body>
+</html>
+{% endblock content %}

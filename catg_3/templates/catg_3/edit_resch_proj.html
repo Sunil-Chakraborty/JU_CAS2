@@ -1,0 +1,237 @@
+<!--Html for editing existing record in Jrnl_pub-->
+
+{% extends 'base_v2.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<style type="text/css">
+    span{
+        color:red;
+    }
+    html {
+        font-family: verdana;
+        font-size: 10pt;        
+      }
+      table {
+        border-collapse: collapse;
+        width: 900px;
+        height : 405px;
+        overflow-y: scroll;
+        overflow-x: hidden !important;
+        display: block;
+      }
+
+      td,
+      th {        
+        height: 15px;
+        border: dashed 1px lightblue;
+        }
+
+     th{
+         width:400px;
+         font-size:20px;
+     }
+     td{
+        width:600px;
+        font-size:25px;
+    }
+
+     .form-number{
+        text-align: center; 
+        width: 60pt;        
+     }
+
+     input[type=number]::-webkit-inner-spin-button, 
+     input[type=number]::-webkit-outer-spin-button { 
+           -webkit-appearance: none; 
+           margin: 0; 
+     }
+
+     .card {
+        margin: 0 auto; /* Added */
+        float: none; /* Added */
+        margin-bottom: 10px; /* Added */
+     }
+     
+</style>
+
+
+<form action="" method="POST" enctype="multipart/form-data">
+
+    {% csrf_token %}
+
+    <div class="card shadow p-3 mb-5 bg-white rounded" style="width: 60%;">
+        {% comment %} <img class="card-img-top" src="..." alt="Card image cap"> {% endcomment %}
+        
+          {% if form1.errors %}
+          <div class="alert-warning center">
+              <h2>{{form1.non_field_errors}}
+				Check the grant sanctioned in Rs.lacs (max 4 digits) </h2>              
+          </div> 
+          {% endif %}
+
+          
+        <div class="card-body">
+          <h2 class="card-title" style="font-weight:bold;">CATEGORY III : Research and Academic Contribution (Edit)</h2>
+          
+              <h2 class="card-title">III-C :  Research Projects (i)  Sponsored Project
+					<a href="{% url 'catg_3:resch-view' user_id=request.user.id %}" class="previous" style="text-decoration:none;float:right;"><i class="fa fa-window-close" style="font-size:36px"></i></a>
+			  </h2>
+          
+          
+          <br>
+            
+            <table class="table table-striped">
+                
+                <td style="display:none;">{{form1.email}}</td> 
+                <td style="display:none;">{{form1.proj_tag}}</td> 
+                <tr>
+                    <th VALIGN=middle>Area of the Applicant<span>*</span></th>
+                    <td>{{form1.faculty_app}}</td>
+                </tr>        
+                <tr>
+                    <th VALIGN=middle>Title of the Project<span>*</span></th>
+                    <td>{{form1.proj_title}}</td>
+                </tr>	
+                <tr>
+                    <th VALIGN=middle>Name of the Funding <br> Agency<span>*</span></th>
+                    <td>{{form1.fund_agnc}}</td>
+                </tr>
+                <tr>
+                    <th VALIGN=middle>Duration <br> (no.of years)<span>*</span></th>
+                    <td>{{form1.no_yrs}}</td>
+                </tr>
+                <tr>
+                    {% if res.proj_tag == "cons" %}
+                        <th VALIGN=middle>Amount Mobilized<span>*</span></th>
+                    {% else %}
+                    <th VALIGN=middle>Grant Sanctioned<br> (in Lakhs)<span>*</span></th>
+                    {% endif %}
+                    <td class="showTooltip" data-toggle="tooltip" data-placement="right" title="Rs. in lacs only">{{form1.prj_amt}}</td>
+				
+                </tr>
+                <tr>
+                    <th VALIGN=middle>Upload Grant Letter link<span>*</span></th>
+                    <td>{{form1.prj_url}}</td>
+                </tr>
+                
+                <tr>
+                  <td style="display:none;">{{form1.self_api_score}}</td>
+                  <td style="display:none;">{{form1.veri_api_score}}</td>
+                </tr>
+            </table>
+
+            <div style="width:200px;float:left;">
+              <button type="submit" id="btnSubmit" style="font-weight:bolder;" class="btn btn-success btn-block btn-lg">
+                Save Record</button>
+              </div>  
+	        
+
+  
+         </div>
+    </div> 
+</form>
+
+
+<script type="text/javascript">
+
+    function limit_input() {
+        // var field = document.getElementById("id_prj_amt");
+        // var max_length = 6;
+        
+        // if ((field.value.length) > max_length) {
+        //     field.value = field.value.slice(0, max_length); 
+        }
+        
+    
+	
+	function limit_yrs() {
+		var field = document.getElementById("id_no_yrs");
+		var max_length = 2;
+		
+		if ((field.value.length) > max_length) {
+			field.value = field.value.slice(0, max_length); 
+		}
+		
+	}
+	
+    $("form").submit(function(){    
+
+        var prj_amt    = $('#id_prj_amt').val();
+        var fac_app    = $('#id_faculty_app').val();
+        var prj_tag    = $('#id_proj_tag').val();
+        
+
+      if (prj_tag == "spon"){  
+        if (fac_app == "ARTS") {       
+          if (parseFloat(prj_amt) >= 1 && parseFloat(prj_amt) <= 3) {
+              var score = 10;
+          }
+          else if (parseFloat(prj_amt) <= 5) {
+              var score = 15;              
+          } 
+          else if (parseFloat(prj_amt) > 5) {
+              var score =20;              
+          }
+                           
+        }
+        else if (fac_app == "SCNC") {
+          if (parseFloat(prj_amt) >= 1 && parseFloat(prj_amt) <= 5) {
+            var score = 10;
+           }
+          else if (parseFloat(prj_amt) <= 30) {
+            var score = 15;              
+           } 
+           else if (parseFloat(prj_amt) > 30) {
+            var score =20;              
+           }              
+        }
+        else if (fac_app == "ENGG") {
+          if (parseFloat(prj_amt) >= 1 && parseFloat(prj_amt) <= 5) {
+            var score = 10;
+           }
+          else if (parseFloat(prj_amt) <= 30) {
+            var score = 15;              
+           } 
+           else if (parseFloat(prj_amt) > 30) {
+            var score =20;              
+           }         
+        }
+        
+        var field1 = document.getElementById("id_self_api_score");				
+        field1.value = parseFloat(score);
+        
+        var field2 = document.getElementById("id_veri_api_score");				
+        field2.value = parseFloat(score);
+        
+       }       
+       else
+       {
+
+            if (fac_app == "ARTS") {
+                var score = (parseFloat(prj_amt)/2*10);
+            }
+            else if (fac_app == "SCNC") { 
+                 var score = (parseFloat(prj_amt)/10*10);             
+            } 
+            else if (fac_app == "ENGG") { 
+                var score = (parseFloat(prj_amt)/10*10);             
+            }
+         
+          var field1 = document.getElementById("id_self_api_score");				
+          field1.value = parseFloat(score);
+          
+          var field2 = document.getElementById("id_veri_api_score");				
+          field2.value = parseFloat(score);
+        
+       }
+        
+     });
+      
+    
+
+</script>
+
+{% endblock content %}

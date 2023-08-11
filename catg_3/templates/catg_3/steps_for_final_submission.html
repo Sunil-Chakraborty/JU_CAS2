@@ -1,0 +1,415 @@
+{% extends 'base_v2.html' %}
+{% load static %}
+
+
+{% block content %}
+
+<head>
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+<!-- To prevent back button activities 
+
+<script type="text/javascript">
+	function preventBack() {
+		window.history.forward();
+	}
+	setTimeout("preventBack()",0);
+	window.onunload = function() { null };
+</script>
+-->
+   
+  <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+  <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+  
+<style>
+    
+    .card {
+      margin: 0 auto; /* Added */
+       /* Added */
+      margin-bottom: 10px; /* Added */
+    }
+	
+	.my-validation-message::before {
+		  display: none;
+	}
+
+	.my-validation-message i {
+		  margin: 0 .4em;
+		  color: #f27474;
+		  font-size: 1.4em;
+	}
+	
+	.divalert{
+	  
+	  
+	  border-radius: 15px;
+	 
+	  font-size:18px;
+	  color:#fff;   
+	}
+
+	
+	element{
+		position:fixed;
+		left: 50%;
+		top: 50%;
+		-ms-transform: translate(-50%,-50%);
+		-moz-transform:translate(-50%,-50%);
+		-webkit-transform: translate(-50%,-50%);
+		 transform: translate(-50%,-50%);
+
+	}
+	
+	
+</style>
+
+</head>
+
+
+<body>
+
+ <div class="card shadow p-3 mb-5 bg-white rounded" style="width: 90%;">
+          
+    <div class="card-body">
+        
+		<h2 style="text-align:center;font-size:30px;font-weight: bold;">
+			Endorsement and Submission
+				<a href="{% url 'catg_3:api-summary-view' user_id=request.user.id %}" class="previous" style="text-decoration:none;float:right;"><i class="fa fa-window-close" style="font-size:36px"></i></a>
+		</h2>
+		<hr>
+		<h2>
+			<div>
+				<div>Step 1: Click below to generate your forwarding letter <span style="font-size:20px"><br>(to be signed by HoD/Director of School)</span></div>
+				<br>
+				<div id="ltr" style="width:250px;float:left;">
+					<a type="button" style="font-weight:bolder;" href="{% url 'catg_3:endo-view' user_id=pk_var %}" target="_blank" class="btn btn-primary btn-block btn-lg">
+						Forwarding Letter</a>
+				</div>
+			</div>
+			<br><br>
+			
+			<div>
+				<div style="margin-top:20px;">Step 2: Upload the signed letter as attachment (JPEG/PNG only) below :</div>
+				<br>
+				<form action=""  method="POST"  enctype="multipart/form-data">
+				
+				
+					
+					{% csrf_token %}
+					
+					{% if form.errors %}
+						<div class="alert-warning center">
+							<h2>{{form.non_field_errors}}</h2>
+						</div> 
+					{% endif %}
+					
+				
+				
+					{{form.fwd_link|truncatechars_html:50}}
+					
+					
+					<br>
+					
+					<div>	
+					
+						<div style="margin-top:35px;width:200px;float:left;">
+							<button type="submit" id="btnSubmit" name="btnform1" style="font-weight:bolder;" class="btn btn-success btn-block btn-lg">
+							Save attachment</button>
+						</div>
+					
+					</div>
+					
+				</form>
+				
+				<br>
+				<br>
+				<br>
+				
+				<form action=""  method="POST" id="my_Form" enctype="multipart/form-data">
+					
+					{% csrf_token %}
+				
+					<div style="display:none;" >{{account.frm_submitted}}</div>
+					
+					 <div>
+					 {% if account.fwd_link %}
+						<div style="margin-top:20px;display:block;">Step 3: <a href="{% url 'account:pdf_view' user_id=request.user.id %}" target ="_blank">Click here to preview your application</a></div>
+						
+						<div style="display:block;margin-top:35px;width:220px;float:left;">
+							<input type="submit" id="btnSubmit2" name="btnform2"  style="font-weight:bolder;"  class="btn btn-warning btn-block btn-lg"  value="Confirm Submission">
+						</div>
+						
+						<div style="display:none;" >{{form.is_submit}}</div>
+						
+						
+						
+					 {% endif %}
+					 </div>	
+					 
+					<!-- 
+					<div id = "alertWindow" title = "Alert Box">
+					   <p> Welcome to the tutorialsPoint! </p>
+					   <p> Alert box into the center. </p>
+					</div>
+					-->
+					
+				</form>
+				
+				
+			</div>
+		
+    </div>
+	
+ </div>
+
+ 
+
+
+<script type="text/javascript">
+
+
+	var isSubmit=false;
+	
+	
+	//$(function () {
+    //     $("#alertWindow").dialog();
+    //});
+	  
+	$( document ).ready(function() {
+		//alertMX("It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).");
+		
+		$('#id_is_submit').prop('checked', false);
+		
+		
+	});
+	
+	
+	$("#my_Form").submit(function(){
+		
+		let text = "Are you sure you want to Submit!";
+	 
+			
+		if (confirm(text) == true) {
+			$('#id_is_submit').prop('checked', true);
+				swal({
+					title: "Success!",
+					text: "You have successfully submitted!",
+					icon: "success"
+				}).then(function() {
+					window.location.href = "{% url 'account:home' user_id=request.user.id %}";
+				});	
+			
+		} else {
+				$('#id_is_submit').prop('checked', false);
+				swal({
+					title: "Information!",
+					text: "You have not yet  submitted!",
+					icon: "warning"
+				}).then(function() {
+					window.location.href = "{% url 'catg_3:letter' user_id=request.user.id %}";
+				});
+			
+		}
+		
+		
+		
+		
+	});	
+	/*
+	 let text = "Are you sure you want to Submit!\nEither Ok or Cancel";
+	 
+			
+		if (confirm(text) == true) {
+			$('#id_is_submit').prop('checked', true);
+				swal({
+					title: "Success!",
+					text: "You have successfully submitted!",
+					icon: "success"
+				}).then(function() {
+					window.location.href = "{% url 'account:home' user_id=request.user.id %}";
+				});	
+			//text = "You pressed OK!";
+		} else {
+				$('#id_is_submit').prop('checked', false);
+				swal({
+					title: "Information!",
+					text: "You have not yet  submitted!",
+					icon: "warning"
+				}).then(function() {
+					window.location.href = "{% url 'catg_3:letter' user_id=request.user.id %}";
+				});
+			
+		}
+	
+	});	
+
+	/*
+	   var isSubmit = $("#id_is_submit").val();
+	   alert(isSubmit);
+	   
+	   var x = confirm( isSubmit==false ? "Are you sure you want to leave?!":"Are you sure you want to Submit!");
+	   
+	   if(x){
+		if(isSubmit==false){
+			
+		 $('#id_is_submit').prop('checked', false);		
+		 alert("Not yet Submitted !");
+		}else{
+		  
+		  $('#id_is_submit').prop('checked', true);	  
+		  swal({
+				title: "Success!",
+				text: "You have successfully submitted!",
+				icon: "success"
+			}).then(function() {
+				window.location.href = "{% url 'account:home' user_id=request.user.id %}";
+			});
+		}
+	   }
+	
+	let text = "Are you sure you want to Submit!\nEither Ok or Cancel";
+	 //swal(text);
+		if (confirm(text) == true) {
+			$('#id_is_submit').prop('checked', true);
+				swal({
+					title: "Success!",
+					text: "You have successfully submitted!",
+					icon: "success"
+				}).then(function() {
+					window.location.href = "{% url 'account:home' user_id=request.user.id %}";
+				});	
+			//text = "You pressed OK!";
+		} else {
+				$('#id_is_submit').prop('checked', false);
+				swal({
+					title: "Information!",
+					text: "You have not yet  submitted!",
+					icon: "warning"
+				}).then(function() {
+					window.location.href = "{% url 'account:home' user_id=request.user.id %}";
+				});
+			
+		}
+	
+			/*
+			
+			============================================================
+			<form id="myForm">
+				<button type="submit" id="btn-submit">Submit</button>
+			</form>
+			
+			$(document).on('click', '#btnSubmit2', function(e) {
+				e.preventDefault();
+				swal({
+					title: 'Confirm',
+					input: 'checkbox',
+					inputValue: 0,
+					inputPlaceholder: ' I agree with the Terms',
+					confirmButtonText: 'Continue',
+					inputValidator: function (result) {
+						return new Promise(function (resolve, reject) {
+							if (result) {
+								resolve();
+							} else {
+								reject('You need to agree with the Terms');
+							}
+						})
+					}
+				}).then(function (result) {
+					$('#my_Form').submit();
+				});
+			});
+			==============================================================
+			
+				
+				swal({
+				  title: "Are you sure?",
+				  text: "Once submitted, you cannot edit your form!",
+				  icon: "warning",				 
+				  buttons: true,
+				  dangerMode: true,
+				})
+				.then((willSubmit) => {
+				  		
+				  if (willSubmit) {			
+					
+					$('#id_is_submit').prop('checked', true);
+					
+					swal("Success! Your form  has been submitted!", {			
+					  icon: "success",
+					  
+					}).then(function(){
+						$('#id_is_submit').prop('checked', true);
+						
+						window.location.href = "{% url 'account:home' user_id=request.user.id %}";
+					});
+					
+					
+				  } else {
+				  
+					$('#id_is_submit').prop('checked', false);
+					
+					swal("Your form is yet to be submitted!",{
+						icon: "warning",
+						
+					}).then(function(){
+					
+						$('#id_is_submit').prop('checked', false);
+						
+						window.location.href = "{% url 'account:home' user_id=request.user.id %}";
+					});
+					
+				  }
+				 
+				});
+			*/
+			
+			
+			
+		
+		
+			
+	
+	
+	
+	/*
+	
+	   
+		   isSubmit = $('input[name=is_submit]').val();
+		    
+		   var x = confirm( isSubmit==false ? "Are you sure you want to leave?!":"Are you sure you want to Submit!");
+		   
+		   if(x){
+			if(isSubmit==false){
+			 	
+			 $('#id_is_submit').prop('checked', false);		
+			 alert("Not yet Submitted !");
+			}else{
+			  
+			  $('#id_is_submit').prop('checked', true);	  
+			  swal({
+					title: "Success!",
+					text: "You have successfully submitted!",
+					icon: "success"
+				}).then(function() {
+					window.location.href = "{% url 'account:home' user_id=request.user.id %}";
+				});
+			}
+		   }
+	
+	   	
+	   
+	   
+	   
+	
+	*/
+	
+		
+</script>
+</body>
+
+{% endblock content %}
+    

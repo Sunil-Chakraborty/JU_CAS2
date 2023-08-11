@@ -1,0 +1,118 @@
+   
+<!DOCTYPE HTML>
+<html lang="en">
+<style>
+:root{
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 15px;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+*{
+    text-decoration: none;
+    color:white;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background: #555;
+    overflow: hidden;
+}
+
+.menu{
+    width: 300px;
+    height: auto;
+    background: #162447;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(0, 0, 0, .5);
+}
+
+.menu .btn{
+    display:block;
+    padding: 1rem;
+    border-bottom: solid 1px #1b1b2f;
+    border-top: solid 1px #1f4068;
+    position: relative;
+}
+
+.menu .submenu {
+    background: #1b1b2f;
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height .8s ease-out;
+}
+
+.menu .submenu a{
+    display:block;
+    padding: 1rem;
+    position: relative;
+}
+
+.menu .submenu a::before{
+    content:'';
+    display:block;
+    position: absolute;
+    top:0;
+    left:0;
+    height: 100%;
+    width: 5px;
+    background: #e43f5a;
+    opacity: 0;
+    transition: all .5s;
+}
+
+.menu .submenu a:hover{
+    padding-left: calc(1rem + 5px);
+}
+
+.menu .submenu a:hover::before{
+    opacity: 1;
+}
+
+.item:target .submenu{
+    max-height: 20rem;
+}
+</style>
+
+<body>
+   
+   <a class="menu">
+        <li class="item" id="mn1">
+            <a class="btn" href="#mn1">Kullanıcılar</a>
+            <div class="submenu">
+                <a href="#">Kullanıcı Listesi</a>
+                <a href="#">Kullanıcı Ekle</a>
+                <a href="#">Kullanıcı Sil</a>
+            </div>
+        </li>
+        <li class="item" id="mn2">
+            <a class="btn" href="#mn2">Dosyalar</a>
+            <div class="submenu">
+                <a href="#">Dosya Listesi</a>
+                <a href="#">Dosya Ekle</a>
+                <a href="#">Dosya Sil</a>
+            </div>
+        </li>
+        <li class="item" id="mn3">
+            <a class="btn" href="#mn3">Ayarlar</a>
+            <div class="submenu">
+                <a href="#">Kullanıcı Ayarları</a>
+                <a href="#">Dosya Ayarları</a>
+                <a href="#">Şifre</a>
+            </div>
+        </li>
+    </a>
+</body>	
+	
+</html>
+	

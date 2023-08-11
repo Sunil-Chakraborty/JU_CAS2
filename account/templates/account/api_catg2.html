@@ -1,0 +1,399 @@
+{% extends 'base_v2.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<style>
+	textarea{
+		font-size:15px;
+		text-align:left;
+		
+		
+		resize:none;
+	}
+	.textarea1{width: 300px; height: 245px;}
+	.textarea2{width: 300px; height: 320px;}
+	.textarea3{width: 300px; height: 190px;}
+	
+	textarea::-webkit-scrollbar {
+	 display:none;
+	}
+	 
+    input[type=number]::-webkit-inner-spin-button, 
+    input[type=number]::-webkit-outer-spin-button { 
+           -webkit-appearance: none; 
+           margin: 0; 
+     }
+</style>
+
+
+<form action="" method="POST" enctype="multipart/form-data">
+
+    {% csrf_token %}
+
+
+<div class="card shadow p-3 mb-5 bg-white rounded" style="width: 95%;margin-left:10px;">
+          
+ <div class="card-body" >
+            <h4 class="card-title" style="font-weight:bold;text-align:center;">CATEGORY II: PROFESSIONAL DEVELOPMENT, CO-CURRICULAR AND EXTENSION ACTIVITIES
+			<a href="{% url 'account:home' user_id=api2.id %}" class="previous" style="text-decoration:none;float:right;"><i class="fa fa-window-close" style="font-size:36px"></i></a>
+			</h4>
+  <br>
+
+<table class="table">
+    <tr>
+       
+        <th>Nature of Activity</th>
+        <th>Max Marks</th>
+        <th style="text-align:center;">Hours spent per<br>academic year</th>
+        <th style="text-align:center;display:none">Actual score</th>
+        <th style="text-align:center;">Self Appraisal Score</th>
+		{% if not user.is_applicant %}	        
+			<th style="text-align:center;">Verified API Score</th>
+		{% endif %}		
+		<th>Doc.Link<br><a style="font-weight:normal" href="{% url 'account:instruction' %}" target=__blank><i class="fa fa-file-text" aria-hidden="true"></i> Refer Sl.No.8 of Gen. Instructions</a></th>
+		<th>Link Status</th>
+    </tr>
+ 
+	<tr>
+		<td style="display:none;">{{form.email|as_crispy_field}}</td>
+		
+        <td><textarea  class="textarea1" readonly>a). Student related co-curricular, extension and field based activities.
+		(i) Discipline related co-curricular activities (e.g.remedial classes,career counseling,study visit,student seminar and other events.)
+		(ii) Other co-curricular activities(Cultural, Sports, NSS, NCC etc.).Extension and dissemination activities (public /popular lectures/talks/seminars etc.)
+		</textarea>		
+        </td>
+        <td><p style="margin-left:15px;">{{fba_marks}}</p></td> 
+		{% if admin %}
+			<td>{{form.field_based_activities}}</td>
+			<script>
+			 $('input[name=field_based_activities]').attr('readonly', true); 
+			</script>
+		{% else %}
+			<td><p style="margin-left:40px;">{{form.field_based_activities}}</p></td>
+		{% endif %}	
+        <td style="display:none;">{{form.actl_api_fba}}</td>
+        <td style="text-align:center;"><p style="margin-left:45px;">{{form.self_api_fba}}</p></td>
+		
+		{% if admin %}
+			<td>{{form.veri_api_fba}}</td>
+			<script>
+			 $('input[name=veri_api_fba]').attr('readonly', false); 
+			</script>
+		{% else %}	
+			<td style="display:none;">{{form.veri_api_fba}}</td>
+		{% endif %}
+		{% if not admin %}
+			<td>{{form.url_fba}}</td>
+		{% endif %}
+		{% if api2.url_fba %}
+			<td><a name="url_fba"  id="id_url_fba" href="{{api2.url_fba}}" target="_blank"  style="max-width:97%;" class="btn btn-primary ">View</a></td>							
+		{% else %}
+			<td><label name="no_url_fba" class="form-control" style="max-width:100%" readonly >None</label></td>						
+		{% endif %}
+		
+		
+		
+		{% comment %}
+		
+        {% if not user.is_applicant %}
+            {% if user_var %}
+                {% if api2.pdf_fba %}       
+		            <td><a name="pdf_fba"  id="id_pdf_fba" href="{{api2.pdf_fba.url}}" target="_blank"  style="max-width:97%" class="btn btn-primary ">View</a></td>
+                {% else%}
+                    <td><label name="no_pdf_fba" class="form-control" style="max-width:100%" readonly >None</label></td>
+                {% endif %}
+            {% endif %}        
+        {% else %}			
+            <td style="width:5%;">{{form.pdf_fba|as_crispy_field}}</td>
+		{% endif %}
+		
+		{% endcomment %}	
+        
+        
+        <td id="fba_marks" style="display:none;">{{fba_marks}}</td>
+        <td id="factor" style="display:none;">{{api_factor}}</td> 
+        <td id="api" style="display:none;"></td>
+    </tr>
+
+   
+        <td><textarea  class="textarea2" readonly>b.) Contribution to corporate life and management of the department and institution through participation in academic and administrative committees and responsibilities.		
+		i). Administrative responsibility (including as Dean / Principal / Chairperson / Convener / Teacher-in-charge/  similar other duties that require regular office hrs for  its discharge)		
+		ii). Participation in Board of Studies, Academic and Administrative Committees
+		(Self declaration)
+		</textarea>
+		</td>
+        <td><p style="margin-left:15px;">{{clm_marks}}</p></td>
+        
+		{% if admin %}
+			<td>{{form.corp_life_management}}</td>
+			<script>
+			 $('input[name=corp_life_management]').attr('readonly', true); 
+			</script>
+		{% else %}
+			<td><p style="margin-left:40px;">{{form.corp_life_management}}</p></td>
+		{% endif %}
+		
+        <td style="display:none;">{{form.actl_api_clm}}</td>
+        <td style="text-align:center;"><p style="margin-left:45px;">{{form.self_api_clm}}</p></td>
+		
+		{% if admin %}
+			<td>{{form.veri_api_clm}}</td>
+			<script>
+			 $('input[name=veri_api_clm]').attr('readonly', false); 
+			</script>
+		{% else %}	
+			<td style="display:none;">{{form.veri_api_clm}}</td>
+		{% endif %}
+		{% if not admin %}
+			<td>{{form.url_clm}}</td>
+		{% endif %}
+		{% if api2.url_clm %}
+			<td><a name="url_clm"  id="id_url_clm" href="{{api2.url_clm}}" target="_blank"  style="max-width:97%;" class="btn btn-primary ">View</a></td>							
+		{% else %}
+			<td><label name="no_url_clm" class="form-control" style="max-width:100%" readonly >None</label></td>						
+		{% endif %}
+		
+       
+        
+        <td id="clm_marks" style="display:none;">{{clm_marks}}</td>
+        <td id="factor" style="display:none;">{{api_factor}}</td> 
+        <td id="api" style="display:none;"></td>
+    </tr>
+
+   
+        <td><textarea  class="textarea3" readonly>c.) Professional Development activities (such as participation in seminars, conferences, short term training courses, industrial experience, talks, lectures in refreshers/faculty development courses, dissemination and general articles and any other contribution
+        </textarea>   
+        </td>
+        <td><p style="margin-left:15px;">{{pda_marks}}</p></td>
+        
+		{% if admin %}
+			<td>{{form.prof_dev_activity}}</td>
+			<script>
+			 $('input[name=prof_dev_activity]').attr('readonly', true); 
+			</script>
+		{% else %}
+			<td><p style="margin-left:40px;">{{form.prof_dev_activity}}</p></td>
+		{% endif %}
+        <td style="display:none;">{{form.actl_api_pda}}</td>
+		
+        <td style="text-align:center;"><p style="margin-left:45px;">{{form.self_api_pda}}</p></td>
+		{% if admin %}
+			<td>{{form.veri_api_pda}}</td>
+			<script>
+			 $('input[name=veri_api_pda]').attr('readonly', false); 
+			</script>
+		{% else %}	
+			<td style="display:none;">{{form.veri_api_pda}}</td>
+		{% endif %}
+        {% if not admin %}
+			<td>{{form.url_pda}}</td>
+		{% endif %}
+		{% if api2.url_pda %}
+			<td><a name="url_pda"  id="id_url_pda" href="{{api2.url_pda}}" target="_blank"  style="max-width:97%;" class="btn btn-primary ">View</a></td>							
+		{% else %}
+			<td><label name="no_url_pda" class="form-control" style="max-width:100%" readonly >None</label></td>						
+		{% endif %}
+        
+        <td id="pda_marks" style="display:none;">{{pda_marks}}</td>
+        <td id="factor" style="display:none;">{{api_factor}}</td> 
+        <td id="api" style="display:none;"></td>
+    </tr>
+ 
+    <tr style="font-weight:bolder;">
+        
+        <td>Total : </td>
+        <td><p style="margin-left:15px;">{{tot_marks}}</p></td>        
+        <td></td>               
+        <td style="padding-left:28px;text-align:left;"><p style="margin-left:45px;">{{tot_self_api}}</p></td> 
+		{% if admin %}	
+			<td style="padding-left:28px;text-align:left;"><p style="margin-left:59px;">{{tot_veri_api}}</p></td>
+		{% endif %}	
+		<td></td>
+		<td></td>
+    </tr>
+
+
+
+	</table>
+	
+	
+	
+		<div class="row" >			
+				<a href="{% url 'account:api-1' user_id=pk_var %}" style="width:5%;padding:0;margin-left:12px;font-weight:bold;margin-right:20px;font-size:2rem;" class="btn btn-primary btn-lg">&laquo;</a>
+				<a href="{% url 'catg_3:jrnl-pub' user_id=pk_var %}" style="width:5%;padding:0;font-weight:bold;font-size:2rem;" class="btn btn-success btn-lg">&raquo;</a>
+		
+				<button style="margin-left:20px;padding:0;width:7%;float:right;font-size:2rem;" type="submit" class="btn  btn-info btn-block btn-lg">
+				Save</button>
+				
+		</div>
+		
+
+    
+   </div>
+</div>
+
+</form>
+
+   <!-- Footer -->
+    <!-- Copyrights 
+    <div class="bg-transparent py-4">
+        <div class="container text-center" style="height:30px;">
+          <p class="text-muted mb-0 py-2">© 2022 Jadavpur University | All rights reserved.</p>
+        </div>
+      </div>
+    </footer>-->
+
+<script type="text/javascript">
+
+	function limit_input1() {
+		var field = document.getElementById("fba_hrs");
+		var max_length = 4;
+		
+		if (field.value.length > max_length) {
+			field.value = field.value.slice(0, max_length); 
+		}
+		
+	}
+	function limit_input2() {
+		var field = document.getElementById("clm_hrs");
+		var max_length = 4;
+		
+		if (field.value.length > max_length) {
+			field.value = field.value.slice(0, max_length); 
+		}
+		
+	}
+	function limit_input3() {
+		var field = document.getElementById("pda_hrs");
+		var max_length = 4;
+		
+		if (field.value.length > max_length) {
+			field.value = field.value.slice(0, max_length); 
+		}
+		
+	}
+	
+	
+	
+	
+	
+	
+    $(document).ready(function(){ 
+
+    $('#fba_hrs').change(function(event){
+            var name = $(this).val();
+            var factor = $('#factor').text();
+            var fba_marks = $('#fba_marks').text();
+            var fba_marks1 = parseInt(fba_marks);
+            var api2 = (parseInt(name) / parseFloat(factor)).toFixed(2);
+           
+            if(api2 > fba_marks1){
+                $("#api").text(fba_marks);
+                var field1 = document.getElementById("id_actl_api_fba");				
+				field1.value = parseFloat(api2);
+                var field2 = document.getElementById("id_self_api_fba");				
+				field2.value = fba_marks1;
+                tot_self_fba=fba_marks1;
+                var field3 = document.getElementById("id_veri_api_fba");
+                field3.value = fba_marks1;
+               
+            }  
+            else{
+                $("#api").text(api2);
+                var field1 = document.getElementById("id_actl_api_fba");				
+				field1.value = parseFloat(api2);
+                var field2 = document.getElementById("id_self_api_fba");				
+				field2.value = parseFloat(api2);
+                tot_self_fba=parseFloat(api2);
+                var field3 = document.getElementById("id_veri_api_fba");
+                field3.value = parseFloat(api2);
+                
+                document.getElementById('id_actl_api_fba').innerHtml = parseFloat(api2);
+               
+            }
+
+        });
+
+        
+    $('#clm_hrs').change(function(event){
+        var name = $(this).val();
+        var factor = $('#factor').text();
+        var clm_marks = $('#clm_marks').text();
+        var clm_marks1 = parseInt(clm_marks)
+        var api2 = (parseInt(name) / parseFloat(factor)).toFixed(2);
+       
+        if(api2 > clm_marks1){
+            $("#api").text(clm_marks);
+            var field1 = document.getElementById("id_actl_api_clm");				
+            field1.value = parseFloat(api2);
+            var field2 = document.getElementById("id_self_api_clm");				
+            field2.value = clm_marks1;
+            tot_self_clm=clm_marks1;
+            var field3 = document.getElementById("id_veri_api_clm");
+            field3.value = clm_marks1;
+           
+        }  
+        else{
+            $("#api").text(api2);
+            var field1 = document.getElementById("id_actl_api_clm");				
+            field1.value = parseFloat(api2);
+            var field2 = document.getElementById("id_self_api_clm");				
+            field2.value = parseFloat(api2);
+            tot_self_clm=parseFloat(api2);
+            var field3 = document.getElementById("id_veri_api_clm");
+            field3.value = parseFloat(api2);
+            
+            document.getElementById('id_actl_api_clm').innerHtml = parseFloat(api2);
+           
+        }
+
+    });
+
+    
+    $('#pda_hrs').change(function(event){
+        var name = $(this).val();
+        var factor = $('#factor').text();
+        var pda_marks = $('#pda_marks').text();
+        var pda_marks1 = parseInt(pda_marks)
+        var api2 = (parseInt(name) / parseFloat(factor)).toFixed(2);
+       
+        if(api2 > pda_marks1){
+            $("#api").text(pda_marks);
+            var field1 = document.getElementById("id_actl_api_pda");				
+            field1.value = parseFloat(api2);
+            var field2 = document.getElementById("id_self_api_pda");				
+            field2.value = pda_marks1;
+            tot_self_pda=pda_marks1;
+            var field3 = document.getElementById("id_veri_api_pda");
+            field3.value = pda_marks1;
+           
+        }  
+        else{
+            $("#api").text(api2);
+            var field1 = document.getElementById("id_actl_api_pda");				
+            field1.value = parseFloat(api2);
+            var field2 = document.getElementById("id_self_api_pda");				
+            field2.value = parseFloat(api2);
+            tot_self_pda=parseFloat(api2);
+            var field3 = document.getElementById("id_veri_api_pda");
+            field3.value = parseFloat(api2);
+            
+            document.getElementById('id_actl_api_pda').innerHtml = parseFloat(api2);
+           
+        }
+
+    });
+
+
+
+    });
+
+</script>
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js">
+ 
+{% endblock content %}

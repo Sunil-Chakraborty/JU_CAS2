@@ -1,0 +1,132 @@
+{% extends 'base_v2.html' %}
+<!--{% include 'css_add_edit.html' %}-->
+{% load static %}
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+
+<style>
+		table.sts {
+			
+			margin-left:5px;
+			width: 100%;
+			height : 400px;
+			overflow-y: scroll;
+			overflow-x: hidden !important;
+			display: block;
+			
+			
+		}
+		
+		thead.sticky {
+		  position: -webkit-sticky;
+		  position: sticky;
+		  top: 0;
+		  background-color: #5d5c61;		  
+		  padding: 50px;
+		  font-size: 20px;
+		  height : 40px;
+		  
+		}
+		tr {
+			color:blue;
+			font-weight:bold;
+		}
+		
+		body{
+			
+		}
+
+</style>
+
+
+<form action="" method="POST" enctype="multipart/form-data">
+
+    {% csrf_token %}
+
+	<div class="card shadow p-3 mb-5 bg-white rounded" style="width:60%;margin-left:50px;">
+          
+		<div class="card-body" >
+				   <h2 class="card-title" style="font-weight:bold;">Part C. Professional Experience (Modification):				   
+				   
+				    {% if user.is_applicant %}
+						<a href="{% url 'account:professional' user_id=request.user.id %}" class="previous" style="text-decoration:none;float:right;"><i class="fa fa-window-close" style="font-size:36px"></i></a>
+					{% endif %}
+					
+				   </h2>	
+	   			   <h5 style="margin-left:5px">Position(s) held Prior to Joining this University, if any:</h5>
+			
+			<hr>
+			
+			<table class="sts">
+				<thead class="sticky">
+				
+				</thead>
+				<tr>
+					<tr>
+						<td style="display:none;height:2px;">{{form3.email|as_crispy_field}}</td>
+					</tr>
+					<tr>
+						<td>{{form3.designation|as_crispy_field}}</td>
+					</tr>
+					<tr>
+						<td>{{form3.employer|as_crispy_field}}</td>
+					</tr>
+					<tr>
+						<td>{{form3.dt_join|as_crispy_field}}</td>
+					</tr>
+					<tr>
+						<td>{{form3.dt_leav|as_crispy_field}}</td>
+					</tr>
+					<tr>
+						<td>{{form3.gross_salary|as_crispy_field}}</td>
+					</tr>
+					<tr>
+						<td>{{form3.reason_leaving|as_crispy_field}}</td>
+					</tr>
+					<tr>
+						<td>{{form3.url_link|as_crispy_field}}</td>					
+					</tr>
+				
+				</tr>
+
+			</table>
+
+			<div style="width:200px;float:left;">
+				<button type="submit" style="font-weight:bolder;" class="btn btn-success btn-block btn-lg">
+					Save & Exit</button>
+			</div>
+		
+	
+		</div>
+	</div>
+
+
+</form>
+
+<script type="text/javascript">
+
+	
+	document.getElementById("id_dt_leav").onchange = function () {
+		var input = document.getElementById("id_dt_join");
+		input.setAttribute("max", this.value);
+	}
+
+	function max_input() {
+
+		var field = document.getElementById("id_gross_salary");		
+		var max_length = 7;
+		var min_length = 7;
+
+		if (field.value.length > max_length) {
+			field.value = field.value.slice(0, max_length);
+
+		}
+
+	}
+
+
+</script>
+
+{% endblock content %}

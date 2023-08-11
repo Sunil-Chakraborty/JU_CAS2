@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<head>
+
+    <style>
+     table{
+       background-color:cadetblue 
+     } 
+     th{
+        font-size: 30px;
+        font-weight: bold;
+        color:darkblue;
+     }
+
+     td{
+         font-size: 20px;
+         font-weight: bold;         
+     }
+
+    </style> 
+
+</head> 
+
+<body>
+
+<div style="float:left;margin-left:320px;">
+<br>
+<br>
+<h2 class="text-center">Dashboard</h2>
+    <table class="table table-stripped" >
+        <thead>
+          <tr>
+            <th>Particulars</th>
+            <th></th>
+            <th></th>
+            <th>Year-1</th>            
+            <th>Year-2</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          <tr>
+            <td>No.of Projects</td>
+            <td></td>
+            <td></td>
+            <td class="text-center">10</td>
+            <td class="text-center">20</td>          
+          </tr>
+          <tr>
+            <td>No. of Publications</td> 
+            <td></td>
+            <td></td>
+            <td class="text-center">20</td>
+            <td class="text-center">30</td>          
+          
+          </tr>
+          <tr>
+            <td>No. of Seminers</td>
+            <td></td>
+            <td></td>
+            <td class="text-center">30</td>
+            <td class="text-center">40</td>          
+            
+          </tr>
+          <tr>
+            <td>No. of Books</td>
+            <td></td>
+            <td></td>
+            <td class="text-center">40</td>
+            <td class="text-center">50</td>          
+            
+          </tr>
+          <tr>
+            <td>No. of Patents</td>
+            <td></td>
+            <td></td>
+            <td class="text-center">50</td>
+            <td class="text-center">60</td>          
+            
+          </tr>
+          <tr>
+            <td>No. of Awards</td>
+            <td></td>
+            <td></td>
+            <td class="text-center">60</td>
+            <td class="text-center">70</td>          
+            
+          </tr>
+
+        </tbody>
+      </table>
+</div> 
+
+
+</body> 
+</html>                                 
+
+{% endblock content %}

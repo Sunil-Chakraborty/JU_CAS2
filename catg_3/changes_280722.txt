@@ -1,0 +1,18 @@
+IIIC (iii)  Projects Outcome/Output
+Type				International	National	National(Central Govt)	State Govt	Local
+Patent				30				20			
+Technology Transfer	30				20			
+Product				30				20			
+Process				30				20			
+Policy Docu			30							20							10			5
+
+General Information
+
+11. Date of last promotion , if any . if date then new field doc upload.
+
+dt_last_promo = models.DateField(
+	    verbose_name='Date of last promotion', null=True, blank=True)
+
+promo_link 				= models.CharField(verbose_name='Document Link',max_length=700,null=True, blank=True)
+
+

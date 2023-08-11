@@ -1,0 +1,368 @@
+{% extends 'base_v2.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<style>
+     html {
+        font-family: verdana;
+        font-size: 10pt;        
+      }
+      
+      table {
+        border-collapse: collapse;
+        overflow-x: scroll !important;
+	    white-space: nowrap;       
+        display: block;
+      }
+     tr{
+         width:1200px;
+     } 
+     td,
+     th {        
+        height: 15px;
+        width:200px;
+        border: dashed 1px lightblue;
+        }
+     td{       
+       font-size:20px;       
+     }   
+     .form-number{
+        text-align: center; 
+        width: 60pt;        
+     }
+
+     input[type=number]::-webkit-inner-spin-button, 
+     input[type=number]::-webkit-outer-spin-button { 
+           -webkit-appearance: none; 
+           margin: 0; 
+     }
+     .card {
+      margin: 0 auto; /* Added */
+      float: none; /* Added */
+      margin-bottom: 10px; /* Added */
+      }
+     
+</style>
+
+
+
+<form action="" method="POST" enctype="multipart/form-data">
+
+    {% csrf_token %}
+
+ <div class="card shadow p-3 mb-5 bg-white rounded" style="width: 95%;">
+          
+    <div class="card-body">
+        <h2 class="card-title" style="font-weight:bold;">CATEGORY III : Research and Academic Contribution
+			<a href="{% url 'account:home' user_id=request.user.id %}" class="previous" style="text-decoration:none;float:right;"><i class="fa fa-window-close" style="font-size:36px"></i></a>
+		</h2>
+        <h3 class="card-title" style="font-weight:bold;">III-C :  Research Projects :</h3>
+        <h3 class="card-title" style="color:blue;">(i)  Sponsored Project
+		  {% if user.is_applicant %}
+				<a href="{% url 'resch-sponsor-add' %}" class="w3-button w3-circle w3-teal" style="text-decoration:none;">+</a>
+				<small style="color:Tomato;font-weight:bolder;">Add</small>
+				<br>
+			
+          {% endif %}
+		
+		</h3>
+		
+    <br> 
+
+    <table class="table">
+        
+            <tr>
+                
+                <th VALIGN=TOP>Sl.No.</th>
+                <th VALIGN=TOP style="text-align: center;">Area of the Applicant</th>
+                <th VALIGN=TOP style="width: 10%;">Title of the Project</th>
+                <th VALIGN=TOP style="text-align: center;">Name of the Funding <br> Agency</th>
+                <th VALIGN=TOP style="text-align: center;">Duration <br> (no.of years)</th>
+                <th VALIGN=TOP style="text-align: center;">Grant Sanctioned<br>(in Lakhs)</th>
+                <th VALIGN=TOP style="width: 30%;">Upload Grant<br>Letter link </th>           
+               
+                <th VALIGN=TOP>Self Appraisal Score</th>
+				{% if admin %}
+					<th VALIGN=TOP>Verified API Score</th>
+				{% endif %}
+				
+                {% if user.is_applicant %}				
+					          <th  VALIGN=TOP colspan="2">&nbsp&nbsp&nbsp&nbspActions</th>
+				{% endif %}           
+                
+            </tr>
+       
+			<script>
+				var spon_score=0;
+			</script>
+			
+      {% for item in res|dictsort:"id" %}
+	  
+           
+              <tr>
+                <td style="display:none;">{{form.email}}</td>             
+                
+                <td>{{ forloop.counter }}</td>
+               
+                <td>{{item.get_faculty_app_display|default_if_none:"Blank"}}</td>               
+                <td><textarea rows="3" cols="40" wrap="hard" readonly>{{item.proj_title|default_if_none:"Blank"}}</textarea></td>
+                <td><textarea rows="3" cols="30" wrap="hard" readonly>{{item.fund_agnc|default_if_none:"Blank"}}</textarea></td>
+                <td style="text-align:center;">{{item.no_yrs}}</td>
+                <td style="text-align:center;">{{item.prj_amt}}</td>        
+                
+                
+                {% if item.prj_url %}
+                    <td><a class="btn btn-secondary btn-lg" href='{{ item.prj_url }}' target=_blank>View</a></td>
+                {% else %}
+                    <td>None</td>
+                {% endif %}
+                
+                            
+                <td style="text-align:center;">{{item.self_api_score|default_if_none:"Blank"}}</td>
+				
+					<script>
+						var spon_score = spon_score + parseFloat({{item.self_api_score}});						
+					</script>
+				{% if admin %}
+					<td style="text-align:center;">{{item.veri_api_score|default_if_none:"Blank"}}</td>
+				{% endif %}
+          
+                 {% if user.is_applicant %}
+                      <td><a style="font-weight:bolder;" name="edit-btn" class="text-information" href="{% url 'catg_3:resch-edit' pk=item.id %}">Edit</a></td>
+                      <td><a style="font-weight:bolder;" class="text-warning" href="{% url 'catg_3:resch-delete' pk=item.id %}">Delete</a></td>				
+                 {% endif %} 
+                      
+
+            </tr>
+			
+         
+		  
+       {% endfor %}
+
+          {% if not res %}
+          <tr>
+            <td colspan="9" style="line-height: 10px;background-color:powderblue;text-align:center;" >No data available in table</td>
+          </tr>
+          {% endif %}
+          
+
+    </table>
+	 
+        <label id="spon_score" style="font-size:20px;font-weight:bold;"></label>
+
+  </div>
+  <hr>
+  <!--IIIC (ii)  Consultancy Project -->
+
+  <div class="card-body">    
+    
+    <h3 class="card-title" style="color:blue;">(ii)  Consultancy Project
+        
+		{% if user.is_applicant %} 
+				<a href="{% url 'resch-cons-add' %}" class="w3-button w3-circle w3-teal" style="text-decoration:none;">+</a>
+				<small style="color:Tomato;font-weight:bolder;">Add</small>
+		{% endif %}
+		
+	</h3>	
+      
+<br> 
+
+<table class="table">
+    
+        <tr>
+            
+            <th VALIGN=TOP>Sl.No.</th>
+            <th VALIGN=TOP style="text-align: center;">Area of the Applicant</th>
+            <th VALIGN=TOP style="width: 10%;">Title of the Project</th>
+            <th VALIGN=TOP style="text-align: center;">Name of the Funding <br> Agency</th>
+            <th VALIGN=TOP style="text-align: center;">Duration <br> (in months)</th>
+            <th VALIGN=TOP style="text-align: center;">Amount Mobilized<br>(in lakhs)</th>
+            <th VALIGN=TOP style="width: 30%;">Upload Grant<br>Letter link</th>           
+           
+            <th VALIGN=TOP>Self Appraisal Score</th>
+			{% if admin %}
+				<th VALIGN=TOP>Verified API Score</th>
+			{% endif %} 
+            {% if user.is_applicant %}				
+                <th  VALIGN=TOP colspan="2">&nbsp&nbsp&nbsp&nbspActions</th>
+            {% endif %}           
+            
+        </tr>
+	
+       
+			<script>
+				var cons_score=0;
+			</script>
+			
+  {% for item in cons %}
+        {% if item.proj_title and item.proj_tag == "cons" %}
+          <tr>
+            <td style="display:none;">{{form.email}}</td>             
+            <td style="display:none;">{{prj_tag}}</td>            
+			<td>{{ forloop.counter }}</td>			
+            <td>{{item.get_faculty_app_display|default_if_none:"Blank"}}</td>               
+            <td><textarea rows="3" cols="40" wrap="hard" readonly>{{item.proj_title|default_if_none:"Blank"}}</textarea></td>
+            <td><textarea rows="3" cols="40" wrap="hard" readonly>{{item.fund_agnc|default_if_none:"Blank"}}</textarea></td>
+            <td style="text-align:center;">{{item.no_yrs}}</td>
+            <td style="text-align:center;">{{item.prj_amt}}</td>        
+            
+            
+            {% if item.prj_url %}
+                <td><a class="btn btn-secondary btn-lg" href='{{ item.prj_url }}' target=_blank>View</a></td>
+            {% else %}
+                <td>None</td>
+            {% endif %}
+            
+                        
+            <td style="text-align:center;">{{item.self_api_score|default_if_none:"Blank"}}</td>
+			
+				<script>
+						var cons_score = cons_score + parseFloat({{item.self_api_score}});						
+				</script>
+				
+			{% if admin %}	
+				<td style="text-align:center;">{{item.veri_api_score|default_if_none:"Blank"}}</td>
+			{% endif %}
+      
+             {% if user.is_applicant %}
+                  <td><a style="font-weight:bolder;" name="edit-btn" class="text-information" href="{% url 'catg_3:resch-cons-edit' pk=item.id %}">Edit</a></td>
+                  <td><a style="font-weight:bolder;" class="text-warning" href="{% url 'catg_3:resch-cons-delete' pk=item.id %}">Delete</a></td>				
+             {% endif %} 
+                  
+
+        </tr>
+      {% endif %}
+   {% endfor %}
+
+    {% if not cons %}
+			<tr>
+				<td colspan="9" style="line-height: 10px;background-color:powderblue;text-align:center;" >No data available in table</td>
+			</tr>
+		{% endif %}
+	   
+
+</table>
+
+ <label id="cons_score" style="font-size:20px;font-weight:bold;"></label>
+
+</div>
+<hr>
+<!--IIIC (iii)  Projects Outcome/Output -->
+
+<div class="card-body">    
+    
+	<h3 class="card-title" style="color:blue;">(iii)  Projects Outcome/Output
+	
+		{% if user.is_applicant %} 
+				<a href="{% url 'prj-add' %}" class="w3-button w3-circle w3-teal" style="text-decoration:none;">+</a>
+				<small style="color:Tomato;font-weight:bolder;">Add</small>
+		{% endif %}
+  
+	</h3>      
+
+<br>
+<table class="table">
+  
+      <tr>
+          
+          <th VALIGN=TOP>Sl.No.</th>
+          <th VALIGN=TOP style="text-align: center;">Area of the Applicant</th>
+          <th VALIGN=TOP style="width: 10%;">Type</th>
+          <th VALIGN=TOP style="text-align: center;">Title</th>
+          <th VALIGN=TOP style="text-align: center;">Level</th>
+          <th VALIGN=TOP style="text-align: center;">Document No./<br>Patent No/<br>Other reference no</th>
+          <th VALIGN=TOP style="width: 30%;">Status (if patent only)</th>
+          <th VALIGN=TOP style="width: 30%;">Upload document link</th>           
+         
+          <th VALIGN=TOP>Self Appraisal Score</th>
+		  {% if admin %}
+			<th VALIGN=TOP>Verified API Score</th>
+		  {% endif %} 
+          {% if user.is_applicant %}				
+              <th  VALIGN=TOP colspan="2">&nbsp&nbsp&nbsp&nbspActions</th>
+          {% endif %}           
+          
+      </tr>
+ 
+
+			<script>
+				var proj_score=0;
+			</script>
+			
+{% for item in prj %}
+      {% if item.proj_title %}
+        <tr>
+          <td style="display:none;">{{form.email}}</td>            
+          <td>{{ forloop.counter }}</td>		  
+          <td>{{item.get_faculty_app_display|default_if_none:"Blank"}}</td>               
+          <td>{{item.get_prj_type_display|default_if_none:"Blank"}}</td>
+          <td><textarea rows="3" cols="40" wrap="hard" readonly>{{item.proj_title|default_if_none:"Blank"}}</textarea></td>
+          <td>{{item.get_prj_lvl_display|default_if_none:"Blank"}}</td>
+          <td style="text-align:center;">{{item.ref_no}}</td>
+		  {% if item.ptnt_sts %}
+			<td>{{item.get_ptnt_sts_display}}</td>
+          {% else %}
+			<td style="text-align: left;">N/A</td>
+		  {% endif %}
+          {% if item.prj_url %}
+              <td><a class="btn btn-secondary btn-lg" href='{{ item.prj_url }}' target=_blank>View</a></td>
+          {% else %}
+              <td>None</td>
+          {% endif %}
+          
+                      
+          <td style="text-align:center;">{{item.self_api_score|default_if_none:"Blank"}}</td>
+		  
+				<script>
+						var proj_score = proj_score + parseFloat({{item.self_api_score}});						
+				</script>
+			{% if admin %}	
+				<td style="text-align:center;">{{item.veri_api_score|default_if_none:"Blank"}}</td>
+			{% endif %}
+    
+           {% if user.is_applicant %}
+                <td><a style="font-weight:bolder;" name="edit-btn" class="text-information" href="{% url 'catg_3:prj-edit' pk=item.id %}">Edit</a></td>
+                <td><a style="font-weight:bolder;" class="text-warning" href="{% url 'catg_3:prj-delete' pk=item.id %}">Delete</a></td>				
+           {% endif %} 
+                
+
+      </tr>
+    {% endif %}
+ {% endfor %}
+    {% if not prj %}
+    <tr>
+      <td colspan="10" style="line-height: 10px;background-color:powderblue;text-align:center;" >No data available in table</td>
+    </tr>
+    {% endif %}
+
+
+</table>
+
+ <label id="proj_score" style="font-size:20px;font-weight:bold;"></label>
+
+
+			<div class="row" >			
+				<a href="{% url 'catg_3:pub-other' user_id=pk_var %}" style="margin-left:12px;width:5%;height:50%;font-weight:bold;margin-right:20px;font-size:2rem;" class="btn btn-primary btn-lg">&laquo;</a>
+				<a href="{% url 'catg_3:resch-guide-view' user_id=pk_var %}" style="float:right;width:5%;font-weight:bold;font-size:2rem;" class="btn btn-success btn-lg">&raquo;</a>
+			</div>
+
+	
+
+</div>
+
+</div>
+</form>
+
+<script type="text/javascript">
+
+	document.getElementById("spon_score").innerHTML = "API Total [III-C(i)] : " + (spon_score.toFixed(2));
+	document.getElementById("cons_score").innerHTML = "API Total [III-C(ii)]): " + (cons_score.toFixed(2));
+	document.getElementById("proj_score").innerHTML = "API Total [III-C(iii)]: " + (proj_score.toFixed(2));
+	
+	
+</script>
+
+{% endblock content %}
+    

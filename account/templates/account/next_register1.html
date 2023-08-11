@@ -1,0 +1,107 @@
+{% extends 'base_v2.html' %}
+{% include 'css_add_edit.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+
+<style>
+
+	
+</style>
+
+<form action="" method="POST" enctype="multipart/form-data" >
+
+    
+	{% csrf_token %}
+
+	
+
+
+	<div class="card shadow p-3 mb-5 bg-white rounded" style="width: 60%;margin-left:50px;">
+          
+		<div class="card-body" >
+				   <h2 class="card-title" style="font-weight:bold;">Academic Qualifications (Add New):
+				    {% if user.is_applicant %}
+						<a href="{% url 'account:academy' user_id=request.user.id %}" class="previous" style="text-decoration:none;float:right;"><i class="fa fa-window-close" style="font-size:36px"></i></a>
+
+					{% endif %}
+					</h2>	
+				   <h5 style="margin-left:5px"> A.Last Academic Qualification (other than research degree(s):</h5>
+
+	<table class="table table-striped">
+
+	
+		
+		<tr >
+			<td>{{form1.degree|as_crispy_field}}</td>
+		</tr>
+		<tr>
+			<td>{{form1.name_board_university|as_crispy_field}}</td>
+		</tr>
+		<tr>
+			<td>{{form1.year_passing|as_crispy_field}}</td>
+		</tr>
+		<tr>
+			<td>{{form1.marks_obtained|as_crispy_field}}</td>
+		</tr>
+		<tr>
+			<td>{{form1.div_class_grade|as_crispy_field}}</td>
+		</tr>
+		<tr>
+			<td>{{form1.subject|as_crispy_field}}</td>
+		</tr>
+		
+		<tr>
+			<td>{{form1.doc_link|as_crispy_field}}</td>		
+		</tr>
+	
+	</table>
+	{{edit}}
+
+	<div style="width:200px;float:left;">
+	<button type="submit" style="font-weight:bolder;" class="btn btn-success btn-block btn-lg">
+		Save & Exit</button>
+	</div>
+	
+
+	</div>
+</div>		
+
+
+</form>
+
+
+<script type="text/javascript">
+
+	function max_input() {
+
+		var field = document.getElementById("pass_out");		
+		var max_length = 4;
+		var min_length = 4;
+		
+		if (field.value.length > max_length) {
+			field.value = field.value.slice(0, max_length);
+
+		}
+		
+	}
+
+	function max_marks() {
+		
+		var field = document.getElementById("id_marks_obtained");
+		var max_length = 5;
+		var min_length = 5;
+		
+		if (field.value.length > max_length) {
+			field.value = field.value.slice(0, max_length);
+
+		}
+	}
+
+
+
+</script>
+
+{% endblock content %}

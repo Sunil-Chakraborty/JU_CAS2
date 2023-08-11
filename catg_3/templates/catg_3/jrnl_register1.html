@@ -1,0 +1,515 @@
+<!--Html for adding records in Jrnl_pub-->
+{% extends 'base_v2.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+
+
+<style>
+  
+
+      span{
+        color:red;
+      }
+      html {
+        font-family: verdana;
+        font-size: 10pt;        
+      }
+      
+      table {
+        border-collapse: collapse;
+        width: 1200px;
+        height : 405px;
+        overflow-y: scroll;
+        overflow-x: hidden !important;
+        display: block;
+      }
+
+      td,
+      th {        
+        height: 15px;
+        border: dashed 1px lightblue;
+        }
+
+     th{
+         width:400px;
+         font-size:20px;
+     }
+     td{
+        width:650px;
+        font-size:25px;
+    }
+
+     .form-number{
+        text-align: center; 
+        width: 60pt;        
+     }
+
+     input[type=number]::-webkit-inner-spin-button, 
+     input[type=number]::-webkit-outer-spin-button { 
+           -webkit-appearance: none; 
+           margin: 0; 
+     }
+     .card {
+        margin: 0 auto; /* Added */
+        float: none; /* Added */
+        margin-bottom: 5px; /* Added */
+       
+     }
+  </style>
+
+
+<form id="formAdd" action="" method="POST" enctype="multipart/form-data" >
+
+    {% csrf_token %}
+
+     <div class="card shadow p-3 mb-5 bg-white rounded" style="width: 80%;">
+         {% if form1.errors %}
+          <div class="alert-warning center">
+              <h2>{{form1.non_field_errors}}</h2>
+          </div> 
+          {% endif %} 
+        <div class="card-body" >
+          <h2 class="card-title" style="font-weight:bold;">CATEGORY III: Research and Academic Contribution (Add New)
+            <a href="{% url 'catg_3:jrnl-pub' user_id=request.user.id %}" class="previous" style="text-decoration:none;float:right;"><i class="fa fa-window-close" style="font-size:36px"></i></a>
+       
+          </h2>  
+          <h2 style="margin-left:5px;color:blue;"> A. Journal Publication:
+           
+          </h2>
+
+
+          <table class="table table-striped" >
+        
+                
+                
+                <tr>  
+                  <th style="color:white;border: none;"></th>
+                  <th style="color:white;border: none;"></th>
+                </tr>
+  
+                <tr>
+                    <th VALIGN=middle>Year of Publication<span>*</span></th>
+                    <td>{{form1.yr_pub}}</td>
+                </tr>        
+                <tr>
+                    <th VALIGN=middle>Title of the Paper<span>*</span></th>
+                    <td>{{form1.title_pub}}</td>
+                </tr>	
+                <tr>
+                    <th VALIGN=middle>No.of authors<span>*</span></th>
+                    <td>{{form1.no_auth}}</td>
+                </tr>
+
+                <tr>
+                    <th VALIGN=middle>Role of Applicant<span>*</span></th>
+                    <td>{{form1.role_appl}}</td>
+                </tr>
+
+
+                {% if form1.jrnl_oth.value > 0  %}
+                  <tr id="other" >
+                    
+                    <th data-toggle="tooltip" data-placement="left" title="Except First and/or Corresponding Author/ Supervisor/ Mentor !">No.of <br> other co-authors <i class="fa fa-info-circle"></i><span>*</span></th>
+                    <td>{{form1.jrnl_oth}}</td>                    
+                  </tr>
+                {% else %}  
+                   <tr id="other" style="display:none;" >
+                      <th data-toggle="tooltip" data-placement="left" title="Except First and/or Corresponding Author/ Supervisor/ Mentor !">No.of <br> other co-authors <i class="fa fa-info-circle"></i><span>*</span></th>
+                      <td>{{form1.jrnl_oth}}</td>
+                   </tr>
+                {% endif %} 
+
+
+
+
+                <tr>
+                    <th VALIGN=middle>Journal Name<span>*</span></th>
+                    <td>{{form1.jrnl_name}}</td>
+                </tr>
+                <tr>
+                    <th VALIGN=middle>Volume (Issue),<br>pg no. from - to<span>*</span></th>
+                    <td>{{form1.vl_pg}}</td>
+                </tr>
+                <tr>
+                  <th VALIGN=middle>Journal Type<span>*</span></th>
+                  <td>{{form1.jrnl_type}}
+                  {{ form1.errors.jrnl_type }}</td>
+                </tr>
+                <tr >
+                  <th VALIGN=middle>Impact Factor <br> (put 0 if NA)<span>*</span></th>
+                  <td>{{form1.imp_fac}}</td>
+                </tr>
+                <tr id="imp">
+                  <th VALIGN=middle>Link of Document showing <br> Impact factor<span>*</span></th>
+                  <td>{{form1.jrnl_url}}</td>
+                </tr>			
+                <tr>
+                  <th VALIGN=middle>Document Link of publication<span>*</span></th>
+                  <td>{{form1.jrnl_link}}</td>
+                </tr>
+                
+                <tr>
+                  <td style="display:none;">{{form1.self_api_score}}</td>
+                  <td style="display:none;">{{form1.veri_api_score}}</td>
+                </tr>
+            </table>
+            
+            <div style="width:200px;float:left;">
+              <button type="submit" id="btnSubmit" style="font-weight:bolder;" class="btn btn-success btn-block btn-lg">
+                Save Record</button>
+              </div>
+	        
+        </div>
+      </div>  
+
+</form>
+
+
+<script type="text/javascript">
+
+document.getElementById("id_no_auth").onchange = function () {		
+		var jrnl_oth = document.getElementById("id_jrnl_oth");	   
+		jrnl_oth.setAttribute("max", this.value-1);		
+	}
+	
+	document.getElementById("id_imp_fac").onchange = function () {
+		var imp_val = $('#id_imp_fac').val();
+    
+		var jrnl = document.getElementById("id_jrnl_url");
+		
+		if (imp_val > 0) {
+            jrnl.setAttribute("required", true); 
+        }
+		
+	}
+	
+
+	function limit_yr_pub() {
+        var field = document.getElementById("id_yr_pub");		
+        var max_length = 4;
+        if (field.value.length > max_length) {
+            field.value = field.value.slice(0, max_length); 
+        }
+	}
+	
+	function limit_no_auth() {
+        var field = document.getElementById("id_no_auth");		
+        var max_length = 2;
+        if (field.value.length > max_length) {
+            field.value = field.value.slice(0, max_length); 
+        }
+	}
+	
+	function limit_other() {
+        var field = document.getElementById("id_jrnl_oth");		
+        var max_length = 1;
+        if (field.value.length > max_length) {
+            field.value = field.value.slice(0, max_length); 
+        }
+	}
+
+	$( document ).ready(function() {
+		var imp_fac = $('#id_imp_fac').val();
+		var jrnl_url = $('#id_jrnl_url').val();
+
+		if (parseFloat(imp_fac) == 0) {
+		   $("#imp").hide("fast")       
+		}
+		
+		else {
+		  $("#imp").show("fast")
+		 
+		}
+		
+		var no_auth = $('#id_no_auth').val();        
+		var role = $('select#id_role_appl').val();
+		var role_catg = $('#id_jrnl_oth').val();
+
+		if (parseInt(no_auth) > 2  && role == 'O_A') {
+		   $("#other").show("fast")       
+		}
+		
+		else {
+		  $("#other").hide("fast")
+		  var field1 = document.getElementById("id_jrnl_oth");				
+				field1.value = 0;
+		}
+		
+	});
+
+  function check_other() {
+  
+	limit_no_auth()
+	check_role()
+    var no_auth = $('#id_no_auth').val();        
+    var role = $('select#id_role_appl').val();
+    var role_catg = $('#id_role_appl').val();
+	
+	$('#id_role_appl option').remove();
+	
+	if (parseInt(no_auth) == 1) {
+		$("#id_role_appl").append('<option value="FC_A">First and Corresponding author</option>');
+	}
+	else {
+		$("#id_role_appl").append('<option value="None">Select</option>');		
+		$("#id_role_appl").append('<option value="F_A">First author</option>');				
+		$("#id_role_appl").append('<option value="C_A">Corresponding author/supervisor/mentor</option>');
+		$("#id_role_appl").append('<option value="FC_A">First and Corresponding author</option>');		
+		$("#id_role_appl").append('<option value="O_A">Other co-author</option>');
+	}
+    
+  }
+	function check_role() {
+		var no_auth = $('#id_no_auth').val();        
+		var role = $('select#id_role_appl').val();
+		
+		
+		if (parseInt(no_auth) > 2  && role == 'O_A') {
+		   $("#other").show("fast")
+		   var jrnl_oth = document.getElementById("id_jrnl_oth");		
+		   
+		   jrnl_oth.setAttribute("min", 1);				
+				   
+		}
+		else {
+		  var jrnl_oth = document.getElementById("id_jrnl_oth");	   
+		  jrnl_oth.setAttribute("min", 0);
+		  
+		  $("#other").hide("fast")
+		  var field1 = document.getElementById("id_jrnl_oth");				
+				field1.value = 0;
+		}	
+		
+	}
+	
+	function check_impact() {    
+		var imp_fac = $('#id_imp_fac').val();
+		var jrnl_url = $('#id_jrnl_url').val();
+
+		if (parseFloat(imp_fac) == 0) {
+		   $("#imp").hide("fast")       
+		}		
+		else {
+		  $("#imp").show("fast")
+		 
+		}
+	 }
+  
+
+
+
+  $("form").submit(function(){
+  
+	/*
+
+    var jr_val    = $('#id_jrnl_type').val();
+    var role_catg = $('#id_jrnl_oth').val();
+    var no_auth   = $('#id_no_auth').val();
+
+
+    if (jr_val == "UGC") {
+      var js = 25;             
+    }
+    else if (jr_val == "OTHER") {
+      var js = 10;              
+    }
+
+    var imp_val   = $('#id_imp_fac').val();
+
+    if (parseFloat(imp_val) == 0 ) {
+      var imp = 0;             
+    }
+    else if (parseFloat(imp_val) <= 1) {
+      var imp = 5;              
+    }
+    else if (parseFloat(imp_val) <= 2) {
+      var imp = 10;              
+    }
+    else if (parseFloat(imp_val) <= 5) {
+      var imp = 15;              
+    }
+    else if (parseFloat(imp_val) <= 10) {
+      var imp = 20;              
+    }
+    else if (parseFloat(imp_val) > 10) {
+      var imp = 25;              
+    }
+
+    var role_appl = $('#id_role_appl').val();
+
+    if (role_appl == "F_A") {
+      if (parseInt(no_auth) == 2) {
+          var role = .50;
+      }
+      else {
+          var role = .35;
+      }                 
+    }
+    else if (role_appl == "C_A") {
+      if (parseInt(no_auth) == 2) {
+        var role = .50;
+      }
+      else {
+        var role = .35;
+      }                   
+    }
+    else if (role_appl == "FC_A") {
+      var role = .70;              
+    }
+    else if (role_appl == "O_A") {
+      var role = .30;              
+    }
+    
+   
+
+    if (parseInt(role_catg) > 0){
+        var api=parseFloat((js+imp)*(role/parseInt(role_catg))).toFixed(2);
+        //alert(api);        
+    }
+    else{
+      var api=parseFloat((js+imp)*(role)).toFixed(2);
+      //alert(api);
+    }
+    
+    var field1 = document.getElementById("id_self_api_score");				
+    field1.value = parseFloat(api).toFixed(2);
+    var field2 = document.getElementById("id_veri_api_score");				
+    field2.value = parseFloat(api).toFixed(2);
+
+	
+	var imp_fac = $('#id_imp_fac').val();
+	
+    if (parseInt(imp_fac) == 0) {
+		$('input[name=jrnl_url]').val("");
+	}
+
+	if (parseInt(imp_fac) > 0) {				   	
+		var j_link  = $('input[name=jrnl_url]').val();
+				   
+		if (j_link == '' ){						
+					    
+			alert("Please provide link against impact factor and save posting.");
+			
+		}
+					
+	}
+	
+    */
+	
+	
+	// Revised score calculation for API Journal Publication :
+	
+	
+	var jr_val    = $('#id_jrnl_type').val();
+    var role_catg = $('#id_jrnl_oth').val();
+    var no_auth   = $('#id_no_auth').val();
+
+
+
+    if (jr_val == "UGC") {
+      var js = 25;             
+    }
+    else if (jr_val == "OTHER") {
+      var js = 10;              
+    }
+
+    var imp_val   = $('#id_imp_fac').val();
+
+    if (parseFloat(imp_val) == 0 ) {
+      var imp = 0;             
+    }
+    else if (parseFloat(imp_val) <= 1) {
+      var imp = 5;              
+    }
+    else if (parseFloat(imp_val) <= 2) {
+      var imp = 10;              
+    }
+    else if (parseFloat(imp_val) <= 5) {
+      var imp = 15;              
+    }
+    else if (parseFloat(imp_val) <= 10) {
+      var imp = 20;              
+    }
+    else if (parseFloat(imp_val) > 10) {
+      var imp = 25;              
+    }
+
+    var role_appl = $('#id_role_appl').val();
+
+    if (role_appl == "F_A") {
+      if (parseInt(no_auth) == 2) {
+          var role = .50;
+      }
+      else {
+          var role = .35;
+      }                 
+    }
+    else if (role_appl == "C_A") {
+      if (parseInt(no_auth) == 2) {
+        var role = .50;
+      }
+      else {
+        var role = .35;
+      }                   
+    }
+    else if (role_appl == "FC_A") {
+      if (parseInt(no_auth) > 1) {		
+			var role = .70;
+		}
+      else {
+        var role = 1;
+      } 	              
+    }
+    else if (role_appl == "O_A") {
+      var role = .30;              
+    }
+   
+		
+	
+
+	if (jr_val == "OTHER") {
+      var api = 10;              
+    }
+	else {
+	
+		if (parseInt(role_catg) > 0){
+			var api=parseFloat((imp*(role/parseInt(role_catg)))+js).toFixed(2);              
+		}
+		else{
+		  var api=(parseFloat(imp*(role))+js).toFixed(2);
+		}
+	}
+	
+    var field1 = document.getElementById("id_self_api_score");				
+    field1.value = parseFloat(api).toFixed(2);
+    var field2 = document.getElementById("id_veri_api_score");				
+    field2.value = parseFloat(api).toFixed(2);
+
+
+	var imp_fac = $('#id_imp_fac').val();
+	
+    if (parseFloat(imp_fac) == 0) {
+		$('input[name=jrnl_url]').val("");
+	} 
+	
+	if (parseInt(imp_fac) > 0) {				   	
+		var j_link  = $('input[name=jrnl_url]').val();
+				   
+		//if (j_link == '' ){						
+					    
+		//	alert("Please provide link against \nimpact factor and save posting.");
+			
+		//}
+					
+	}
+	
+  
+});
+
+ 
+</script>
+
+{% endblock content %}

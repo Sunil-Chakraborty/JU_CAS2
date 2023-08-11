@@ -1,0 +1,86 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+<title>JU CAS Portal</title>
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="stylesheet" href="{% static 'w3css/w3.css' %}">
+<link rel="stylesheet" href="{% static 'w3css/googleapis.css' %}">
+<link rel="stylesheet" href="{% static 'w3css/font-awesome.min.css' %}">
+<link rel="stylesheet" href="{% static 'css/really-simple-jquery-dialog.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+
+<style>
+html,h1,h2,h3 {font-family: "Raleway", sans-serif}
+
+#topbar{
+  
+  width: 100%; /* Full width */
+  
+  background-color: #e1c8d0;
+  
+  height:70px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  
+}
+
+input[type=number] {
+    -moz-appearance:textfield;
+}
+	
+.heading{
+  padding-left:520px;
+  padding-top:15px;
+  letter-spacing: 2px;
+  text-shadow: 2px 2px 2px #aaa;
+  font-variant: small-caps;
+  font-size: 30px;
+  font-family: "Times New Roman", Times, serif;
+  color:black;
+}
+html {
+    height: 100%;
+
+}
+
+body {
+    min-height: calc(100% - 60px);
+    
+    
+}
+
+
+
+/* .invert {filter: invert(100%);} */ 
+
+</style>
+
+</head>
+<body class="w3-light-grey">
+
+<!-- Top container -->
+<div id="topbar" class="w3-bar w3-top w3-large w3-card w3-display-topmiddle w3-margin-bottom " >
+	
+  <span class="w3-bar-item " style="padding-left:20px; padding-top:5px;">
+    <img  src="{% static 'image/ju_logo.png' %}" alt="Ju Logo" width="280" height="60" style="float:left;"> 
+  </span>
+
+  <h3 class="heading w3-text-shadow"><strong>
+    Career Advancement Scheme (CAS) Portal For Teachers</strong>
+  </h3>
+
+</div>
+<br>
+<br>
+          {% block content %}
+  
+          {% endblock content %}
+		  
+
+
+</body>
+</html>

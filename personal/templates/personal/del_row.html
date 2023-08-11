@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+
+    <script src=
+    "https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js">
+    </script>
+
+    <table id="tbUser">
+        <tr>
+            <th>Sr</th><th>Name</th><th>Location</th><th></th>
+        </tr>
+        <tr>
+            <td>1</td><td>Amit</td><td>Ghatkopar</td>
+            <td><button class="btnDelete">Delete</button></td>
+        </tr>
+        <tr>
+            <td>2</td><td>Vicky</td><td>Powai</td>
+            <td><button class="btnDelete">Delete</button></td>
+        </tr>
+        
+    </table>
+
+
+<!-- Script to delete table row -->
+<script> 
+    $("#tbUser").on('click', '.btnDelete', function () {
+        
+        $(this).closest('tr').remove();
+    });
+</script>
+
+
+
+
+</html>

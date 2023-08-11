@@ -1,0 +1,43 @@
+{% extends 'base_v2.html' %}
+{% load static %}
+
+
+{% block content %}
+
+<!DOCTYPE html>
+<html>
+
+<style>
+	iframe{
+		width:100%;
+		height:500px;
+		border:1px solid black;
+		right:0; 
+		top:0; 
+		bottom:0; 
+		
+	}
+	
+</style>
+
+
+
+
+
+<body>
+
+<h2 style="text-align:center;">
+	<a href="{% url 'account:home' user_id=request.user.id %}" class="previous" style="text-decoration:none;"><i class="fa fa-window-close" style="font-size:36px"></i></a>
+</h2>
+
+<div style="text-align:center;">
+	<iframe id="scaled-frame" src="{% static 'image/Guidelines for promotion under CAS.pdf' %}"		
+		title="Govt. Notification">
+	</iframe>
+</div>
+
+</body>
+
+</html>
+{% endblock content %}
+ 

@@ -1,0 +1,382 @@
+{% extends 'base_v2.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<style>
+     html {
+        font-family: verdana;
+        font-size: 10pt;        
+      }
+      
+      table {
+        border-collapse: collapse;
+        overflow-x: scroll !important;
+	    white-space: nowrap;       
+        display: block;
+      }
+     tr{
+         width:1200px;
+     } 
+     td,
+     th {        
+        height: 15px;
+        width:200px;
+        border: dashed 1px lightblue;
+        }
+     td{       
+       font-size:20px;       
+     }   
+     .form-number{
+        text-align: center; 
+        width: 60pt;        
+     }
+
+     input[type=number]::-webkit-inner-spin-button, 
+     input[type=number]::-webkit-outer-spin-button { 
+           -webkit-appearance: none; 
+           margin: 0; 
+     }
+     .card {
+      margin: 0 auto; /* Added */
+      float: none; /* Added */
+      margin-bottom: 10px; /* Added */
+      }
+     
+</style>
+
+
+
+<form action="" method="POST" enctype="multipart/form-data">
+
+    {% csrf_token %}
+
+ <div class="card shadow p-3 mb-5 bg-white rounded" style="width: 95%;">
+ 
+  <!--III-E : (i)  Fellowship / Award from Academic Bodies/Associations -->
+          
+    <div class="card-body">
+        <h2 class="card-title" style="font-weight:bold;">CATEGORY III : Research and Academic Contribution
+			<a href="{% url 'account:home' user_id=request.user.id %}" class="previous" style="text-decoration:none;float:right;"><i class="fa fa-window-close" style="font-size:36px"></i></a>
+		</h2>
+        <h3 class="card-title" style="font-weight:bold;">III-E :  Fellowships, Awards and Invited lectures delivered in conferences / seminars :</h3>
+        <h3 class="card-title" style="color:blue;">(i)  Fellowship / Award from Academic Bodies/Associations       
+            
+          {% if user.is_applicant %}         
+				<a href="{% url 'fellow-award-add' %}" class="w3-button w3-circle w3-teal" style="text-decoration:none;">+</a>
+				<small style="color:Tomato;font-weight:bolder;">Add</small>
+		  {% endif %}
+		  
+        </h3>   
+    <br> 
+    <br>
+    <table class="table">
+        
+            <tr>
+                
+                <th VALIGN=TOP>Sl.No.</th>
+                <th VALIGN=TOP style="text-align: center;">Type</th>
+                <th VALIGN=TOP style="width: 10%;">Name of the Fellowship/Award</th>
+                <th VALIGN=TOP style="text-align: center;">Name of the Awarding <br> Body/Association</th>
+                <th VALIGN=TOP style="text-align: center;">Level</th>
+                <th VALIGN=TOP style="text-align: center;">Document Link</th>
+                         
+               
+                <th VALIGN=TOP>Self Appraisal Score</th>
+				
+				{% if admin %}
+					<th VALIGN=TOP>Verified API Score</th>
+				{% endif %}
+				
+                {% if user.is_applicant %}				
+					          <th  VALIGN=TOP colspan="2">&nbsp&nbsp&nbsp&nbspActions</th>
+				{% endif %}           
+                
+            </tr>
+       
+			
+			<script>
+				var fell_score=0;
+			</script>
+			
+      {% for item in prj %}
+            {% if item.fellow_type %}
+              <tr>
+                <td style="display:none;">{{form.email}}</td>             
+                
+                <td>{{ forloop.counter }}</td>
+				<td>{{item.get_fellow_type_display|default_if_none:"Blank"}}</td>
+        <td><textarea rows="3" cols="40" wrap="hard" readonly>{{item.name_fellow|default_if_none:"Blank"}}</textarea></td>
+				<td><textarea rows="3" cols="40" wrap="hard" readonly>{{item.name_body|default_if_none:"Blank"}}</textarea></td>
+				<td>{{item.get_prj_lvl_display|default_if_none:"Blank"}}</td>			
+				
+                {% if item.prj_url %}
+                    <td><a class="btn btn-secondary btn-lg" href='{{ item.prj_url }}' target=_blank>View</a></td>
+                {% else %}
+                    <td>None</td>
+                {% endif %}
+                
+                            
+                <td style="text-align:center;">{{item.self_api_score|default_if_none:"Blank"}}</td>
+					
+					<script>
+						var fell_score = fell_score + parseFloat({{item.self_api_score}});						
+					</script>
+					
+				{% if admin %}
+					<td style="text-align:center;">{{item.veri_api_score|default_if_none:"Blank"}}</td>
+				{% endif %}
+          
+                 {% if user.is_applicant %}
+                      <td><a style="font-weight:bolder;" name="edit-btn" class="text-information" href="{% url 'catg_3:fellow-award-edit' pk=item.id %}">Edit</a></td>
+                      <td><a style="font-weight:bolder;" class="text-warning" href="{% url 'catg_3:fellow-award-delete' pk=item.id %}">Delete</a></td>				
+                 {% endif %} 
+                      
+
+            </tr>
+          {% endif %}
+       {% endfor %}
+        
+       {% if not prj %}
+       <tr>
+         <td colspan="8" style="line-height: 10px;background-color:powderblue;text-align:center;" >No data available in table</td>
+       </tr>
+       {% endif %}
+      
+    </table>
+	
+	<label id="fell_score" style="font-size:20px;font-weight:bold;"></label>
+
+  </div>
+  
+  
+  <!--III-E : (ii) Invited Lecture / Paper presented -->
+  
+         
+    <div class="card-body">
+       
+        <h3 class="card-title" style="color:blue;">(ii) Invited Lecture / Paper presented       
+            
+			{% if user.is_applicant %}
+				<a href="{% url 'lecture-paper-add' %}" class="w3-button w3-circle w3-teal" style="text-decoration:none;">+</a>
+				<small style="color:Tomato;font-weight:bolder;">Add</small>	  
+            {% endif %}
+			
+        </h3> 
+		<div id="cap" style="display:none;">{{api_cap}}</div>
+		
+    <br> 
+    <br>
+    <table class="table">
+        
+            <tr>
+                
+                <th VALIGN=TOP>Sl.No.</th>
+                <th VALIGN=TOP style="text-align: center;">Type</th>
+                <th VALIGN=TOP style="width: 10%;">Title of the Lecture/Paper</th>
+                <th VALIGN=TOP style="text-align: center;">Name of the Conference/<br>Seminar/ Workshop</th>
+                <th VALIGN=TOP style="text-align: center;">Organized by</th>
+                <th VALIGN=TOP style="text-align: center;">Venue</th>
+                <th VALIGN=TOP style="text-align: center;">Duration of the Conference/<br>Seminar/ Workshop</th>
+                <th VALIGN=TOP style="text-align: center;">Level</th>
+                <th VALIGN=TOP style="text-align: center;">Document Link</th>
+                         
+               
+                <th VALIGN=TOP>Self Appraisal Score</th>
+				{% if admin %}
+					<th VALIGN=TOP>Verified API Score</th>
+				{% endif %}
+
+                {% if user.is_applicant %}				
+					          <th  VALIGN=TOP colspan="2">&nbsp&nbsp&nbsp&nbspActions</th>
+				{% endif %}           
+                
+            </tr>
+			
+			<script>
+				var lect_score=0;
+			</script>
+
+      {% for item in lec %}
+            {% if item.invitation_type %}
+              <tr>
+                <td style="display:none;">{{form.email}}</td>             
+                
+                <td>{{ forloop.counter }}</td>
+				<td>{{item.get_invitation_type_display|default_if_none:"Blank"}}</td>
+				<td><textarea rows="3" cols="40" wrap="hard" readonly>{{item.title_lecture|default_if_none:"Blank"}}</textarea></td>
+				<td><textarea rows="3" cols="40" wrap="hard" readonly>{{item.seminer|default_if_none:"Blank"}}</textarea></td>
+				<td><textarea rows="3" cols="20" wrap="hard" readonly>{{item.organizer|default_if_none:"Blank"}}</textarea></td>
+				<td><textarea rows="3" cols="20" wrap="hard" readonly>{{item.venue|default_if_none:"Blank"}}</textarea></td>
+				<td>{{item.duration|default_if_none:"Blank"}}</td>				
+				<td>{{item.get_prj_lvl_display|default_if_none:"Blank"}}</td>			
+				
+                {% if item.prj_url %}
+					<td><a class="btn btn-secondary btn-lg" href='{{ item.prj_url }}' target=_blank>View</a></td>
+                  
+                {% else %}
+                    <td>None</td>
+                {% endif %}
+                
+                            
+                <td style="text-align:center;">{{item.self_api_score|default_if_none:"Blank"}}</td>
+				
+					 <script>
+						var lect_score = lect_score + parseFloat({{item.self_api_score}});						
+					</script>
+					
+				{% if admin %}
+					<td style="text-align:center;">{{item.veri_api_score|default_if_none:"Blank"}}</td>
+				{% endif %}
+
+          
+                 {% if user.is_applicant %}
+                      <td><a style="font-weight:bolder;" name="edit-btn" class="text-information" href="{% url 'catg_3:lecture-paper-edit' pk=item.id %}">Edit</a></td>
+                      <td><a style="font-weight:bolder;" class="text-warning" href="{% url 'catg_3:lecture-paper-delete' pk=item.id %}">Delete</a></td>				
+                 {% endif %} 
+                      
+
+            </tr>		
+			
+		  {% endif %}
+		  
+		  
+       {% endfor %}
+	   
+	   {% if not lec %}
+      <tr>
+        <td colspan="11" style="line-height: 10px;background-color:powderblue;text-align:center;" >No data available in table</td>
+      </tr>
+	   {% endif %}
+	   
+        
+
+    </table>
+	
+	<label id="lect_score" style="font-size:20px;font-weight:bold;"></label>
+	
+  </div>
+
+  
+  <!--IIIE (iii) e-Learning Delivery Process/Material -->
+  
+       
+    <div class="card-body">
+       
+        <h3 class="card-title" style="color:blue;">(iii) e-Learning Delivery Process/Material     
+            
+          {% if user.is_applicant %}            
+				<a href="{% url 'lecture-elearn-add' %}" class="w3-button w3-circle w3-teal" style="text-decoration:none;">+</a>
+				<small style="color:Tomato;font-weight:bolder;">Add</small>	  
+          {% endif %}
+		  
+         </h3>   
+		 
+    <br> 
+    <br>
+    <table class="table">
+        
+            <tr>
+                
+                <th VALIGN=TOP>Sl.No.</th>                
+                <th VALIGN=TOP style="width: 10%;">Name of the Module</th>
+                <th VALIGN=TOP style="text-align: center;">Name of the Course</th>
+				        <th VALIGN=TOP style="width:10%;text-align: center;">Name of the Program</th>
+				        <th VALIGN=TOP style="text-align: center;">Document Link</th>
+                <th VALIGN=TOP>Self Appraisal Score</th>
+				
+				{% if admin %}
+					<th VALIGN=TOP>Verified API Score</th>
+				{% endif %}
+				
+                {% if user.is_applicant %}				
+					          <th  VALIGN=TOP style="text-align: center;" colspan="2">&nbsp&nbsp&nbsp&nbspActions</th>
+				{% endif %}           
+                
+            </tr>
+       
+			<script>
+				var elearn_score=0;
+			</script>
+
+      {% for item in elearn %}
+            {% if item.model_name %}
+              <tr>
+                <td style="display:none;">{{form.email}}</td>
+                <td>{{ forloop.counter }}</td>
+				        <td><textarea rows="3" cols="40" wrap="hard" readonly>{{item.model_name|default_if_none:"Blank"}}</textarea></td>
+                <td><textarea rows="3" cols="40" wrap="hard" readonly>{{item.course_name|default_if_none:"Blank"}}</textarea></td>
+				        <td><textarea rows="3" cols="40" wrap="hard" readonly>{{item.program_name|default_if_none:"Blank"}}</textarea></td>							
+							
+				
+                {% if item.prj_url %}
+                    <td><a class="btn btn-secondary btn-lg" href='{{ item.prj_url }}' target=_blank>View</a></td>
+                {% else %}
+                    <td>None</td>
+                {% endif %}
+                
+                            
+                <td style="text-align:center;">{{item.self_api_score|default_if_none:"Blank"}}</td>
+				
+					<script>
+						var elearn_score = elearn_score + parseFloat({{item.self_api_score}});						
+					</script>
+					
+				{% if admin %}
+					<td style="text-align:center;">{{item.veri_api_score|default_if_none:"Blank"}}</td>
+				{% endif %}
+
+          
+                 {% if user.is_applicant %}
+                      <td><a style="font-weight:bolder;" name="edit-btn" class="text-information" href="{% url 'catg_3:lecture-elearn-edit' pk=item.id %}">Edit</a></td>
+                      <td><a style="font-weight:bolder;" class="text-warning" href="{% url 'catg_3:lecture-elearn-delete' pk=item.id %}">Delete</a></td>				
+                 {% endif %} 
+                      
+
+            </tr>
+          {% endif %}
+       {% endfor %}
+       {% if not elearn %}
+       <tr>
+         <td colspan="7" style="line-height: 10px;background-color:powderblue;text-align:center;" >No data available in table</td>
+       </tr>
+       {% endif %}
+       
+
+    </table>
+	
+	
+			<div class="row" >
+				<label id="elearn_score" style="font-size:20px;font-weight:bold;"></label>			
+				<a href="{% url 'catg_3:resch-guide-view' user_id=pk_var %}" style="margin-left:12px;width:5%;height:50%;font-weight:bold;margin-right:20px;font-size:2rem;" class="btn btn-primary btn-lg">&laquo;</a>
+		
+				<a href="{% url 'catg_3:api-summary-view' user_id=pk_var %}" style="margin-left:12px;float:right;width:20%;font-weight:bold;font-size:2rem;" class="btn btn-success btn-lg">API Summary</a>
+			</div>
+
+	
+			
+
+  </div>
+  
+</div>
+
+</form>
+
+<script type="text/javascript">
+
+	var cap_val = $('#cap').text();
+	
+	document.getElementById("fell_score").innerHTML = "API Total [III-E(i)]: " + (fell_score.toFixed(2));
+	
+    if (parseFloat(lect_score) > parseFloat(cap_val)) {
+		
+		lect_score = parseFloat(cap_val);
+	}	
+	document.getElementById("lect_score").innerHTML = "API Total [III-E(ii)]: " + (lect_score.toFixed(2));	
+	document.getElementById("elearn_score").innerHTML = "API Total [III-E(iii)]: " + (elearn_score.toFixed(2));
+	
+</script>
+
+{% endblock content %}
+    

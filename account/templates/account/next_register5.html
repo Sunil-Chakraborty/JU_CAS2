@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+
+<form action="" method="POST" enctype="multipart/form-data">
+
+    {% csrf_token %}
+
+	<h5 style="margin-left:5px">B.Field(s) of Specialisation under the Subject / Discipline :
+	
+	</h5>
+
+	<table class="table">
+	<tr>
+		<td style="display:none;">{{form5.email|as_crispy_field}}</td>
+		<td>{{form5.pg_class|as_crispy_field}}</td>
+		<td>{{form5.ug_class|as_crispy_field}}</td>
+		<td>{{form5.specialisation|as_crispy_field}}</td>        
+		<td>{{form4.pdf|as_crispy_field}}</td>
+		
+	</tr>
+	</table>
+	
+
+	<button type="submit" class="btn btn-success btn-block btn-lg"><i class="fas fa-database"></i>
+		Save & Exit</button>
+
+    
+	<a style="font-weight:bolder;" class="btn btn-success btn-block btn-lg" href="{% url 'prests-cancel' %}">Cancel</a>
+
+ 
+</form>
+
+<script type="text/javascript">
+
+</script>
+
+{% endblock content %}

@@ -1,0 +1,213 @@
+{% extends 'base_v2.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<style>
+     html {
+        font-family: verdana;
+        font-size: 10pt;        
+      }
+      
+      table {
+        border-collapse: collapse;
+        overflow-x: scroll !important;
+	    white-space: nowrap;       
+        display: block;
+      }
+     tr{
+         width:1200px;
+     } 
+     td,
+     th {        
+        height: 15px;
+        width:200px;
+        border: dashed 1px lightblue;
+        }
+     td{       
+       font-size:20px;       
+     }   
+     .form-number{
+        text-align: center; 
+        width: 60pt;        
+     }
+     
+     input[type=number]::-webkit-inner-spin-button, 
+     input[type=number]::-webkit-outer-spin-button { 
+           -webkit-appearance: none; 
+           margin: 0; 
+     }
+     .card {
+      margin: 0 auto; /* Added */
+      float: none; /* Added */
+      margin-bottom: 10px; /* Added */
+      }
+
+     
+    
+</style>
+
+<script src=
+"https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js">
+</script>
+      
+<body onload="zoom()">
+
+<form action="" method="POST" enctype="multipart/form-data">
+
+    {% csrf_token %}
+
+ <div class="card shadow p-3 mb-5 bg-white rounded" style="width: 90%;">
+          
+    <div class="card-body">
+        <h2 class="card-title" style="font-weight:bold;">CATEGORY III: Research and Academic Contribution
+			<a href="{% url 'account:home' user_id=request.user.id %}" class="previous" style="text-decoration:none;float:right;"><i class="fa fa-window-close" style="font-size:36px"></i></a>
+		</h2>
+        <h2 style="margin-left:5px;color:blue;"> III-A : Journal Publication:
+		{% if user.is_applicant %}
+			<a href="{% url 'jrnl-add' %}" class="w3-button w3-circle w3-teal" style="text-decoration:none;">+</a>
+			<small style="color:Tomato; font-weight:bolder">Add</small>			
+			<br> 
+		{% endif %}
+		</h2>
+		
+    <br> 
+    <table id="jrn_pub" class="table table-sticky">
+			
+			
+            <tr style="font-size:18px;">
+                
+                <th >Sl.No.</th>
+                <th VALIGN=TOP style="text-align: center;">Year of <br> Publication</th>
+                <th VALIGN=TOP style="width: 10%;">Title of the Paper</th>
+                <th VALIGN=TOP style="text-align: center;">No.of <br> authors</th>
+                <th VALIGN=TOP>Role of Applicant</th>
+				<th VALIGN=TOP style="text-align: center;">No of Other<br> Co-authors</th>
+                <th VALIGN=TOP style="width: 30%;">Journal Name</th>
+                <th VALIGN=TOP style="width: 20%;">Volume (Issue),<br>pg no. from - to</th>
+                <th VALIGN=TOP>Journal Type</th>
+                <th VALIGN=TOP style="text-align: center;">Impact Factor <br> (put 0 if NA)</th>
+                
+                
+                <th VALIGN=TOP>Link of Journal<br> page showing <br> impact factor</th>
+                
+                <th VALIGN=TOP>Document Link</th>
+                
+                <th VALIGN=TOP>Self Appraisal Score</th>
+				{% if admin %}
+					<th VALIGN=TOP>Verified API Score</th>
+				{% endif %}	
+                {% if user.is_applicant %}				
+				        	<th  VALIGN=TOP colspan="2">&nbsp&nbsp&nbsp&nbspActions</th>
+				{% endif %}           
+               
+            </tr>
+			
+			<script>
+				var score=0;
+				
+			</script>
+			
+      {% for item in jrnl|dictsortreversed:"yr_pub" %}
+				 
+			 <tbody>
+              <tr>
+                <td style="display:none;">{{form.email}}</td>
+					
+				<td >
+				{{ forloop.counter }}
+				</td>
+				
+                <td style="text-align:center;">{{item.yr_pub}}</td>               
+                <td><textarea rows="3" cols="40" wrap="hard" readonly>{{item.title_pub|default_if_none:"Blank"}}</textarea></td>
+                <td style="text-align:center;">{{item.no_auth|default_if_none:"Blank"}}</td>
+                <td>{{item.get_role_appl_display|default_if_none:"Blank"}}</td>
+				<td style="text-align:center;">{{item.jrnl_oth|default_if_none:"Blank"}}</td>
+                <td><textarea rows="3" cols="20" wrap="hard" readonly>{{item.jrnl_name|default_if_none:"Blank"}}</textarea></td>
+                <td>{{item.vl_pg|default_if_none:"Blank"}}</td>
+                <td>{{item.get_jrnl_type_display|default_if_none:"Blank"}}</td>
+                <td style="text-align:center;">{{item.imp_fac|default_if_none:"Blank"}}</td>
+                
+
+                {% if item.jrnl_url %}
+                    <td><a class="btn btn-secondary btn-lg" href='{{ item.jrnl_url }}' target=_blank>View</a></td>
+                {% else %}
+                    <td>None</td>
+                {% endif %}                
+              
+
+                {% if item.jrnl_link %}
+                    <td><a class="btn btn-secondary btn-lg" href='{{ item.jrnl_link }}' target=_blank>View</a></td>
+                {% else %}
+                    <td>None</td>
+                {% endif %}
+                
+                <td id="api_score" style="text-align:center;">{{item.self_api_score|default_if_none:"Blank"}}</td>
+				
+					<script>
+						var score = score + parseFloat({{item.self_api_score}});						
+					</script>
+				
+				{% if admin %}
+					<td style="text-align:center;">{{item.veri_api_score|default_if_none:"Blank"}}</td>
+				{% endif %}	
+                {% if user.is_applicant %}
+                    <td><a style="font-weight:bolder;" name="edit-btn" class="text-information" href="{% url 'catg_3:jrnl-edit' pk=item.id %}">Edit</a></td>
+                    <td><a style="font-weight:bolder;" class="text-warning" href="{% url 'catg_3:jrnl-delete' pk=item.id %}">Delete</a></td>				
+                {% endif %}
+
+            </tr>
+			</tbody>
+           
+		  
+       {% endfor %}
+
+            {% if not jrnl %}
+                <tr>
+                    <td colspan="14" style="line-height: 10px;background-color:powderblue;color:black;text-align:center;" >No data available in table</td>
+                </tr>
+			{% endif %}
+		
+       
+
+    </table>
+	
+			<div class="row" >	
+				<label id="self_score" style="font-size:20px;font-weight:bold;"></label>			
+				<a href="{% url 'account:api-2' user_id=pk_var %}" style="margin-left:12px;width:5%;height:20%;font-weight:bold;margin-right:20px;font-size:1.5rem;" class="btn btn-primary btn-lg">&laquo;</a>
+				<a href="{% url 'catg_3:pub-other' user_id=pk_var %}" style="width:5%;font-weight:bold;font-size:1.5rem;" class="btn btn-success btn-lg">&raquo;</a>
+			
+			
+			</div>
+ 
+	
+  </div>
+</div>
+</form>
+
+
+
+<script type="text/javascript">
+
+    $(document).ready(function(){
+        $('#id_jrnl_type').change(function(event){
+                var name = $(this).val();
+                
+                
+        });
+		
+	
+	 
+   });
+   
+	document.getElementById("self_score").innerHTML = "API Total (III-A) : " + (score.toFixed(2));
+					
+	
+				
+	  
+</script>
+</body>
+
+{% endblock content %}
+    

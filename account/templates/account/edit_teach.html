@@ -1,0 +1,68 @@
+{% extends 'base_v2.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+
+
+<style>
+	tr {			
+		font-weight:bolder;
+	}
+	
+    input[type=number]::-webkit-inner-spin-button, 
+    input[type=number]::-webkit-outer-spin-button { 
+           -webkit-appearance: none; 
+           margin: 0; 
+     }
+	
+    
+</style>
+
+<form action="" method="POST" enctype="multipart/form-data">
+
+    {% csrf_token %}
+
+	
+	<div class="card shadow p-3 mb-5 bg-white rounded" style="width: 95%;margin-left:50px;">
+          
+		<div class="card-body" >
+				   <h2 class="card-title" style="font-weight:bold;">Part D. Teaching Experien :
+				   {% if user.is_applicant %}				   
+						<a href="{% url 'account:teaching' user_id=request.user.id %}" class="previous" style="text-decoration:none;float:right;"><i class="fa fa-window-close" style="font-size:36px"></i></a>
+					{% endif %}	
+				   </h2>	
+				   <h5 style="margin-left:5px">17.Field(s) of Specialisation under the Subject / Discipline :</h5>
+
+	<table class="table">
+	<tr>
+		<td style="display:none;">{{form5.email|as_crispy_field}}</td>
+		<td>{{form5.pg_class|as_crispy_field}}</td>
+		<td>{{form5.ug_class|as_crispy_field}}</td>
+		<td>{{form5.specialisation|as_crispy_field}}</td> 
+		<td>{{form5.url_link|as_crispy_field}}</td>
+		
+	</tr>
+
+
+	</table>
+
+	
+	<div style="width:120px;float:left;">
+		<button type="submit" style="font-weight:bolder;background-color:tan;" class="btn btn-block btn-lg">
+		Save & Exit</button>
+	</div>
+	
+	
+
+</div>
+</div>
+
+</form>
+
+<script type="text/javascript">
+
+</script>
+
+{% endblock content %}

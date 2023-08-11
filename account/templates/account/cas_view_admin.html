@@ -1,0 +1,217 @@
+{% extends 'base_admin.html' %}
+{% load static %}
+
+
+
+{% block content %}
+<head>
+	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.4/css/jquery.dataTables.min.css">
+	  
+	
+	<style type="text/css">
+	
+	/* Custom CSS for DataTables elements */
+	.dataTables_wrapper .dataTables_length,
+	.dataTables_wrapper .dataTables_filter,
+	.dataTables_wrapper .dataTables_info,
+	.dataTables_wrapper .dataTables_paginate {
+		color: blue; /* Change the color here */
+		font-size: 26px; /* Change the font-size here */
+	}
+	
+	.dt-buttons {			
+            color: black; /* Change button text color here */
+            font-size: 24px; /* Change button font-size here */
+            border-radius: 5px; /* Change button border-radius here */
+            padding: 5px 10px; /* Change button padding here */
+    }
+		
+	.text-right {
+		text-align: right;
+	}
+	.text-middle {
+		text-align: center;
+	}
+	.dt-toolbar {
+		text-align: center;
+	}
+	
+	th{
+		color:white;
+		font-size:20px;
+		font-weight:bold;
+	}
+	td{
+		color:black;
+		font-size:18px;
+		font-weight:bold;
+	}
+	</style>
+	
+  </head>
+			
+
+ <div style="font-size:25px;font-weight:bolder;color:blue;cursor: context-menu;">
+ <marquee behavior="scroll" direction="left">Message: <i>Give Access to view uploaded Google Drive files for further consideration of Application</i></marquee>
+ </div>	
+ <div class="card shadow p-3 mb-5 bg-white rounded" style="width: 95%;margin-left:50px;margin-top:10px;">
+       
+	<div class="card-body" >
+	
+		<h2 class="col-md-8" style="font-style: bold;font-size: 3rem;" >DashBoard
+		<span style="font-size: 2.5rem;color:blue;margin-left:900px;">CAS Users List</span>
+		</h2>
+		  
+    </div>
+	
+	{% if admin %}
+	
+		<h2 class="card-title" style="text-align:center;font-size:30px;color:black;">
+			<a href="{% url 'logout' %}" style="float:left; font-size:25px;color::black;" class="w3-bar-item w3-button w3-padding w3-hover-red"><i class="fa fa-power-off fa-fw"></i>Logout&nbsp&nbsp</a>
+			<a href="{% url 'password_change' %}" style="float:left; font-size:25px;margin-right:125px;color::black;" class="w3-bar-item w3-button w3-padding w3-hover-red"><i class="fa fa-cog fa-fw"></i>Change Password</a>
+			
+			<a href="{% url 'catg_3:cas-sts-view' user_id=request.user.id %}" style="float:right; font-size:25px;color::black;">Client Status</a> 
+		</h2>
+
+	{% endif %}
+		
+
+    <br>
+
+		<table id="faculty" class="table table-css table-hover table-bordered" >
+        
+			<thead class="thead-dark align-middle">
+				<tr>
+					<th>Srl.</th>
+					<th style="text-align: left;">Name</th>	
+					<th style="text-align: left;">Faculty</th>						
+					<th style="text-align: left;">Department</th>							
+					<th style="text-align: left;">Designation</th>
+					<th style="text-align: left;">Operation&nbsp;</th>		
+					<th style="text-align: left;">PDF Doc&nbsp;</th>
+					<th style="text-align: left;">Status</th>
+					
+				</tr>
+			</thead>
+
+
+			<tbody>
+
+			
+				{% for item in account %}
+				
+					{% if not item.is_admin %}
+					
+					<tr>
+					
+						
+							<td >{{ forloop.counter }}</td>									
+							<td>{{item.username}}</td>									
+							<td>{{item.Department.faculty}}</td>									
+							<td>{{item.Department}}</td>									
+							<td>{{item.get_from_dsg_display}}</td>
+							<td><a  class="btn btn-warning" style="font-weight:bolder;" href="{% url 'account:cas' user_id=item.id %}">Open Account</a></td>
+							
+							<td><a style="font-weight:bolder;color:black;text-decoration:none;" class="p-2" href="{% url 'account:pdf_view' user_id=item.id %}" target="_blank">Preview</a></td>
+							{% if item.is_submit %}
+								<td style="font-weight:bolder;color:green;">Complete</td>
+							{% else %}	
+								<td style="font-weight:bolder;color:red;">In Process</td>
+							{% endif %}	
+						
+						
+						
+					</tr>
+					
+					{% endif %}
+
+				{% endfor %}
+			
+		
+				
+			</tbody>
+
+		</table>
+	</div>
+</div>
+	
+	<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>  
+	<script type="text/javascript" src="//cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+	<script type="text/javascript" src="https://cdn.datatables.net/buttons/2.0.1/js/dataTables.buttons.min.js"></script>
+	<script type="text/javascript" src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.html5.min.js"></script>
+	<script type="text/javascript" src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.print.min.js"></script>
+	<script type="text/javascript" src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.colVis.min.js"></script>
+
+<!-- Other scripts -->
+	
+<script type="text/javascript">
+	
+  $(document).ready(function() {
+  
+	$('#faculty').DataTable({
+			
+			lengthMenu: [10,25, 50, 100, 200], // Set the available "Show entries" options
+            pageLength: 10, // Set the default number of records per page
+			
+			responsive: true,
+			dom: 'lBfrtip',
+			
+			//dom: '<"dt-toolbar"lB><"dt-wrapper"fr>t<"dt-toolbar-footer"ip>',
+			
+			columnDefs: [
+				{
+					targets: [0],
+					orderData: [0, 1],
+				},
+				{
+					targets: [1],
+					orderData: [1, 0],
+				},
+				{
+					targets: [4],
+					orderData: [4, 0],
+				},
+				
+				
+			],
+			
+			buttons: [
+            'copy', 'csv', 'print',
+			
+			{
+				extend: 'pdfHtml5',
+				exportOptions: {
+				  //columns: ':not(:last-child):not(:nth-last-child(2))'
+				  columns: ':not(:eq(5)):not(:eq(6)):not(:eq(7))'
+				  /*selector excludes the first 
+				   and third columns (0-based index) 
+				   from being exported.
+				  columns: ':not(:eq(0)):not(:eq(2))'
+				  */
+				  
+				}				
+			},
+			
+			{
+			  extend: 'excelHtml5',
+			  exportOptions: {
+				columns: ':not(:last-child):not(:nth-last-child(3))'
+			  }
+			}
+			
+			
+			
+			]
+			
+			
+			
+	});
+
+	
+  });
+  
+
+
+</script>
+
+{% endblock content %}

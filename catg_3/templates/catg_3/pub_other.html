@@ -1,0 +1,278 @@
+{% extends 'base_v2.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<style>
+     html {
+        font-family: verdana;
+        font-size: 10pt;        
+      }
+      
+      table {
+        border-collapse: collapse;
+        overflow-x: scroll !important;
+	    white-space: nowrap;       
+        display: block;
+      }
+     tr{
+         width:1200px;
+     } 
+     td,
+     th {        
+        height: 15px;
+        width:200px;
+        border: dashed 1px lightblue;
+        }
+     td{       
+       font-size:20px;       
+     }   
+     .form-number{
+        text-align: center; 
+        width: 60pt;        
+     }
+
+     input[type=number]::-webkit-inner-spin-button, 
+     input[type=number]::-webkit-outer-spin-button { 
+           -webkit-appearance: none; 
+           margin: 0; 
+     }
+     .card {
+      margin: 0 auto; /* Added */
+      float: none; /* Added */
+      margin-bottom: 10px; /* Added */
+      }
+     
+</style>
+
+
+
+<form action="" method="POST" enctype="multipart/form-data">
+
+    {% csrf_token %}
+	
+	
+
+ <div class="card shadow p-3 mb-5 bg-white rounded" style="width: 95%;">
+          
+    <div class="card-body">
+        <h2 class="card-title" style="font-weight:bold;">CATEGORY III : Research and Academic Contribution
+			<a href="{% url 'account:home' user_id=request.user.id %}" class="previous" style="text-decoration:none;float:right;"><i class="fa fa-window-close" style="font-size:36px"></i></a>
+		</h2>
+        <h3 class="card-title" style="color:blue;">III-B(i) : Publications other than journal articles
+        
+          {% if user.is_applicant %}
+		  
+			<a href="{% url 'pub-add' %}" class="w3-button w3-circle w3-teal" style="text-decoration:none;">+</a>
+			<small style="color:Tomato;font-weight:bolder">Add</small>	
+            <br>
+			
+			
+	      {% endif %}
+        </h3>  
+    <br> 
+    <table class="table">
+        
+            <tr>
+                
+                <th VALIGN=TOP>Sl.No.</th>
+                <th VALIGN=TOP style="text-align: center;">Year of <br> Publication</th>
+                <th VALIGN=TOP style="width: 10%;">Type of Publication</th>
+                <th VALIGN=TOP style="text-align: center;">Title of <br> the Chapter/ Paper</th>
+                <th VALIGN=TOP style="text-align: center;">Title of <br> the Book/ Proceedings</th>
+                <th VALIGN=TOP style="text-align: center;">No.of <br> Authors</th>
+                <th VALIGN=TOP style="width: 30%;">Name of <br> Publisher</th>
+                <th VALIGN=TOP style="text-align: center;">Status of Publisher</th>
+                <th VALIGN=TOP style="text-align: center;">ISBN/ISSN No</th>
+                <th VALIGN=TOP>Document Link</th>
+
+                <th VALIGN=TOP>Self Appraisal Score</th>
+				{% if admin %}
+					<th VALIGN=TOP>Verified API Score</th>
+				{% endif %}
+                {% if user.is_applicant %}				
+					<th  VALIGN=TOP colspan="2">&nbsp&nbsp&nbsp&nbspActions</th>
+				{% endif %}           
+                
+            </tr>
+       
+			<script>
+				var score=0;
+			</script>
+			
+      {% for item in pub %}
+            
+              <tr>
+                <td style="display:none;">{{form.email}}</td>             
+                <td>{{ forloop.counter }}</td>
+                <td style="text-align:center;">{{item.yr_pub}}</td>               
+                <td>{{item.get_pub_type_display|default_if_none:"Blank"}}</td>
+                <td style="text-align:center;"><textarea rows="3" cols="40" wrap="hard" readonly>{{item.chap_title|default_if_none:"N/A"}}</textarea></td>
+                <td style="text-align:center;"><textarea rows="3" cols="40" wrap="hard" readonly>{{item.bk_title|default_if_none:"Blank"}}</textarea></td>
+                <td style="text-align:center;">{{item.no_auth}}</td>        
+                <td><textarea rows="3" cols="30" wrap="hard" readonly>{{item.name_pub|default_if_none:"Blank"}}</textarea></td>
+                <td>{{item.get_sts_pub_display|default_if_none:"Blank"}}</td>
+                <td style="text-align:center;">{{item.isbn_no}}</td>
+
+                
+                {% if item.pub_url %}
+                    <td><a class="btn btn-secondary btn-lg" href='{{ item.pub_url }}' target=_blank>View</a></td>
+                {% else %}
+                    <td>None</td>
+                {% endif %}
+                
+                            
+                <td style="text-align:center;">{{item.self_api_score|default_if_none:"Blank"}}</td>
+				
+					<script>
+						var score = score + parseFloat({{item.self_api_score}});						
+					</script>
+				
+				{% if admin %}
+					<td style="text-align:center;">{{item.veri_api_score|default_if_none:"Blank"}}</td>
+				{% endif %} 
+          
+                {% if user.is_applicant %}
+						<td><a style="font-weight:bolder;" name="edit-btn" class="text-information" href="{% url 'catg_3:pub-edit' pk=item.id %}">Edit</a></td>
+						<td><a style="font-weight:bolder;" class="text-warning" href="{% url 'catg_3:pub-delete' pk=item.id %}">Delete</a></td>				
+				{% endif %} 
+             
+
+            </tr>
+          
+       {% endfor %}
+			{% if not pub %}
+				<tr>
+					<td colspan="13" style="line-height: 10px;background-color:powderblue;text-align:center;" >No data available in table</td>
+				</tr>
+			{% endif %}
+
+
+    </table>
+	
+	
+			<div class="row" >
+				<label id="self_score" style="font-size:20px;font-weight:bold;"></label>			
+			</div>
+
+		<hr>
+		
+		  <!--III-B(ii) : Referring of Journal Papers from UGC list -->
+
+		  <div class="card-body">    
+			
+			<h3 class="card-title" style="color:blue;">III-B(ii) : Referring of Articles from UGC Journal list 
+				
+
+				{% if user.is_applicant %} 
+						<a href="{% url 'jrnl-paper-add' %}" class="w3-button w3-circle w3-teal" style="text-decoration:none;">+</a>
+						<small style="color:Tomato;font-weight:bolder;">Add</small>
+				{% endif %}
+				
+			</h3>	
+			  
+		<br> 
+
+		<table class="table">
+			
+				<tr>
+					
+					<th VALIGN=TOP>Sl.No.</th>
+					<th VALIGN=TOP style="text-align: center;">Journal Name</th>
+					<th VALIGN=TOP style="width: 10%;">Title of the paper</th>
+					<th VALIGN=TOP style="text-align: center;">Year of review <br> submission</th>
+					<th VALIGN=TOP style="text-align: center;">Review Invitation <br> Letter link</th>
+					<th VALIGN=TOP style="text-align: center;">Review submission <br> document link</th>
+							   
+					<th VALIGN=TOP>Self Appraisal Score</th>
+					{% if admin %}
+						<th VALIGN=TOP>Verified API Score</th>
+					{% endif %} 
+					{% if user.is_applicant %}				
+						<th  VALIGN=TOP colspan="2">&nbsp&nbsp&nbsp&nbspActions</th>
+					{% endif %}           
+					
+				</tr>
+			
+			   
+					<script>
+						var jrnl_paper_score=0;
+					</script>
+					
+		  {% for item in jrnl_paper %}
+				
+				  <tr>
+					<td style="display:none;">{{form.email}}</td>
+					<td>{{ forloop.counter }}</td>			
+					<td><textarea rows="3" cols="40" wrap="hard" readonly>{{item.jrnl_name|default_if_none:"Blank"}}</textarea></td>
+					<td><textarea rows="3" cols="40" wrap="hard" readonly>{{item.paper_title|default_if_none:"Blank"}}</textarea></td>
+					<td style="text-align:center;">{{item.yr_review}}</td>
+										
+					{% if item.ltr_url %}
+						<td><a class="btn btn-secondary btn-lg" href='{{ item.ltr_url }}' target=_blank>View</a></td>
+					{% else %}
+						<td>None</td>
+					{% endif %}
+					
+					{% if item.sub_ltr_url %}
+						<td><a class="btn btn-secondary btn-lg" href='{{ item.sub_ltr_url }}' target=_blank>View</a></td>
+					{% else %}
+						<td>None</td>
+					{% endif %}
+				
+								
+					<td style="text-align:center;">{{item.self_api_score|default_if_none:"Blank"}}</td>
+					
+						<script>
+								var jrnl_paper_score = jrnl_paper_score + parseFloat({{item.self_api_score}});						
+						</script>
+						
+					{% if admin %}	
+						<td style="text-align:center;">{{item.veri_api_score|default_if_none:"Blank"}}</td>
+					{% endif %}
+			  
+					 {% if user.is_applicant %}
+						  <td><a style="font-weight:bolder;" name="edit-btn" class="text-information" href="{% url 'catg_3:jrnl-paper-edit' pk=item.id %}">Edit</a></td>
+						  <td><a style="font-weight:bolder;" class="text-warning" href="{% url 'catg_3:jrnl-paper-delete' pk=item.id %}">Delete</a></td>				
+					 {% endif %} 
+						  
+
+				</tr>
+			  
+		   {% endfor %}
+			
+			{% if not jrnl_paper %}
+			<tr>
+				<td colspan="8" style="line-height: 10px;background-color:powderblue;text-align:center;" >No data available in table</td>
+			</tr>
+			{% endif %}
+	   
+		</table>
+		
+		<div class="row" >
+				<label id="self_score2" style="font-size:20px;font-weight:bold;"></label>			
+				<a href="{% url 'catg_3:jrnl-pub' user_id=pk_var %}" style="margin-left:12px;width:5%;height:50%;font-weight:bold;margin-right:20px;font-size:2rem;" class="btn btn-primary btn-lg">&laquo;</a>
+				<a href="{% url 'catg_3:resch-view' user_id=pk_var %}" style="float:right;width:5%;font-weight:bold;font-size:2rem;" class="btn btn-success btn-lg">&raquo;</a>
+		</div>
+
+
+  </div>
+</div>
+</form>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('#id_jrnl_type').change(function(event){
+                var name = $(this).val();
+                alert(name);
+                
+        });
+ 
+   });
+   document.getElementById("self_score").innerHTML = "API Total III-B(i) : " + (score.toFixed(2)); 
+   document.getElementById("self_score2").innerHTML = "API Total III-B(ii) : " + (jrnl_paper_score.toFixed(2)); 
+</script>
+
+{% endblock content %}
+    

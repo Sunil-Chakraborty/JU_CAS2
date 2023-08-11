@@ -1,0 +1,155 @@
+<!--Html for editing existing record in Jrnl_pub-->
+
+{% extends 'base_v2.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<style type="text/css">
+    span{
+        color:red;
+    }
+    html {
+        font-family: verdana;
+        font-size: 10pt;        
+      }
+      table {
+        border-collapse: collapse;
+        width: 900px;
+        height : 405px;
+        overflow-y: scroll;
+        overflow-x: hidden !important;
+        display: block;
+      }
+
+      td,
+      th {        
+        height: 15px;
+        border: dashed 1px lightblue;
+        }
+
+     th{
+         width:400px;
+         font-size:20px;
+     }
+     td{
+        width:600px;
+        font-size:25px;
+    }
+
+     .form-number{
+        text-align: center; 
+        width: 60pt;        
+     }
+
+     input[type=number]::-webkit-inner-spin-button, 
+     input[type=number]::-webkit-outer-spin-button { 
+           -webkit-appearance: none; 
+           margin: 0; 
+     }
+
+     .card {
+        margin: 0 auto; /* Added */
+        float: none; /* Added */
+        margin-bottom: 10px; /* Added */
+     }
+     
+</style>
+
+
+<form action="" method="POST" enctype="multipart/form-data">
+
+    {% csrf_token %}
+
+    <div class="card shadow p-3 mb-5 bg-white rounded" style="width: 70%;">
+        {% comment %} <img class="card-img-top" src="..." alt="Card image cap"> {% endcomment %}
+        
+          {% if form1.errors %}
+          <div class="alert-warning center">
+              <h2>{{form1.non_field_errors}}</h2>
+          </div> 
+          {% endif %}
+
+          
+        <div class="card-body">
+          <h2 class="card-title" style="font-weight:bold;">III-B(ii): Referring of Journal Papers from UGC list  (Edit)
+            <a href="{% url 'catg_3:pub-other' user_id=request.user.id %}" class="previous" style="text-decoration:none;float:right;"><i class="fa fa-window-close" style="font-size:36px"></i></a>
+		  
+          </h2>
+          
+          
+          <br>
+            
+            <table class="table table-striped">
+                
+                <td style="display:none;">{{form1.email}}</td> 
+        
+                <tr>
+                    <th VALIGN=middle>Journal Name<span>*</span></th>
+                    <td>{{form1.jrnl_name}}</td>
+                </tr>        
+                <tr>
+                    <th VALIGN=middle>Title of the paper<span>*</span></th>
+                    <td>{{form1.paper_title}}</td>
+                </tr>	
+                <tr id="other" >
+                    <th VALIGN=middle>Year of review<span>*</span></th>
+                    <td >{{form1.yr_review}}</td>
+                </tr>
+                <tr>
+                    <th VALIGN=middle>Review Invitation <br> Letter link<span>*</span></th>
+                    <td>{{form1.ltr_url}}</td>
+                </tr>
+                <tr>
+                    <th VALIGN=middle>Review submission <br> document link<span>*</span></th>
+                    <td>{{form1.sub_ltr_url}}</td>
+                </tr>
+                
+                <tr>
+                  <td style="display:none;">{{form1.self_api_score}}</td>
+                  <td style="display:none;">{{form1.veri_api_score}}</td>
+                </tr>
+            </table>
+
+            <div style="width:200px;float:left;">
+              <button type="submit" id="btnSubmit" style="font-weight:bolder;" class="btn btn-success btn-block btn-lg">
+                Save Record</button>
+              </div>
+            
+         </div>
+    </div> 
+</form>
+
+
+<script type="text/javascript">
+
+function limit_input() {
+				var field = document.getElementById("id_yr_review");
+				var max_length = 4;
+				
+				if (field.value.length > max_length) {
+					field.value = field.value.slice(0, max_length); 
+				}
+				
+}
+
+$("form").submit(function(){    
+
+	var api = 5;
+	
+    var field1 = document.getElementById("id_self_api_score");				
+    field1.value = parseFloat(api).toFixed(2);
+    
+    var field2 = document.getElementById("id_veri_api_score");				
+    field2.value = parseFloat(api).toFixed(2);
+    
+    
+    
+    });
+    
+
+
+</script>
+
+{% endblock content %}

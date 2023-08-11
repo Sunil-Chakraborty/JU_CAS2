@@ -1,0 +1,134 @@
+{% extends 'base_login.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+
+<style type="text/css">
+   body {
+	background: linear-gradient(to top right, #80FFDB, #5390D9);
+	  }
+  h5{
+	  text-align: center;
+	  color: blue;
+  }	  
+  .card-signin {
+	  width: 100%;
+	  max-width: 800px;
+	  padding: 15px;
+	  margin: auto;
+  }
+
+  .form-signin input[type="password"] {
+    margin-bottom: -1px;
+	margin-top: 5px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+	width:330px;
+	height:40px;
+  }
+
+
+</style>
+
+<div class="container-fluid">
+	<div class="row justify-content-center">
+		<div class="card card-signin">
+		  <div class="card-body">
+		    <form class="form-signin" method="post">{% csrf_token %}
+				<div class="d-flex flex-column pb-3">
+				    <img class="img-fluid mx-auto d-block" style="width: 250px;" src="{% static 'codingwithmitch/ju_logo.jpg' %}" alt="ju logo">
+						<h5>Application for Career Advancement Scheme (CAS)</h5>
+				</div>
+
+				<div class="row">
+					<div class="col-md-6 h6">
+						{{registration_form.username|as_crispy_field}}
+					</div>
+					<div class="col-md-6 h6">    
+						{{registration_form.Department|as_crispy_field}}
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-6 h6">
+						{{registration_form.Designation|as_crispy_field}}
+					</div>
+					<div class="col-md-6 h6">    
+						{{registration_form.email|as_crispy_field}}
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-6 h6">
+						{{registration_form.faculty|as_crispy_field}}
+					</div>
+					<div class="col-md-6 h6">
+						{{registration_form.gender|as_crispy_field}}
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-6 h6">
+						<input type="password" name="password1" id="inputPassword1" class="form-control" placeholder="Enter password" required>
+					</div>
+					<div class="col-md-6 h6">
+						<input type="password" name="password2" id="inputPassword2" class="form-control" placeholder="Confirm password" required>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-6 h6" style="display:none;">
+						{{registration_form.is_applicant|as_crispy_field}}
+					</div>					
+					<div class="col-md-6 h6">
+						{{registration_form.is_hod|as_crispy_field}}
+					</div>
+				</div>
+				
+<!-- 				
+				<input type="text" name="username" id="inputUsername" class="form-control" placeholder="Full Name" required> 
+				<input type="text" name="Department" id="inputDepartment" class="form-control" placeholder="Department" required>
+				
+				<input type="email" name="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+				 -->
+<!-- 				 
+				<div class="row">
+					<div class="col-md-6 h6">
+						{{registration_form.password1|as_crispy_field}}
+					</div>
+					<div class="col-md-6 h6">    
+						{{registration_form.password2|as_crispy_field}}
+					</div>
+				</div> 
+ -->
+				<!-- <input type="password" name="password1" id="inputPassword1" class="form-control" placeholder="Enter password" required>
+
+				<input type="password" name="password2" id="inputPassword2" class="form-control" placeholder="Confirm password" required> -->
+
+				{% for field in registration_form %}
+				<p>
+				{% for error in field.errors %}
+				<p style="color: red">{{ error }}</p>
+				{% endfor %}
+				</p>
+				{% endfor %}
+				{% if registration_form.non_field_errors %}
+				<div style="color: red">
+					<p>{{registration_form.non_field_errors}}</p>
+				</div>
+
+				{% endif %}
+				<div class="text-center">
+				<button class="btn btn-lg btn-primary btn-block" type="submit">Register</button>
+				</div>	
+				</form>
+		  </div>
+		</div>
+		
+	</div>
+</div>
+
+
+
+
+
+
+{% endblock content %}

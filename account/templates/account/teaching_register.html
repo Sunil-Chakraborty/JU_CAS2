@@ -1,0 +1,174 @@
+{% extends 'base_v2.html' %}
+{% load static %}
+
+{% block content %}
+<head>
+
+	<style>
+	hr.new4 {
+			border: 1px solid black;
+			font-weight:bolder;
+	}
+	.navba {
+        margin-top: 10px;
+        margin-bottom: 10px;
+        position:relative;
+        z-index:-1;
+        background-color:#34495E;
+		color: white;
+        box-shadow: 0 8px 8px -4px lightblue;
+        height: 30px;
+		etter-spacing: 2px;
+		
+   	 }
+	 
+	 
+    input[type=number]::-webkit-inner-spin-button, 
+    input[type=number]::-webkit-outer-spin-button { 
+           -webkit-appearance: none; 
+           margin: 0; 
+    }
+	.form-number{
+        text-align: center; 
+        width: 60pt;        
+    }
+	div {
+	  
+	   margin:0px;outline:none;
+	  
+	}
+	
+	</style>
+</head>
+
+<div style="margin-left:2rem;margin-top:0;">	
+
+<form action="" method="POST" enctype="multipart/form-data">
+
+    {% csrf_token %} 
+ 
+    <div class="card shadow p-3 mb-5 bg-white rounded" style="width: 90%;margin-left:50px;">
+          
+        <div class="card-body">
+		
+			{% if form5.errors %}
+			  <div class="alert alert-warning center" style="padding:0;margin:0;height:30px;font-size:20px;" >
+				 <strong>{{form5.non_field_errors}}</strong>
+			  </div> 
+			{% endif %}
+			
+                   <h2 class="card-title" style="font-weight:bold;">Part D. Teaching Experience 
+				   
+						<a href="{% url 'account:home' user_id=pk_var %}" class="previous" style="text-decoration:none;float:right;"><i class="fa fa-window-close" style="font-size:36px"></i></a>
+
+				   </h2>
+ 
+
+			
+			<h4 style="margin-top:10px">A. Period of Teaching and / or Research Experience:&nbsp&nbsp&nbsp&nbsp
+				
+			</h4>
+			
+			<hr class="new4" style="font-weight:bold;">
+			<table class = "table table-borderless" >				
+					<td style="display:none;">{{form5.email}}</td>
+					<tr  >
+						<th style="height:20px;" VALIGN=TOP style="text-align: left;">Level</th>
+						<th style="height:20px;" VALIGN=TOP style="text-align: left;">No. of Years</th>
+					</tr>
+				
+						<tr >
+                            <td>PG classes :</td>
+							{% if not user.is_applicant %}
+								<td>{{teach.pg_class}}</td>
+							{% else %}
+								<td>{{form5.pg_class}} </td>
+							{% endif %}
+							<td></td>
+								
+                        </tr>
+                        <tr>
+                            <td>UG classes :</td>
+							{% if not user.is_applicant %}
+								<td>{{teach.ug_class}}</td>
+							{% else %}
+								<td>{{form5.ug_class}}</td>
+							{% endif %}	
+							<td></td>
+									
+                        </tr>
+						<tr>
+                            <td>Post-doctoral Research :</td>
+							{% if not user.is_applicant %}
+								<td>{{teach.postdoc_yrs}}</td>
+							{% else %}
+								<td>{{form5.postdoc_yrs}}</td>
+							{% endif %}	
+							
+							<td></td>
+									
+                        </tr>
+						<tr>
+                            <td>Doctoral Research :</td>
+							{% if not user.is_applicant %}
+								<td>{{teach.doc_yrs}}</td>
+							{% else %}
+								<td>{{form5.doc_yrs}}</td>
+							{% endif %}	
+							<td></td>
+									
+                        </tr>
+                 
+			
+			</table>		
+			<p style="font-size:8;color:tomato">*In case of not applicable, please put 0</p>
+
+			<h4 style="margin-top:10px">B.Field(s) of Specialisation under the Subject / Discipline :
+				
+			</h4>
+			<hr class="new4">
+		
+			<table class = "table table-borderless">				
+				<thead  >
+					<tr>
+						<th  VALIGN=TOP style="text-align: left;">Particulars of fields of Specialisation</th>
+						<!--<td><th  VALIGN=TOP style="text-align: left;">Doc Link :
+						{% if teach.url_link %}
+							<span><a name="url_link"  id="id_url_link" href="{{teach.url_link}}" target="_blank"  style="margin-left:5px;max-width:60%;" class="btn btn-primary ">Doc View</a></span>									
+						{% endif %}
+						</th>-->
+					</tr>
+					
+				</thead>
+				
+					<tr>
+						{% if not user.is_applicant %}					
+							<td>{{teach.specialisation|linebreaks}}</td>
+						{% else %}
+							<td>{{form5.specialisation}}</td>
+						{% endif %}
+						<!--<td>{{form5.url_link}}</td>-->
+					</tr>			
+									
+			</table>
+			
+			<div class="row" style="text-align: left;" >			
+				<a href="{% url 'account:professional' user_id=pk_var %}"  style="margin-left:15px;padding:0;width:5%;font-weight:bold;font-size:2rem;" class="btn btn-primary btn-lg">&laquo;</a>
+				<a href="{% url 'account:orient' user_id=pk_var %}"  style="margin-left:10px;padding:0;width:5%;font-weight:bold;font-size:2rem;" class="btn btn-success btn-lg">&raquo;</a>
+			{% if user.is_applicant %}	
+				<button style="margin-left:400px;float:right;padding:0;width:110px;color:white;font-size:25px;" type="submit" class="btn btn-info btn-block btn-lg">
+				Save</button>
+			{% endif %}
+			</div>
+
+
+		</div>
+	</div>
+</form>
+</div>
+<script type="text/javascript">
+	
+
+</script>
+
+{% endblock content %}

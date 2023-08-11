@@ -1,0 +1,402 @@
+{% extends 'base_v2.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+<link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+
+<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+<script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+
+{% comment %} <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css"> {% endcomment %}
+
+<style type="text/css">
+
+		 
+		.card-body{
+			background-color: #5d5c61;
+			cursor:default;
+			
+		} 
+		.card-body2{
+			background-color: white;
+			cursor:default;
+			
+		} 
+
+		.container{
+			margin-top: 5px;
+			margin-left: 100px;
+
+
+		}
+
+		th, td{
+			color:white;
+			font-size:20px;
+			
+		}
+
+		td a:hover{
+			color:yellow;
+		}
+
+		.txt-color{
+			color:white;
+		}
+		 
+		.card {
+		   background-color: 1FCBDE;
+		   color: #fff;
+		   padding: 15px 5px;
+		   border-radius: 3px;
+		   
+		   margin-bottom: 1px; 
+		}
+		
+		table.sts {
+			background-color: #FFFFF0;
+			margin-left:10px;
+			width: 95%;
+			height : 480px;
+			overflow-y: scroll;
+			overflow-x: hidden !important;
+			display: block;
+			border-collapse: collapse;
+			
+		}
+		
+		thead.sticky {
+		  position: -webkit-sticky;
+		  position: sticky;
+		  top: 0;
+		  background-color: #5d5c61;		  
+		  padding: 50px;
+		  font-size: 20px;
+		  height : 40px;
+		  
+		}
+		
+		
+		.vertical {
+            border-left: 2px solid black;
+            height: 290px;
+            position:absolute;
+            margin-left: 280px;
+        }
+		
+		#demo {
+			background-color: #aaa;
+			color: #fff;
+			padding: 5px;
+			border-radius: 3px;
+			cursor: pointer;
+			margin-top: 5px; 
+			margin-bottom: 5px; 
+		}
+		span{
+			color:red;			
+			font-weight:bold;
+		}
+		 
+		<!-- Round circle in CSS -->
+			.blue-color {
+				color:blue;
+			}
+			 
+			.green-color {
+				color:green;
+			}
+			 
+			.teal-color {
+				color:teal;
+			}
+			 
+			.yellow-color {
+			color:yellow;
+			}
+			
+			.red-color {
+				color:red;
+			}
+			.orange-color {
+				color:orange;
+			}
+		<!----------------->
+
+</style>
+
+ <div style="font-size:25px;font-weight:bolder;color:blue;cursor: context-menu;">
+ <marquee behavior="scroll" direction="left">Message: <i>Give Access to view uploaded Google Drive files for further consideration of Application</i></marquee>
+ </div>	
+ <div class="container-fluid">
+  <div class="row">
+  <div class="col-sm-4">
+<div class="card shadow p-3 mb-5 bg-white rounded" style="width: 150%;margin-left:50px;margin-top:8px;">
+          
+	<div class="card-body">
+			   <h2 class="card-title" style="margin-left:20px">DashBoard</h2>
+			   
+		  	<div class="d-flex flex-column justify-content-center p-4">
+				<table class = "table">
+						<tr>
+							<th style="text-align: left;">Name</th>
+							<td>{{username}}</td>
+						</tr>
+						<tr>
+							<th style="text-align: left;">Faculty</th>
+							<td>{{facult}}</td>	
+						</tr>	
+						<tr>
+							<th style="text-align: left;">Department</th>
+							<td>{{Department}}</td>
+						</tr>	
+						<tr>	
+							<th style="text-align: left;">Designation</th>
+							<td>{{Designation}}</td>
+						</tr>	
+						<tr>	
+							<th style="text-align: left;">PDF Doc&nbsp;</th>
+							<td><a style="font-weight:bolder;color:white;text-decoration:none;" class="p-2" href="{% url 'account:pdf_view' user_id=request.user.id %}" target="_blank">Preview</a></td>
+							
+						</tr>
+					</table>
+					
+				<div class="card-title bg-white rounded" style="margin-top:10px;">
+					<u style="color:rgb(66, 44, 44);font-size:20px;font-weight:bolder; margin-left:20px;">Documents</u>
+					<ul>
+						<li>
+							<a style="font-size:20px;font-weight:bolder;color:tomato;" class="p-2" href="{% url 'account:about' %}">Guideline to upload supporting documents through  &nbspGoogle Drive</a>
+						</li>
+						<li>
+							<a style="font-size:20px;font-weight:bolder;color:tomato;float:left;" class="p-2" href="{% url 'account:notice' %}">University Notification for CAS Application</a>
+						</li>
+					</ul>
+					
+												
+				</div>		
+				
+			
+		</div>
+	</div>
+
+</div>
+</div>
+<div class="col-sm-8">
+<div class="card shadow p-3 mb-5 bg-white rounded" style="width: 70%;margin-left:250px;margin-right:250px;margin-top:5px;">
+          
+	<div class="card-body2" >
+		<table class = "table sts table-striped rounded shadow" >
+				
+				<h2 style="color:rgb(66, 44, 44);text-align:center">CAS Application Status</h2>
+				<thead class="sticky">
+					<tr>
+						<th style="text-align: left;color:white; width:20%" class="v1" >Index</th>	
+						<th style="text-align: left;color:white;">Particulars</th>						
+						<th style="text-align: left;color:white;">Status</th>
+					</tr>
+				</thead>
+				
+					<tr>
+						<td style="color:#993300;" >Part A</td>
+						<td style="color:black;"><span>*&nbsp</span><a class="w3-hover-blue" href="{% url 'account:cas' user_id=request.user.id %}">General Information</a></td>
+						{% if casform.general_sts %}
+							<td style="color:black;"><i class='fa fa-check-circle green-color' style="font-size:40px;"></i></td>
+						{% else %}
+							<td style="color:black;"><i class='fa fa-exclamation-circle orange-color' style="font-size:40px;"></i></td>
+						{% endif %}
+					</tr>
+					<tr>
+						<td style="color:#993300;">Part B (a)</td>
+						<td style="color:black;"><span>*&nbsp</span><a class="w3-hover-blue" href="{% url 'account:academy' user_id=request.user.id %}">Last Academic Qualifications</a></td>
+						{% if casform.academy_sts %}
+							<td style="color:black;"><i class='fa fa-check-circle green-color' style="font-size:40px;"></i></td>
+						{% else %}
+							<td style="color:black;"><i class='fa fa-exclamation-circle orange-color' style="font-size:40px;"></i></td>
+						{% endif %}
+					</tr>
+					<tr>
+						<td style="color:#993300;">Part B (b)</td>
+						<td style="color:black;"><span>&nbsp&nbsp</span><a class="w3-hover-blue" href="{% url 'account:academy' user_id=request.user.id %}">Research Degrees</a></td>
+						{% if casform.research_paper_sts %}
+							<td style="color:black;"><i class='fa fa-check-circle green-color' style="font-size:40px;"></i></td>
+						{% else %}
+							<td style="color:black;"><i class='fa fa-exclamation-circle orange-color' style="font-size:40px;"></i></td>
+						{% endif %}
+					</tr>
+					<tr>
+						<td style="color:#993300;">Part C (a)</td>
+						<td style="color:black;"><span>&nbsp&nbsp</span><a class="w3-hover-blue" href="{% url 'account:professional' user_id=request.user.id %}">Position(s) held Prior to Joining this &nbsp&nbspUniversity</a></td>
+						{% if casform.priorpost_sts %}
+							<td style="color:black;"><i class='fa fa-check-circle green-color' style="font-size:40px;"></i></td>
+						{% else %}
+							<td style="color:black;"><i class='fa fa-exclamation-circle orange-color' style="font-size:40px;"></i></td>
+						{% endif %}
+					</tr>
+					<tr>
+						<td style="color:#993300;">Part C (b)</td>
+						<td style="color:black;"><span>*&nbsp</span><a class="w3-hover-blue" href="{% url 'account:professional' user_id=request.user.id %}">Posts held after Appointment at the &nbsp&nbspUniversity</a></td>
+						{% if casform.present_post_sts %}
+							<td style="color:black;"><i class='fa fa-check-circle green-color' style="font-size:40px;"></i></td>
+						{% else %}
+							<td style="color:black;"><i class='fa fa-exclamation-circle orange-color' style="font-size:40px;"></i></td>
+						{% endif %}
+					</tr>
+					<tr>
+						<td style="color:#993300;">Part D</td>
+						<td style="color:black;"><span>*&nbsp</span><a class="w3-hover-blue" href="{% url 'account:teaching' user_id=request.user.id %}">Teaching Experience</a></td>
+
+						{% if casform.teaching_sts %}
+							<td style="color:black;"><i class='fa fa-check-circle green-color' style="font-size:40px;"></i></td>
+						{% else %}
+							<td style="color:black;"><i class='fa fa-exclamation-circle orange-color' style="font-size:40px;"></i></td>
+						{% endif %}
+					</tr>
+					<tr>
+						<td style="color:#993300;">Part E</td>
+						<td style="color:black;"><span>*&nbsp</span><a class="w3-hover-blue" href="{% url 'account:orient' user_id=request.user.id %}">Orientation / Induction Program(s) &nbsp&nbspor Refresher / &nbspShort-term Course(s)</a></td>
+
+						{% if casform.orientation_sts %}
+							<td style="color:black;"><i class='fa fa-check-circle green-color' style="font-size:40px;"></i></td>
+						{% else %}
+							<td style="color:black;"><i class='fa fa-exclamation-circle orange-color' style="font-size:40px;"></i></td>
+						{% endif %}
+					</tr>
+					<tr>
+						<td style="color:#993300;">Catg-I</td>
+						<td style="color:black;"><span>*&nbsp</span><a class="w3-hover-blue" href="{% url 'account:api-1' user_id=request.user.id %}">Teaching, Learning And Evaluation <br>&nbsp&nbspRelated Activities</a></td>
+
+						{% if casform.api_catg1_sts %}
+							<td style="color:black;"><i class='fa fa-check-circle green-color' style="font-size:40px;"></i></td>
+						{% else %}
+							<td style="color:black;"><i class='fa fa-exclamation-circle orange-color' style="font-size:40px;"></i></td>
+						{% endif %}
+					</tr>
+					<tr>
+						<td style="color:#993300;">Catg-II</td>
+						<td style="color:black;"><span>*&nbsp</span><a class="w3-hover-blue" href="{% url 'account:api-2' user_id=request.user.id %}">Professional Development, <br>&nbsp&nbspCo-Curricular And Extension &nbsp&nbspActivities</a></td>
+
+						{% if casform.api_catg2_sts  %}
+							<td style="color:black;"><i class='fa fa-check-circle green-color' style="font-size:40px;"></i></td>
+						{% else %}
+							<td style="color:black;"><i class='fa fa-exclamation-circle orange-color' style="font-size:40px;"></i></td>
+						{% endif %}
+					</tr>
+					<tr>
+						<td style="color:#993300;">Catg-III A</td>
+						<td style="color:black;"><span>&nbsp&nbsp</span><a class="w3-hover-blue" href="{% url 'catg_3:jrnl-pub' user_id=request.user.id %}">Journal Publication</a></td>
+
+						{% if casform.jrnl_pub_sts %}
+							<td style="color:black;"><i class='fa fa-check-circle green-color' style="font-size:40px;"></i></td>
+						{% else %}
+							<td style="color:black;"><i class='fa fa-exclamation-circle orange-color' style="font-size:40px;"></i></td>
+						{% endif %}
+					</tr>
+					<tr>
+						<td style="color:#993300;">Catg-III B(i)</td>
+						<td style="color:black;"><span>&nbsp&nbsp</span><a class="w3-hover-blue" href="{% url 'catg_3:pub-other' user_id=request.user.id %}">Publications other than journal &nbsp&nbsparticles</a></td>
+
+						{% if casform.pub_other_sts %}
+							<td style="color:black;"><i class='fa fa-check-circle green-color' style="font-size:40px;"></i></td>
+						{% else %}
+							<td style="color:black;"><i class='fa fa-exclamation-circle orange-color' style="font-size:40px;"></i></td>
+						{% endif %}
+					</tr>
+					<tr>
+						<td style="color:#993300;">Catg-III B(ii)</td>
+						<td style="color:black;"><span>&nbsp&nbsp</span><a class="w3-hover-blue" href="{% url 'catg_3:pub-other' user_id=request.user.id %}">Referring of Articles from UGC &nbsp&nbspJournal list </a></td>
+
+						{% if casform.jrnlpaper_sts %}
+							<td style="color:black;"><i class='fa fa-check-circle green-color' style="font-size:40px;"></i></td>
+						{% else %}
+							<td style="color:black;"><i class='fa fa-exclamation-circle orange-color' style="font-size:40px;"></i></td>
+						{% endif %}
+					</tr>
+					<tr>
+						<td style="color:#993300;">Catg-III C(i)</td>
+						<td style="color:black;"><span>&nbsp&nbsp</span><a class="w3-hover-blue" href="{% url 'catg_3:resch-view' user_id=request.user.id %}">Sponsored Project</a></td>
+
+						{% if casform.resch_proj_sts %}
+							<td style="color:black;"><i class='fa fa-check-circle green-color' style="font-size:40px;"></i></td>
+						{% else %}
+							<td style="color:black;"><i class='fa fa-exclamation-circle orange-color' style="font-size:40px;"></i></td>
+						{% endif %}
+					</tr>
+					<tr>
+						<td style="color:#993300;">Catg-III C(ii)</td>
+						<td style="color:black;"><span>&nbsp&nbsp</span><a class="w3-hover-blue" href="{% url 'catg_3:resch-view' user_id=request.user.id %}">Consultancy Project</a></td>
+
+						{% if casform.resch_cons_sts %}
+							<td style="color:black;"><i class='fa fa-check-circle green-color' style="font-size:40px;"></i></td>
+						{% else %}
+							<td style="color:black;"><i class='fa fa-exclamation-circle orange-color' style="font-size:40px;"></i></td>
+						{% endif %}
+					</tr>
+					<tr>
+						<td style="color:#993300;">Catg-III C(iii)</td>
+						<td style="color:black;"><span>&nbsp&nbsp</span><a class="w3-hover-blue" href="{% url 'catg_3:resch-view' user_id=request.user.id %}">Projects Outcome/Output</a></td>
+
+						{% if casform.prj_outcm_sts %}
+							<td style="color:black;"><i class='fa fa-check-circle green-color' style="font-size:40px;"></i></td>
+						{% else %}
+							<td style="color:black;"><i class='fa fa-exclamation-circle orange-color' style="font-size:40px;"></i></td>
+						{% endif %}
+					</tr>
+					<tr>
+						<td style="color:#993300;">Catg-III D</td>
+						<td style="color:black;"><span>&nbsp&nbsp</span><a class="w3-hover-blue" href="{% url 'catg_3:resch-guide-view' user_id=request.user.id %}">Research Guidance</a></td>
+
+						{% if casform.resch_guide_sts %}
+							<td style="color:black;"><i class='fa fa-check-circle green-color' style="font-size:40px;"></i></td>
+						{% else %}
+							<td style="color:black;"><i class='fa fa-exclamation-circle orange-color' style="font-size:40px;"></i></td>
+						{% endif %}
+					</tr>
+					<tr>
+						<td style="color:#993300;">Catg-III E(i)</td>
+						<td style="color:black;"><span>&nbsp&nbsp</span><a class="w3-hover-blue" href="{% url 'catg_3:fellow-award-view' user_id=request.user.id %}">Fellowship / Award from Academic <br>&nbsp&nbspBodies/Associations</a></td>
+
+						{% if casform.fellow_award_sts %}
+							<td style="color:black;"><i class='fa fa-check-circle green-color' style="font-size:40px;"></i></td>
+						{% else %}
+							<td style="color:black;"><i class='fa fa-exclamation-circle orange-color' style="font-size:40px;"></i></td>
+						{% endif %}
+					</tr>
+					<tr>
+						<td style="color:#993300;">Catg-III E(ii)</td>
+						<td style="color:black;"><span>*&nbsp</span><a class="w3-hover-blue" href="{% url 'catg_3:fellow-award-view' user_id=request.user.id %}">Invited Lecture / Paper presented</a></td>
+
+						{% if casform.lecture_paper_sts %}
+							<td style="color:black;"><i class='fa fa-check-circle green-color' style="font-size:40px;"></i></td>
+						{% else %}
+							<td style="color:black;"><i class='fa fa-exclamation-circle orange-color' style="font-size:40px;"></i></td>
+						{% endif %}
+					</tr>
+					<tr>
+						<td style="color:#993300;">Catg-III E(iii)</td>
+						<td style="color:black;"><span>&nbsp&nbsp</span><a class="w3-hover-blue" href="{% url 'catg_3:fellow-award-view' user_id=request.user.id %}">e-Learning Delivery &nbsp&nbspProcess/Material</a></td>
+
+						{% if casform.e_learning_sts %}
+							<td style="color:black;"><i class='fa fa-check-circle green-color' style="font-size:40px;"></i></td>
+						{% else %}
+							<td style="color:black;"><i class='fa fa-exclamation-circle orange-color' style="font-size:40px;"></i></td>
+						{% endif %}
+					</tr>
+
+				</table>
+			<br>
+		
+			
+				
+		</div>
+		
+</div>		
+</div>
+</div>
+
+<script type="text/javascript">
+        window.history.forward(1);
+</script>
+
+{% endblock content %}

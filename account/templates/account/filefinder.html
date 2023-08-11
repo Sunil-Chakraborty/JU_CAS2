@@ -1,0 +1,41 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <title>Mail File Attachment</title>
+	
+	<style type="text/css">
+		
+	
+
+	</style>
+  </head>
+
+  <body>
+  
+  
+	<main>
+	<h2> Please ensure the right path</h2>
+	
+	<form action="" method="POST" enctype="multipart/form-data">
+		  {% csrf_token %}
+		   Path Name <p>{{form1.path_name}}</p>		  	  
+		  <button type="submit">Upload</button>
+	</form>
+
+
+    </main>
+
+
+
+
+<script type="text/javascript">
+
+</script>
+
+</body>
+
+</html>

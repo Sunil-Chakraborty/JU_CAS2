@@ -1,0 +1,124 @@
+{% load static %}
+{% load crispy_forms_tags %}
+
+<html>
+<head>
+
+	<style>
+			@page {
+				size: a4 portrait;
+				@frame header_frame {           /* Static Frame */
+					-pdf-frame-content: header_content;
+					left: 50pt; width: 512pt; top: 10pt; height: 1000pt;
+				}
+				@frame content_frame {          /* Content Frame */
+					left: 50pt; width: 512pt; top: 90pt; height: 632pt;
+				}
+				@frame footer_frame {           /* Another static Frame */
+					-pdf-frame-content: footer_content;
+					left: 50pt; width: 512pt; top: 772pt; height: 20pt;
+				}
+			}
+			
+			.container{
+					margin:100px;
+					width:1000px;
+					height:800px;
+					padding-left:10px;
+					padding-right:10px;
+					border: 1px solid black;
+			}
+            
+            .subject{
+                text-align:center;
+                font-size:25px;
+
+            }
+            .content{
+                font-size:20px;
+            }
+            
+            #wrapper {
+                width: 1000px;
+                padding-top:70px;
+                overflow: hidden; /* add this to contain floated children */
+            }
+           
+            
+            .seal {
+                width: 50px;
+               
+                float: right; /* add this */
+                font-size:20px;
+                
+            }
+            .address{
+                font-size:20px;
+            }
+			
+    </style> 
+    
+    
+
+
+</head>
+    
+<body>
+        <!-- Content for Static Frame 'header_frame' -->
+        <div id="header_content">
+           
+            <img src="http://localhost:8000/static/images/ju_logo.png" style="width:60px;text-align:center;">
+          
+            <h2 style="text-align:center">JADAVPUR UNIVERSITY
+               <br> KOLKATA - 700032               
+               <br> 
+            </h2>
+            <br>
+            
+        </div>
+   
+        
+        
+
+
+    
+        <!-- Content for Static Frame 'footer_frame' -->
+        <div id="footer_content">(c) - page <pdf:pagenumber>
+            of <pdf:pagecount>
+        </div>
+        
+        <!-- HTML Content -->
+		
+		
+		<br>
+		<br>
+           
+            <div class="subject"><strong>
+			Career advancement scheme(CAS)<br>
+			Letter of Endorsement
+			</strong><br></div>
+
+            <div class="address">
+                To<br>
+                The Registrar<br>
+                Jadavpur University<br><br>
+            </div>
+
+            <div class="content">
+                <p>Dear Madam,</p>
+                <p>Prof {{username}}, a faculty member in the Department of {{Department}}, is applying for promotion under the "Career advancement scheme(CAS)" from
+                {{from_dsg}} to {{to_dsg}}. </p>
+                <p>I have checked his application and endorse it for submission to the Universiy for due consideration.</p>
+                <p> Thanking you</p>
+				<br>
+				<div >Date:</div>
+                <div >(Head of the Department)</div><br>                
+                <div >Seal</div><br>
+                
+            </div>
+
+           
+	        
+</body>
+	
+</html>

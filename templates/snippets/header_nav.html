@@ -1,0 +1,176 @@
+{% load static %}
+
+<html>
+<head>
+	<title>JU CAS</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+ 
+<style type="text/css">
+
+    .btn-css
+    {
+        padding:0;
+        
+    }
+    .a-color{
+      color:white;
+    }
+    </style>
+</head>
+<body>
+<p></p>
+		<div class="navbar-brand" >
+
+			    {% if request.user.is_authenticated %}
+					
+						<img style="float:left;width: 90px;position:relative;padding:5px;margin-bottom:5px;" class="rounded float-left" src="{% static 'images/ju_logo.png' %}" alt="JU logo">
+					  <h1 class="text-center" style="margin-top: 5px; line-height : 60px">Application for Career Advancement Scheme (CAS)</h1>
+					  
+            {% if not user.is_applicant %}
+               <p  style="padding-left: 620px;padding-top: 1px;width:100%">Welcome Admin, {{ request.user.username }}
+                  {% if user_var %}
+                    <a class="btn btn-primary text-white" href="{% url 'account:pdf_view' user_id=user_var %}" target="_blank" style="margin-left: 350px;text-decoration:none;" >PDF_View</a>&nbsp&nbsp
+                  {% else %}
+                    <a class="btn btn-default text-black disabled" href="{% url 'account:pdf_view' user_id=request.user.id %}" target="_blank" style="margin-left: 350px;text-decoration:none;" >PDF_View</a>&nbsp&nbsp
+                  {% endif %}
+                  <a class="btn bg-primary   text-white" href="{% url 'password_change' %}" style="text-decoration:none;">Change Password</a>&nbsp&nbsp
+                  <a class="btn bg-primary   text-white" href="{% url 'logout' %}"style="text-decoration:none;">Logout</a>
+              </p>
+            {% else %}
+				   		<p  style="padding-left: 690px;padding-top: 1px;width:100%">Welcome, {{ request.user.username }}
+                <a class="bg-primary text-white" href="{% url 'account:pdf_view' user_id=request.user.id %}" target="_blank" style="margin-left: 350px;text-decoration:none;" >PDF_View</a>&nbsp&nbsp
+                <a class="bg-primary text-white" href="{% url 'password_change' %}" style="text-decoration:none;">Change Pwd</a>&nbsp&nbsp
+                <a class="bg-primary text-white" href="{% url 'logout' %}"style="text-decoration:none;">Logout</a>
+           
+              </p>
+				    {% endif %}
+          
+          {% endif %}  
+    </div>
+				
+   <div class="btn-group-lg" style="width:100%;background-color:pink;font-size:17px;font-weight:bolder;height:45px;">
+        {% if not user.is_applicant %}
+            <a style="margin-left:2rem;" class="btn btn-default btn-css" href="{% url 'account:home' user_id=request.user.id %}">Home</a>
+              {% if user_var %}
+                <a class="btn btn-default btn-css" href="{% url 'account:cas' user_id=pk_var %}">General Information</a>
+                <a class="btn btn-default btn-css" href="{% url 'account:academy' user_id=pk_var %}" >Academic Qualifications</a>
+                <a class="btn btn-default btn-css" href="{% url 'account:professional' user_id=pk_var %}">Professional Experience</a>
+                <a class="btn btn-default btn-css" href="{% url 'account:teaching' user_id=pk_var %}">Teaching Experience</a>
+                <a class="btn btn-default btn-css" href="{% url 'account:orient' user_id=pk_var %}">Orientation / Refresher Courses</a>
+              {% else %}
+                <a class="btn btn-default btn-css disabled" href="{% url 'account:cas' user_id=request.user.id %}">General Information</a>
+                <a class="btn btn-default btn-css disabled" href="{% url 'account:academy' user_id=request.user.id %}">Academic Qualifications</a>
+                <a class="btn btn-default btn-css disabled" href="{% url 'account:professional' user_id=request.user.id %}">Professional Experience</a>
+                <a class="btn btn-default btn-css disabled" href="{% url 'account:teaching' user_id=request.user.id %}">Teaching Experience</a>
+                <a class="btn btn-default btn-css disabled" href="{% url 'account:orient' user_id=request.user.id %}">Orientation / Refresher Courses</a>
+              {% endif %} 
+        {% else %}
+            <a style="margin-left:2rem;" class="btn btn-default btn-css" href="{% url 'account:home' user_id=request.user.id %}">Home</a>
+            <a class="btn btn-default btn-css" href="{% url 'account:cas' user_id=request.user.id %}">General Information</a>
+            <a class="btn btn-default btn-css" href="{% url 'account:academy' user_id=request.user.id %}">Academic Qualifications</a>
+            <a class="btn btn-default btn-css" href="{% url 'account:professional' user_id=request.user.id %}">Professional Experience</a>
+            <a class="btn btn-default btn-css" href="{% url 'account:teaching' user_id=request.user.id %}">Teaching Experience</a>
+            <a class="btn btn-default btn-css" href="{% url 'account:orient' user_id=request.user.id %}">Orientation / Refresher Courses</a>
+        {% endif %}
+
+          <div class="w3-dropdown-hover">
+							<label class="btn btn-default">API</label>
+               <div class="w3-dropdown-content w3-bar-block w3-card-4" style="position:absolute; z-index: 1;">
+                  {% if not user.is_applicant %}
+                
+                    {% if user_var %}
+                      <a href="{% url 'account:api-1' user_id=pk_var %}" class="btn btn-default">Criterion I</a>
+                    {% endif %}
+
+                  {% else %}
+                       <a href="{% url 'account:api-1' user_id=request.user.id %}" class="btn btn-default">Criterion I</a>
+                  {% endif %}
+                
+                  {% if not user.is_applicant %}
+                
+                    {% if user_var %}
+                      <a href="{% url 'account:api-2' user_id=pk_var %}" class="btn btn-default">Criterion II</a>
+                    {% endif %}
+
+                  {% else %}
+
+                    <a href="{% url 'account:api-2' user_id=request.user.id %}" class="btn btn-default">Criterion II</a>
+                  
+                  {% endif %} 
+             
+            
+                  {% if not user.is_applicant %}
+                
+                    {% if user_var %}
+                      {% comment %} <a href="{% url 'account:api-3' user_id=pk_var %}" class="btn btn-default">Criterion III- A</a> {% endcomment %}
+                      <a href="#" class="btn btn-default">Criterion III- A</a>
+                    {% endif %}
+
+                  {% else %}
+
+                      {% comment %} <a href="{% url 'account:api-3' user_id=request.user.id %}" class="btn btn-default">Criterion III-A</a> {% endcomment %}
+                      
+                      <a href="{% url 'catg_3:jrnl-pub' user_id=request.user.id %}" class="btn btn-default">Criterion III-A</a>
+                      
+                      
+                  
+                  {% endif %} 
+                   
+                  
+                {% if not user.is_applicant %}
+                
+                  {% if user_var %}
+                    {% comment %} <a href="{% url 'catg_3:pub-other' user_id=pk_var %}" class="btn btn-default">Criterion III- B</a> {% endcomment %}
+                    <a href="#" class="btn btn-default">Criterion III- B</a>
+                  {% endif %}
+
+                {% else %}
+
+                    {% comment %} <a href="{% url 'catg_3:pub-other' user_id=request.user.id %}" class="btn btn-default">Criterion III-B</a> {% endcomment %}
+                    
+                    <a href="{% url 'catg_3:pub-other' user_id=request.user.id %}" class="btn btn-default">Criterion III-B</a>
+                    
+                    
+                
+                {% endif %}  
+               </div>
+					</div>
+    </div>
+    
+
+    <p></p>
+
+ <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+
+ <script type="text/javascript">
+ 
+    $(function(){
+        $(".btn").hover(
+          function () {
+            $(this).toggleClass('btn-info btn-default hovered');
+          },
+          function () {
+            $(this).toggleClass('btn-info btn-default hovered');
+          }
+        );
+    });
+
+     
+    // $('.btn').click(function(){
+    //   $('.btn').removeClass('clicked');
+    //   $(this).addClass('clicked');
+    // }); 
+
+
+ </script>
+
+
+
+</body>
+</html>

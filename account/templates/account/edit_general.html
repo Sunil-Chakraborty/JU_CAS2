@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+
+<form action="" method="POST" enctype="multipart/form-data">
+
+    {% csrf_token %}
+
+	<h5 style="margin-left:5px">Part A. General Information
+	
+	</h5>
+
+
+	<table class="table table-striped">
+			<tr>
+				<td>{{form8.pdf|as_crispy_field}}</td>
+					Currently: <a href="{{form8.pdf}}"></a>
+						<input type="checkbox" name="pdf-clear" id="pdf-clear_id">
+						<label for="pdf-clear_id">Clear</label><br>
+					Change:
+						<input type="file" name="pdf" id="id_pdf">
+				</td>	
+{% comment %} 
+			<td>{{form8.pdf|as_crispy_field}}</td>
+{% endcomment %}
+
+			</tr>
+		</table>
+			
+		<div class="row">
+
+			<div  class="col-md-12 text-left">
+				<button type="submit" class="btn btn-success btn-block btn-lg">
+					Save and back</button>
+			</div>
+			
+		<div >
+		
+		</h4>
+
+
+</form>
+
+<script type="text/javascript">
+
+</script>
+
+{% endblock content %}
