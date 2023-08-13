@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+	{% for user in users %}
+		<a href="{% url 'send_message' user.id %}">Send message to {{ user.username }}</a><br>
+	{% endfor %}
+  <h1>Send Message</h1>
+  <form method="post">
+    {% csrf_token %}
+    <textarea name="content" rows="5" cols="50" required></textarea><br>
+    <input type="submit" value="Send">
+  </form>
+{% endblock %}

@@ -1,4 +1,5 @@
 {% extends 'base_admin.html' %}
+
 {% load static %}
 
 
@@ -69,8 +70,11 @@
 		<h2 class="card-title" style="text-align:center;font-size:30px;color:black;">
 			<a href="{% url 'logout' %}" style="float:left; font-size:25px;color::black;" class="w3-bar-item w3-button w3-padding w3-hover-red"><i class="fa fa-power-off fa-fw"></i>Logout&nbsp&nbsp</a>
 			<a href="{% url 'password_change' %}" style="float:left; font-size:25px;margin-right:125px;color::black;" class="w3-bar-item w3-button w3-padding w3-hover-red"><i class="fa fa-cog fa-fw"></i>Change Password</a>
+			<a href="{% url 'notify:inbox'%}"  style="float:right; margin-left:20px;font-size:25px;color:white;" class="btn btn-info">Inbox</a>
 			
-			<a href="{% url 'catg_3:cas-sts-view' user_id=request.user.id %}" style="float:right; font-size:25px;color::black;">Client Status</a> 
+						
+			<a href="{% url 'catg_3:cas-sts-view' user_id=request.user.id %}" style="float:right; font-size:25px;color:white;" class="btn btn-success">Client Status</a>
+			
 		</h2>
 
 	{% endif %}
@@ -82,10 +86,10 @@
         
 			<thead class="thead-dark align-middle">
 				<tr>
-					<th>Srl.</th>
+					<th style="width:1%" >Srl.</th>
 					<th style="text-align: left;">Name</th>	
-					<th style="text-align: left;">Faculty</th>						
-					<th style="text-align: left;">Department</th>							
+					<th style="width: 12%;text-align: left;">Faculty</th>						
+					<th style="width: 15%;text-align: left;">Department</th>							
 					<th style="text-align: left;">Designation</th>
 					<th style="text-align: left;">Operation&nbsp;</th>		
 					<th style="text-align: left;">PDF Doc&nbsp;</th>
@@ -113,12 +117,12 @@
 							<td><a  class="btn btn-warning" style="font-weight:bolder;" href="{% url 'account:cas' user_id=item.id %}">Open Account</a></td>
 							
 							<td><a style="font-weight:bolder;color:black;text-decoration:none;" class="p-2" href="{% url 'account:pdf_view' user_id=item.id %}" target="_blank">Preview</a></td>
-							{% if item.is_submit %}
-								<td style="font-weight:bolder;color:green;">Complete</td>
+							{% if item.frm_submitted %}
+								<td style="font-weight:bolder;color:green;" >Complete</td>
 							{% else %}	
-								<td style="font-weight:bolder;color:red;">In Process</td>
-							{% endif %}	
-						
+								<td style="font-weight:bolder;color:orange;" >In Process</td>
+							{% endif %}
+							
 						
 						
 					</tr>

@@ -164,6 +164,7 @@
 				<a href="{% url 'logout' %}" style="float:left; font-size:25px;" class="w3-bar-item w3-button w3-padding w3-hover-red"><i class="fa fa-power-off fa-fw"></i>Logout</a>
 				<a href="{% url 'password_change' %}" style="float:left; font-size:25px;margin-right:125px" class="w3-bar-item w3-button w3-padding w3-hover-red"><i class="fa fa-cog fa-fw"></i>Change Password</a>
 				<a href="{% url 'catg_3:cas-sts-view' user_id=request.user.id %}" style="float:right; font-size:25px;color:white;">Client Status</a> 
+				
 			</h2>
 			
 		{% else %}
@@ -180,7 +181,7 @@
 							<th style="text-align: left;">Faculty</th>						
 							<th style="text-align: left;">Department</th>							
 							<th style="text-align: left;">Designation</th>
-							<th></th>		
+							<th style="text-align: left;">Messages</th></th>		
 							<th style="text-align: left;">PDF Doc&nbsp;</th>
 							
 						</tr>
@@ -192,8 +193,9 @@
 						<td>{{facult}}</td>								
 						<td>{{Department}}</td>
 						<td>{{Designation}}</td>
-						<td></td>
+						<td><a href="{% url 'notify:inbox'%}"  style="font-weight:bolder;color:white;text-decoration:none;" class="p-2">Message Inbox</a></td>
 						<td><a style="font-weight:bolder;color:white;text-decoration:none;" class="p-2" href="{% url 'account:pdf_view' user_id=request.user.id %}" target="_blank">Preview</a></td>
+						
 					</tr>
 					{% endif %}
 					
@@ -210,7 +212,7 @@
 									<td>{{item.Department}}</td>									
 									<td>{{item.get_from_dsg_display}}</td>
 	
-
+									
 
 
 									<td><a  class="btn btn-warning" href="{% url 'account:cas' user_id=item.id %}">Open Account</a></td>

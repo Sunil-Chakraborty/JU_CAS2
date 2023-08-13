@@ -1,0 +1,88 @@
+<!-- create_message.html -->
+{% extends 'base_admin.html' %}
+
+{% load static %}
+
+{% block content %}
+<head>
+  
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+	
+	<script>
+		jQuery(document).ready(function($) {
+			$("#myModal").modal('show');
+			CKEDITOR.replace('id_content', {
+				width: '100%', // Set the width to 100%
+				// Other configuration options...
+			}); 
+		});
+	</script>
+	<style>
+		.modal {
+		   position: absolute;
+		   top: 10%;
+		   left: 10%;
+		}
+		.modal-dialog {
+					max-width: 1200px; /* Adjust this value to your desired width */
+		}
+	</style>
+</head>
+<div class="modal fade" id="myModal" role="dialog">
+		<div class="modal-dialog">
+    
+		  <!-- Modal content-->
+		  <div class="modal-content">
+			<div class="modal-header">
+				<h2 class="modal-title">Create Message</h2>
+			</div>
+			<div class="modal-body">
+				<form method="post">
+					{% csrf_token %}
+					From : {{ form.sender }} To : {{ form.receiver }}
+					<br>
+					<div style="width: 100%;">
+						<textarea name="content" cols="40" rows="10" id="id_content"></textarea>
+					</div>
+    
+					<br>
+					<button type="submit" class="btn btn-info">Send Message</button>
+				</form>
+				<div class="modal-footer">				
+					<button type="button"  class="btn btn-secondary" id="closeModalBtn" data-dismiss="modal">Close</button>
+				</div>
+			</div>	
+		  </div>
+		</div>
+</div>
+	<script src="https://cdn.ckeditor.com/4.16.2/standard/ckeditor.js"></script>
+        <script>
+          $(document).ready(function() {
+            // Function to make 'feedback' field optional
+            function makeFeedbackOptional() {
+              $('textarea[name="feedback"]').prop('required', false);
+			  $('textarea[name="feedback"]').val('');
+			  $('textarea[name="feedback"]').hide();
+			}
+
+            // Call the function to make the field optional
+            makeFeedbackOptional();
+          });
+		  
+			var closeModalBtn = document.getElementById("closeModalBtn");
+
+			// Add an event listener to the close button
+			closeModalBtn.addEventListener("click", function() {
+			  // Redirect to the previous page
+			  //history.back();
+			  
+			  window.location.href = "{% url 'account:home' user_id=1 %}";
+				
+			});
+			
+			$('#myModal').modal({backdrop: 'static', keyboard: false});  
+	
+		</script>
+		
+{% endblock %}

@@ -1,0 +1,144 @@
+{% extends 'base_admin.html' %}
+{% block content %}
+
+<head>
+  
+		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+		
+		<script>
+			jQuery(document).ready(function($) {
+				$("#myModal").modal('show');
+			});
+		</script>
+
+		<style>
+				/* static/your_app/styles.css */
+
+				/* Style the message list */
+				ul {
+				  list-style: none;
+				  padding: 0;
+				  margin: 0;
+				}
+
+				/* Style each message item */
+				li {
+				  margin-bottom: 10px;
+				  padding: 10px;
+				  border: 1px solid #ccc;
+				  border-radius: 5px;
+				}
+
+				/* Style the sender and receiver information */
+				li span {
+				  font-weight: bold;
+				}
+
+				/* Style the date */
+				li small {
+				  color: #999;
+				}
+
+				/* Optional: Center the inbox heading */
+				h1 {
+				  text-align: center;
+				}
+				.modal {
+				   position: absolute;				   
+				   top: 10%;
+				   left: 10%;
+				}
+				.modal-dialog {
+					max-width: 1200px; /* Adjust this value to your desired width */
+				}
+
+		</style>
+</head>
+{% block error_messages %}
+{% endblock error_messages %}
+
+	<div class="modal fade" id="myModal" role="dialog">
+		<div class="modal-dialog">
+    
+		  <!-- Modal content-->
+		  <div class="modal-content">
+			<div class="modal-header">
+	 
+			 {% if account.is_superuser %}
+				<h2 class="modal-title">Sent Messages</h2>
+				
+				<br>
+				<p><a style="color:teal;font-size:20px;font-weight:bold;" href="{% url 'notify:create_message' %}">Compose New Message</a></p>
+			 {% else %}
+				<h1 class="inbox-heading">Inbox Messages</h1>
+			 {% endif %}
+			</div>
+			<div class="modal-body">
+			  <ul class="message-list">
+				{% for message in messages %}
+				  <li class="message-item">
+					<span class="message-sender">From :&nbsp&nbsp IQAC-Admin</span>
+					<small class="message-date">{{ message.timestamp|date:"F d, Y" }}</small>
+					<span  style="float:right;color:teal;"><a href="{% url 'account:edit-message' message_id=message.id %}">Reply Message</a></span>
+										
+					<br>
+					<p style="color: blue; font-family: Arial, sans-serif;">{{ message.content|safe }}</p>
+					
+					<br>
+					<b>Feedback :&nbsp&nbsp</b>
+					<p>
+						<span style="background-color: yellow;">{{ message.feedback }}</span>
+					</p>
+				  </li>
+				{% endfor %}
+				</ul>
+				<ul>
+				{% for message in sending_message %}
+				
+				  <li class="message-item">
+				   
+					<span class="message-sender">From :&nbsp&nbsp IQAC-Admin</span>
+					<small class="message-date">{{ message.timestamp|date:"F d, Y" }}</small>
+					&nbsp&nbsp<span class="message-sender">To :&nbsp&nbsp {{ message.receiver_name }} -->{{ message.email }}</span>
+					
+					<span style="float:right;"><a href="{% url 'notify:edit-message' message_id=message.id %}">Edit Message</a></span>
+					<span style="float:right;margin-right:10px;color:black;"><a href="{% url 'notify:delete-message' message_id=message.id %}" class="message-delete-button">Delete</a></span>
+					<br>
+					<p style="color: blue; font-family: Arial, sans-serif;">{{ message.content|safe }}</p>
+					
+					<br>
+					<b>Feedback :&nbsp&nbsp</b>
+					{% if message.read %}
+						&nbsp&nbsp<span class="message-sender" style="color:red;">Responded on : {{ message.modified_date|date:"F d, Y" }}</span>
+					{% endif %}
+					<p>
+						<span style="background-color: yellow;">{{ message.feedback }}</span>
+					</p>
+				{% endfor %}
+			  </ul>
+				<div class="modal-footer">				
+					<button type="button"  class="btn btn-secondary" id="closeModalBtn" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		  </div>
+	    </div>
+	</div>
+		
+	
+	<script>
+			var closeModalBtn = document.getElementById("closeModalBtn");
+
+			// Add an event listener to the close button
+			closeModalBtn.addEventListener("click", function() {
+			  // Redirect to the previous page
+			  //history.back();
+			  var id_no = {{ id_no }};
+			  window.location.href = "{% url 'account:home' user_id=id_no %}";
+				
+			});
+			
+			$('#myModal').modal({backdrop: 'static', keyboard: false})  
+
+	</script>	
+{% endblock %}

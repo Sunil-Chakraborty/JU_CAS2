@@ -71,6 +71,7 @@ urlpatterns = [
     path('login', login_view, name="login"),
     path('account/', include('account.urls', namespace='account')),
     path('catg_3/', include('catg_3.urls', namespace='catg_3')),
+    path('notify/', include('notify.urls', namespace='notify')),
 
     path('logout/', logout_view, name="logout"),  
     path('', register_view, name="register"),  
