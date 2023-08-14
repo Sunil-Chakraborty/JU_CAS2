@@ -80,7 +80,7 @@
 				  <li class="message-item">
 					<span class="message-sender">From :&nbsp&nbsp IQAC-Admin</span>
 					<small class="message-date">{{ message.timestamp|date:"F d, Y" }}</small>
-					<span  style="float:right;color:teal;"><a href="{% url 'account:edit-message' message_id=message.id %}">Reply Message</a></span>
+					<span  style="float:right;color:teal;"><a href="{% url 'notify:edit-message' message_id=message.id %}">Reply Message</a></span>
 										
 					<br>
 					<p style="color: blue; font-family: Arial, sans-serif;">{{ message.content|safe }}</p>
@@ -134,6 +134,7 @@
 			  // Redirect to the previous page
 			  //history.back();
 			  var id_no = {{ id_no }};
+			  
 			  window.location.href = "{% url 'account:home' user_id=id_no %}";
 				
 			});

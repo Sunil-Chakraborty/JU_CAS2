@@ -168,7 +168,10 @@
 			</h2>
 			
 		{% else %}
-			<h2 class="card-title" style="margin-left:20px;color: #fff0f2 !important;">DashBoard</h2>
+			<h2 class="card-title" style="margin-left:20px;color: #fff0f2 !important;">DashBoard
+			
+			<a href="{% url 'notify:inbox'%}"  style="float:right;font-size:20px;color:white;"  class="btn btn-info">Message Inbox</a></h2>
+			
 		{% endif %}
 
 		

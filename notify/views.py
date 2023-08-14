@@ -31,14 +31,14 @@ def inbox(request,*args, **kwargs):
     #user_id = request.session['user_id']
     account = Account.objects.get(pk=user.id)
     
-    print("l-90 ",user.id)
+    print("l-34 ",user.id)
     received_messages = Message.objects.filter(receiver=user.id,read=False)
     sending_message = Message.objects.filter(sender=user.id) 
     
     if received_messages or sending_message or user.id == 1 : 
         return render(request, 'notify/inbox.html', {'messages': received_messages,'sending_message': sending_message,'account':account,'id_no':id_no})
     else:
-        return redirect('dashboard')
+        return redirect('account:home', user_id=id_no)
         
       
 def create_message(request):

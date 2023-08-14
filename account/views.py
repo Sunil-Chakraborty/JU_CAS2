@@ -15,6 +15,8 @@ from django.core.files.storage import default_storage
 from django.views.generic import TemplateView, ListView, CreateView, View
 from django.db.models import Sum,Min,Max,Avg
 from django.contrib.auth.decorators import login_required
+from notify.models import Message
+from django.urls import reverse
 
 
 from catg_3.models import Jrnl_pub,Pub_other,Resch_proj,Resch_cons,Prj_outcm, Resch_guide,Fellow_Award,Lecture_Paper,E_Learning,JrnlPaper_UGC
@@ -972,12 +974,21 @@ def self_view(request, *args, **kwargs):
          
         if account.frm_submitted :
             return render(request, "account/cas_view2.html", context)
-
+    
+    i = 0  # Initialize the variable 'i'
+    
     if not user.is_applicant:
         return render(request, "account/cas_view_admin.html", context)
     else:
+        if not request.session.get('visited_the_page'):
+        # Set the session variable to indicate the user has visited the page
+            request.session['visited_the_page'] = True
+            recd_msg = Message.objects.filter(receiver=user_id)
+            if recd_msg:            
+                inbox_url = reverse('notify:inbox')
+                return HttpResponseRedirect(inbox_url)  # Redirect immediately
+                  
         return render(request, "account/cas_view.html", context)
-
 
     #return render(request, "account/cas_view.html", context)
 
