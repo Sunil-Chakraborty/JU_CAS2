@@ -35,7 +35,7 @@
 		  <!-- Modal content-->
 		  <div class="modal-content">
 			<div class="modal-header">
-			  <h2 class="modal-title">Edit Message</h2>
+			  <h2 class="modal-title">Reply</h2>
 				
 					
 			  <form id="editForm" method="post">
@@ -66,11 +66,11 @@
 				
 				<br>
 				<br>
-				<p style="color:black;font-weight:bold;"><u>Your feedback</u></p>
+				<p style="color:black;font-weight:bold;"><u>Your Response</u></p>
 				<textarea class="form-control" name="feedback" cols="20" rows="3" required id="id_feedback" style="color: black;">{{ form.feedback.value }}</textarea>
 				
 				<br>
-				<button type="submit" class="btn-info" >Save Changes</button>
+				<button type="submit" class="btn-info" >Send</button>
 			  </form>
 				<div class="modal-footer">				
 					<button type="button"  class="btn btn-secondary" id="closeModalBtn" data-dismiss="modal">Close</button>
@@ -110,8 +110,8 @@
 			closeModalBtn.addEventListener("click", function() {
 			  // Redirect to the previous page
 			  //history.back();
-			  
-			  window.location.href = "{% url 'notify:inbox'%}";
+			  var id_no = {{ id_no }};
+			  window.location.href = "{% url 'account:home' user_id=id_no %}";
 				
 			});
 			

@@ -980,14 +980,28 @@ def self_view(request, *args, **kwargs):
     if not user.is_applicant:
         return render(request, "account/cas_view_admin.html", context)
     else:
+        recd_msg = Message.objects.filter(receiver=user_id)
+        
+        for msg in recd_msg:
+            if msg.read:
+                msg_read=True            
+            else:
+                msg_read=False
+                break    
+                 
+        if not msg_read:    
+            context['recd_msg'] = recd_msg
+        else:
+            recd_msg=""
+        
         if not request.session.get('visited_the_page'):
         # Set the session variable to indicate the user has visited the page
             request.session['visited_the_page'] = True
-            recd_msg = Message.objects.filter(receiver=user_id)
+            #recd_msg = Message.objects.filter(receiver=user_id)
             if recd_msg:            
                 inbox_url = reverse('notify:inbox')
                 return HttpResponseRedirect(inbox_url)  # Redirect immediately
-                  
+                 
         return render(request, "account/cas_view.html", context)
 
     #return render(request, "account/cas_view.html", context)

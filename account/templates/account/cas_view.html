@@ -169,9 +169,10 @@
 			
 		{% else %}
 			<h2 class="card-title" style="margin-left:20px;color: #fff0f2 !important;">DashBoard
-			
-			<a href="{% url 'notify:inbox'%}"  style="float:right;font-size:20px;color:white;"  class="btn btn-info">Message Inbox</a></h2>
-			
+			{% if recd_msg %}
+				<a href="{% url 'notify:inbox'%}"  style="float:right;font-size:20px;color:black;font-weight:bold;"  class="btn btn-warning">Admin Notification</a>
+			{% endif %}
+			</h2>
 		{% endif %}
 
 		
@@ -184,7 +185,6 @@
 							<th style="text-align: left;">Faculty</th>						
 							<th style="text-align: left;">Department</th>							
 							<th style="text-align: left;">Designation</th>
-							<th style="text-align: left;">Messages</th></th>		
 							<th style="text-align: left;">PDF Doc&nbsp;</th>
 							
 						</tr>
@@ -196,7 +196,6 @@
 						<td>{{facult}}</td>								
 						<td>{{Department}}</td>
 						<td>{{Designation}}</td>
-						<td><a href="{% url 'notify:inbox'%}"  style="font-weight:bolder;color:white;text-decoration:none;" class="p-2">Message Inbox</a></td>
 						<td><a style="font-weight:bolder;color:white;text-decoration:none;" class="p-2" href="{% url 'account:pdf_view' user_id=request.user.id %}" target="_blank">Preview</a></td>
 						
 					</tr>

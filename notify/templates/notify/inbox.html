@@ -52,7 +52,7 @@
 				.modal-dialog {
 					max-width: 1200px; /* Adjust this value to your desired width */
 				}
-
+				
 		</style>
 </head>
 {% block error_messages %}
@@ -71,7 +71,7 @@
 				<br>
 				<p><a style="color:teal;font-size:20px;font-weight:bold;" href="{% url 'notify:create_message' %}">Compose New Message</a></p>
 			 {% else %}
-				<h1 class="inbox-heading">Inbox Messages</h1>
+				<h1 class="inbox-heading">Admin Notification</h1>
 			 {% endif %}
 			</div>
 			<div class="modal-body">
@@ -80,13 +80,13 @@
 				  <li class="message-item">
 					<span class="message-sender">From :&nbsp&nbsp IQAC-Admin</span>
 					<small class="message-date">{{ message.timestamp|date:"F d, Y" }}</small>
-					<span  style="float:right;color:teal;"><a href="{% url 'notify:edit-message' message_id=message.id %}">Reply Message</a></span>
+					<span  style="float:right;color:teal;"><a href="{% url 'notify:edit-message' message_id=message.id %}">Reply Here</a></span>
 										
 					<br>
 					<p style="color: blue; font-family: Arial, sans-serif;">{{ message.content|safe }}</p>
 					
 					<br>
-					<b>Feedback :&nbsp&nbsp</b>
+					<b>My Response :&nbsp&nbsp</b>
 					<p>
 						<span style="background-color: yellow;">{{ message.feedback }}</span>
 					</p>

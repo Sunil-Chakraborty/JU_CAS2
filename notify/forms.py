@@ -7,7 +7,7 @@ from django.contrib.auth.forms import UserCreationForm
 from account.models import Account
 from . models import  Message
 from ckeditor.widgets import CKEditorWidget
-
+from django.contrib.auth import get_user_model
 
 class MessageForm(forms.ModelForm):
     content = forms.CharField(widget=CKEditorWidget())
@@ -25,4 +25,5 @@ class MessageForm(forms.ModelForm):
             super(MessageForm,self).__init__(*args, **kwargs)
             self.fields['feedback'].required = False
             self.fields['content'].required = False
-            
+            # Set the default sender value
+            self.fields['sender'].initial = get_user_model().objects.get(email='admin@jdvu.in')
