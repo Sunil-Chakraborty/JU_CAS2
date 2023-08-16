@@ -982,18 +982,19 @@ def self_view(request, *args, **kwargs):
     else:
         recd_msg = Message.objects.filter(receiver=user_id)
         
-        for msg in recd_msg:
-            if msg.read:
-                msg_read=True            
+        if recd_msg :
+            for msg in recd_msg:
+                if msg.read:
+                    msg_read=True            
+                else:
+                    msg_read=False
+                    break    
+                     
+            if not msg_read:    
+                context['recd_msg'] = recd_msg
             else:
-                msg_read=False
-                break    
-                 
-        if not msg_read:    
-            context['recd_msg'] = recd_msg
-        else:
-            recd_msg=""
-        
+                recd_msg=""
+            
         if not request.session.get('visited_the_page'):
         # Set the session variable to indicate the user has visited the page
             request.session['visited_the_page'] = True
