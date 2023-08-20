@@ -94,6 +94,7 @@
 					<th style="text-align: left;">Operation&nbsp;</th>		
 					<th style="text-align: left;">PDF Doc&nbsp;</th>
 					<th style="text-align: left;">Status</th>
+					<th style="text-align: left;">Login</th>
 					
 				</tr>
 			</thead>
@@ -119,9 +120,12 @@
 							<td><a style="font-weight:bolder;color:black;text-decoration:none;" class="p-2" href="{% url 'account:pdf_view' user_id=item.id %}" target="_blank">Preview</a></td>
 							{% if item.frm_submitted %}
 								<td style="font-weight:bolder;color:green;" >Complete</td>
+								<td>{{item.last_login|date:"F d, Y"}}</td>
 							{% else %}	
 								<td style="font-weight:bolder;color:orange;" >In Process</td>
+								<td></td>
 							{% endif %}
+							
 							
 						
 						

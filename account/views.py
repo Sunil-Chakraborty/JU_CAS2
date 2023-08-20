@@ -969,6 +969,7 @@ def self_view(request, *args, **kwargs):
         context['faculty'] = account.faculty
         context['is_hod'] = account.is_hod 
         context['is_applicant'] = account.is_applicant
+        context['last_login'] = account.last_login
         
         #return render(request, 'account/cas_view.html', context)
          
